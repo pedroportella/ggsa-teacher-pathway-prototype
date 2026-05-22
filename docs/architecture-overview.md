@@ -159,3 +159,5 @@ Smoke-test the running artifact:
 curl -s -w '\nHTTP %{http_code}\n' http://127.0.0.1:5173/status
 curl -s -w '\nHTTP %{http_code}\n' http://127.0.0.1:5173/api/teacher-pathway-submissions
 ```
+
+Continuous integration mirrors the same frontend quality gates in `.github/workflows/ci.yml` and adds Playwright smoke coverage plus PHP syntax validation for the WordPress plugin. See `docs/ci-cd.md` for the full workflow contract and local parity commands.

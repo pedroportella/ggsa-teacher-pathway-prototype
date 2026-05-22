@@ -40,6 +40,7 @@ The solution is implemented as a decoupled Next.js frontend and headless WordPre
 - Unit coverage for shared readiness logic and reusable UI components.
 - Playwright smoke coverage for the portal journey.
 - TypeScript, linting and production build commands for the frontend workspace.
+- GitHub Actions CI for frontend verification, Playwright smoke testing and WordPress plugin linting.
 
 ## Technology Summary
 
@@ -246,3 +247,4 @@ Docker database settings are configured in `docker-compose.yml`:
 ## Documentation
 
 - `docs/architecture-overview.md`: system structure, IA, boundaries, runtime and verification guidance.
+- `docs/ci-cd.md`: GitHub Actions workflow, local parity checks and future production gates.
