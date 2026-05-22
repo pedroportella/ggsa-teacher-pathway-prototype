@@ -24,6 +24,7 @@
   --ggsa-colour-warning-soft: #fff3cf;
   --ggsa-colour-error: #7a271a;
   --ggsa-colour-error-soft: #fde9e4;
+  --ggsa-font-family-body: Calibri, Helvetica, Arial, sans-serif;
 
   --adha-hds-primary-blue: var(--ggsa-colour-teal-dark);
   --adha-hds-primary-blue-dark: var(--ggsa-colour-teal-deep);
@@ -47,6 +48,7 @@
   --adha-hds-radius: 6px;
   --adha-hds-component-padding: 3rem;
   --adha-hds-component-padding-mobile: 1.5rem;
+  --adha-hds-font-family-body: var(--ggsa-font-family-body);
 
   --brand-colour-1: var(--ggsa-colour-teal-dark);
   --brand-colour-2: var(--ggsa-colour-teal);

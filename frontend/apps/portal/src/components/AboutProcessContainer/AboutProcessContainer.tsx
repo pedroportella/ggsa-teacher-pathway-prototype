@@ -1,4 +1,9 @@
+import { ggsaIconSvg, ggsaLogoSvg } from '@ggsa/ui-assets';
 import { Panel } from '@ggsa/ui-library';
+
+type ImageAsset = string | { src: string };
+
+const assetSrc = (asset: ImageAsset) => (typeof asset === 'string' ? asset : asset.src);
 
 const processStages = [
   {
@@ -30,6 +35,18 @@ export function AboutProcessContainer() {
             <p>
               The GGSA Teacher Pathway is delivered as a decoupled product: WordPress owns pathway content, LearnDash-style modules and editorial administration, while the Next.js frontend renders learning plans, progress and evidence readiness.
             </p>
+          </div>
+          <div className="col-xs-12 col-lg-4">
+            <div className="about-brand-lockup" aria-label="Good to Great Schools Australia brand marks">
+              <img
+                alt="Good to Great Schools Australia"
+                className="about-brand-lockup__wordmark"
+                src={assetSrc(ggsaLogoSvg)}
+              />
+              <div className="about-brand-lockup__marks" aria-hidden="true">
+                <img className="about-brand-lockup__mark" src={assetSrc(ggsaIconSvg)} alt="" />
+              </div>
+            </div>
           </div>
         </div>
       </section>

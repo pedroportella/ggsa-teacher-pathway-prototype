@@ -4,13 +4,25 @@
   box-sizing: border-box;
 }
 
+:root {
+  font-family: var(--ggsa-font-family-body, Calibri, Helvetica, Arial, sans-serif);
+}
+
 body {
   margin: 0;
+  font-family: var(--ggsa-font-family-body, Calibri, Helvetica, Arial, sans-serif);
   background: var(--adha-hds-primary-blue-very-pale);
 }
 
 .app-shell {
   min-height: 100vh;
+  font-family: var(--ggsa-font-family-body, Calibri, Helvetica, Arial, sans-serif);
+}
+
+.app-shell :where(button, input, select, textarea),
+.app-shell [class^="au-"],
+.app-shell [class*=" au-"] {
+  font-family: var(--ggsa-font-family-body, Calibri, Helvetica, Arial, sans-serif);
 }
 
 .au-header {
@@ -110,6 +122,40 @@ body {
 .portal-band--summary p,
 .portal-band--intake p {
   max-width: 31rem;
+}
+
+.about-brand-lockup {
+  display: grid;
+  align-content: center;
+  gap: 1rem;
+  min-height: 100%;
+  margin-top: 0.25rem;
+  padding: 1.25rem;
+  background: var(--adha-hds-surface);
+  border: 1px solid var(--adha-hds-border);
+  border-left: 0.35rem solid var(--ggsa-colour-gold);
+  border-radius: var(--adha-radius-lg, 0.5rem);
+}
+
+.about-brand-lockup__wordmark {
+  width: min(100%, 28rem);
+  height: auto;
+}
+
+.about-brand-lockup__marks {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.about-brand-lockup__mark {
+  width: 4.5rem;
+  height: auto;
+}
+
+.about-brand-lockup__crest {
+  width: 8rem;
+  height: auto;
 }
 
 .portal-metrics {
@@ -285,10 +331,30 @@ body {
   .portal-band--summary {
     background: var(--adha-hds-surface);
   }
+
+  .about-brand-lockup {
+    margin-top: 1.25rem;
+  }
 }
 
 @media (max-width: 560px) {
   .portal-band {
     padding-block: 1.25rem;
+  }
+
+  .about-brand-lockup {
+    padding: 1rem;
+  }
+
+  .about-brand-lockup__marks {
+    gap: 0.75rem;
+  }
+
+  .about-brand-lockup__mark {
+    width: 3.75rem;
+  }
+
+  .about-brand-lockup__crest {
+    width: 7rem;
   }
 }

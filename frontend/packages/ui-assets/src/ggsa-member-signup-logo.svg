@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 86" role="img" aria-labelledby="ggsa-member-signup-logo-title ggsa-member-signup-logo-desc">
+  <title id="ggsa-member-signup-logo-title">Good to Great Schools Australia</title>
+  <desc id="ggsa-member-signup-logo-desc">Good to Great Schools Australia logo with the tagline Great teachers, Effective teaching, Every child.</desc>
+  <defs>
+    <style>
+      .text-orange { fill: #faa332; }
+      .text-yellow { fill: #fbbc16; }
+      .text-teal { fill: #2392b2; }
+      .wordmark {
+        font-family: Calibri, Helvetica, Arial, sans-serif;
+        font-size: 31px;
+        font-weight: 600;
+        letter-spacing: .02em;
+      }
+      .tagline {
+        font-family: Calibri, Helvetica, Arial, sans-serif;
+        font-size: 22px;
+        font-weight: 300;
+        letter-spacing: .045em;
+      }
+    </style>
+  </defs>
+
+  <g aria-hidden="true" transform="translate(0 10) scale(.286)">
+    <path d="m144.73,43.77L0,101.36l85.29,157.06,93.04-36.65-33.6-178.01Z" fill="#faa332"/>
+    <path d="m362.35,43.77l146.17,57.59-86.13,157.06-93.97-36.65,33.93-178.01Z" fill="#fbbc16"/>
+    <path d="m354.93,0h-201.34l36.61,220.03h128.12L354.93,0Z" fill="#2392b2"/>
+  </g>
+
+  <text class="wordmark text-orange" x="176" y="35" aria-hidden="true">GOOD TO GREAT SCHOOLS</text>
+  <text class="wordmark text-teal" x="842" y="35" text-anchor="end" aria-hidden="true">AUSTRALIA</text>
+  <text class="tagline text-teal" x="176" y="66" textLength="666" lengthAdjust="spacing" aria-hidden="true">Great teachers, Effective teaching, Every child.</text>
+</svg>

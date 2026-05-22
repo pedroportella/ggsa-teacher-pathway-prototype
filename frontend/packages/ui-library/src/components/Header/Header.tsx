@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { ggsaBrand } from '@ggsa/ui-assets';
+import { ggsaBrand, ggsaLogoSvg } from '@ggsa/ui-assets';
 import type { NavLink } from '../types';
 import './Header.scss';
 
@@ -17,7 +17,10 @@ export type HeaderProps = {
   subNavLinks?: NavLink[];
 };
 
-const defaultLogo = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 620 96'%3E%3Crect width='620' height='96' fill='%23fff'/%3E%3Ctext x='24' y='58' font-family='Arial, sans-serif' font-size='34' font-weight='700' fill='%2300558c'%3EGGSA%3C/text%3E%3Ctext x='132' y='58' font-family='Arial, sans-serif' font-size='23' fill='%23222'%3EGood to Great Schools Australia%3C/text%3E%3C/svg%3E`;
+type ImageAsset = string | { src: string };
+
+const assetSrc = (asset: ImageAsset) => (typeof asset === 'string' ? asset : asset.src);
+const defaultLogo = assetSrc(ggsaLogoSvg);
 
 export function Header({
   brandName,

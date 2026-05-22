@@ -1,4 +1,7 @@
 export const healthDesignSystemTokens = {
+  font: {
+    body: 'Calibri, Helvetica, Arial, sans-serif',
+  },
   colour: {
     primaryBlue: '#0c6b83',
     primaryBlueDark: '#005664',
