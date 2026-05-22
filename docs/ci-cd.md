@@ -60,6 +60,7 @@ Run these from the repository root before handing over a change.
 
 ```bash
 volta install node@20.19.5 pnpm@10.18.3
+export PATH="$HOME/.volta/bin:$PATH"
 pnpm --dir frontend install
 pnpm --dir frontend lint
 pnpm --dir frontend test:unit

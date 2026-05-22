@@ -98,6 +98,7 @@ Use the current Docker stack when you want to keep the existing local WordPress 
 
 ```bash
 volta install node@20.19.5 pnpm@10.18.3
+export PATH="$HOME/.volta/bin:$PATH"
 
 # Build images and start WordPress, MariaDB, setup and frontend containers.
 pnpm docker:build
@@ -171,11 +172,14 @@ Use this path when iterating on the Next.js workspace without the WordPress stac
 
 ```bash
 volta install node@20.19.5 pnpm@10.18.3
+export PATH="$HOME/.volta/bin:$PATH"
 pnpm --dir frontend install
 pnpm --dir frontend dev
 ```
 
-Volta reads the root `package.json` and selects the pinned local toolchain. If you use `nvm`, `fnm`, `asdf` or another manager instead, switch to the root `.node-version` or `.nvmrc` version before running frontend commands.
+Volta reads the root `package.json` and selects the pinned local toolchain. `export PATH="$HOME/.volta/bin:$PATH"` makes sure Volta's `node` and `pnpm` shims win over older `nvm`, `fnm` or `asdf` entries in the current shell. To make that permanent, put the same export before other Node version manager setup in `~/.zshrc`.
+
+If you use another version manager instead of Volta, switch to the root `.node-version` or `.nvmrc` version before running frontend commands.
 
 The frontend falls back to seeded local data when the backend is unavailable.
 
