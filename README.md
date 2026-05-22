@@ -54,7 +54,7 @@ The solution is implemented as a decoupled Next.js frontend and headless WordPre
 ## Runtime Requirements
 
 - Docker Desktop, Docker and Docker Compose for the complete local stack.
-- Node.js 20 or newer for local frontend commands. The Docker frontend image uses Node 22.
+- Node.js 20.19.0 for local frontend commands and CI. Root Docker helper scripts also run on Node 22.
 - pnpm 10.18.3, managed through Corepack and the `packageManager` fields.
 - Playwright Chromium dependencies for local browser tests.
 
@@ -93,6 +93,8 @@ Run from the repository root.
 
 Make sure Docker Desktop is running before using Docker Compose. On macOS, the error `failed to connect to the docker API at unix:///Users/.../.docker/run/docker.sock` means the Docker daemon is not running yet.
 
+Use the current Docker stack when you want to keep the existing local WordPress database, uploaded files and containers:
+
 ```bash
 corepack enable
 corepack prepare pnpm@10.18.3 --activate
@@ -102,13 +104,29 @@ pnpm docker:build
 pnpm docker:up
 ```
 
-To start the same stack and replace the WordPress register with seed learning plans:
+To start the current stack and replace the WordPress register with seed learning plans:
 
 ```bash
 pnpm docker:up -- --refresh-register
 # or
 pnpm docker:up:seed
 ```
+
+Use a fresh Docker stack when you want to remove the local containers, Compose networks, WordPress and MariaDB volumes, local Compose-built images and orphaned containers before rebuilding:
+
+```bash
+pnpm docker:fresh
+```
+
+The manual equivalent is:
+
+```bash
+pnpm docker:clean
+pnpm docker:build
+pnpm docker:up:seed
+```
+
+`pnpm docker:clean` removes local Docker state for this Compose project. It deletes the local WordPress and database volumes, so submitted learning plans and uploaded local evidence files are removed.
 
 The stack starts both application surfaces:
 
@@ -122,6 +140,8 @@ docker compose ps
 pnpm docker:logs
 pnpm docker:down
 pnpm docker:reset
+pnpm docker:clean
+pnpm docker:fresh
 ```
 
 ## Local Access
@@ -174,8 +194,8 @@ pnpm --dir frontend test:e2e
 Run these commands from the repository root for a clean local verification.
 
 ```bash
-# Reset containers, networks and the local database volume.
-pnpm docker:reset
+# Remove containers, networks, volumes, local Compose images and orphans.
+pnpm docker:clean
 
 # Build local Docker images and start the complete stack.
 pnpm docker:build

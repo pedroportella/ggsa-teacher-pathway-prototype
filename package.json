@@ -5,6 +5,10 @@
   "type": "module",
   "description": "GGSA Teacher Pathway portal using Next.js, headless WordPress, LearnDash-style data and Docker.",
   "packageManager": "pnpm@10.18.3",
+  "engines": {
+    "node": ">=20.19.0 <23.0.0",
+    "pnpm": "10.18.3"
+  },
   "scripts": {
     "dev": "pnpm --dir frontend dev",
     "build": "pnpm --dir frontend build",
@@ -19,6 +23,8 @@
     "docker:up:seed": "sh scripts/docker-up.sh --refresh-register",
     "docker:logs": "docker compose logs -f",
     "docker:down": "docker compose down",
-    "docker:reset": "docker compose down -v"
+    "docker:reset": "docker compose down -v",
+    "docker:clean": "docker compose down -v --rmi local --remove-orphans",
+    "docker:fresh": "pnpm docker:clean && pnpm docker:build && pnpm docker:up:seed"
   }
 }

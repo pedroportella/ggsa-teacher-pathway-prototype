@@ -18,7 +18,7 @@ The workflow runs on pushes to `main`, pull requests to `main` and manual dispat
 
 ## Frontend Verification
 
-Runs in the `frontend` workspace with Node.js 20.19.0 and Corepack-managed `pnpm@10.18.3`.
+Runs in the `frontend` workspace with Node.js 20.19.0 from the repository `.node-version` file and Corepack-managed `pnpm@10.18.3`.
 
 ```bash
 pnpm install --frozen-lockfile

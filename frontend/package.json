@@ -6,7 +6,8 @@
   "description": "GGSA frontend workspace with portal apps and reusable design packages.",
   "packageManager": "pnpm@10.18.3",
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=20.19.0 <21.0.0",
+    "pnpm": "10.18.3"
   },
   "scripts": {
     "dev": "pnpm --filter @ggsa/portal dev",
@@ -22,7 +23,7 @@
     "@playwright/test": "^1.49.1",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
-    "@types/node": "^18.19.74",
+    "@types/node": "^20.19.0",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
