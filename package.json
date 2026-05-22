@@ -5,6 +5,10 @@
   "type": "module",
   "description": "GGSA Teacher Pathway portal using Next.js, headless WordPress, LearnDash-style data and Docker.",
   "packageManager": "pnpm@10.18.3",
+  "volta": {
+    "node": "20.19.5",
+    "pnpm": "10.18.3"
+  },
   "engines": {
     "node": ">=20.19.0 <23.0.0",
     "pnpm": "10.18.3"

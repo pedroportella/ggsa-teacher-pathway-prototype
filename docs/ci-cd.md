@@ -18,7 +18,7 @@ The workflow runs on pushes to `main`, pull requests to `main` and manual dispat
 
 ## Frontend Verification
 
-Runs in the `frontend` workspace with Node.js 20.19.0 from the repository `.node-version` file and Corepack-managed `pnpm@10.18.3`.
+Runs in the `frontend` workspace with Node.js 20.19.x from the repository `.node-version` file and Corepack-managed `pnpm@10.18.3`.
 
 ```bash
 pnpm install --frozen-lockfile
@@ -59,6 +59,7 @@ This confirms the current WordPress backend scaffold can be parsed without requi
 Run these from the repository root before handing over a change.
 
 ```bash
+volta install node@20.19.5 pnpm@10.18.3
 pnpm --dir frontend install
 pnpm --dir frontend lint
 pnpm --dir frontend test:unit
@@ -66,7 +67,7 @@ pnpm --dir frontend typecheck
 pnpm --dir frontend build
 pnpm --dir frontend exec playwright install chromium
 pnpm --dir frontend test:e2e
-php -l backend/wp-content/plugins/ggsa-teacher-pathway/ggsa-teacher-pathway.php
+docker compose run --rm --entrypoint php wordpress -l wp-content/plugins/ggsa-teacher-pathway/ggsa-teacher-pathway.php
 ```
 
 For an end-to-end local stack check:

@@ -49,13 +49,14 @@ The solution is implemented as a decoupled Next.js frontend and headless WordPre
 - Database: MariaDB.
 - Runtime: Docker and Docker Compose.
 - Testing: Vitest and Playwright.
-- Package manager: pnpm 10.18.3 through Corepack.
+- Package manager: pnpm 10.18.3 through Volta locally and Corepack in CI/Docker.
 
 ## Runtime Requirements
 
 - Docker Desktop, Docker and Docker Compose for the complete local stack.
-- Node.js 20.19.0 for local frontend commands and CI. Root Docker helper scripts also run on Node 22.
-- pnpm 10.18.3, managed through Corepack and the `packageManager` fields.
+- Volta for local Node.js and pnpm selection.
+- Node.js 20.19.x for local frontend commands and CI. Root Docker helper scripts also run on Node 22.
+- pnpm 10.18.3, managed through Volta locally and Corepack in CI/Docker.
 - Playwright Chromium dependencies for local browser tests.
 
 ## Repository Structure
@@ -96,8 +97,7 @@ Make sure Docker Desktop is running before using Docker Compose. On macOS, the e
 Use the current Docker stack when you want to keep the existing local WordPress database, uploaded files and containers:
 
 ```bash
-corepack enable
-corepack prepare pnpm@10.18.3 --activate
+volta install node@20.19.5 pnpm@10.18.3
 
 # Build images and start WordPress, MariaDB, setup and frontend containers.
 pnpm docker:build
@@ -170,13 +170,16 @@ Submitted learning plans can be reviewed in WordPress under `Teacher Learning Pl
 Use this path when iterating on the Next.js workspace without the WordPress stack.
 
 ```bash
-corepack enable
-corepack prepare pnpm@10.18.3 --activate
+volta install node@20.19.5 pnpm@10.18.3
 pnpm --dir frontend install
 pnpm --dir frontend dev
 ```
 
+Volta reads the root `package.json` and selects the pinned local toolchain. If you use `nvm`, `fnm`, `asdf` or another manager instead, switch to the root `.node-version` or `.nvmrc` version before running frontend commands.
+
 The frontend falls back to seeded local data when the backend is unavailable.
+
+The frontend-only dev server runs at `http://localhost:5174`. The Docker frontend runs at `http://localhost:5173`.
 
 Useful frontend checks:
 
@@ -226,6 +229,9 @@ pnpm --dir frontend test:e2e
 
 # Run the real-backend Playwright persistence test against the seeded Docker stack.
 pnpm test:e2e:real
+
+# Validate the WordPress plugin PHP syntax through the Docker PHP runtime.
+docker compose run --rm --entrypoint php wordpress -l wp-content/plugins/ggsa-teacher-pathway/ggsa-teacher-pathway.php
 ```
 
 ## Daily Development Commands
@@ -246,13 +252,16 @@ docker compose ps
 pnpm docker:logs
 
 # Flush WordPress rewrites after route or permalink changes.
-docker compose exec wordpress wp rewrite flush --hard --allow-root
+docker compose run --rm --entrypoint wp wordpress-setup rewrite flush --hard --allow-root
 
 # Run frontend checks.
 pnpm --dir frontend lint
 pnpm --dir frontend test:unit
 pnpm --dir frontend typecheck
 pnpm --dir frontend build
+
+# Validate the WordPress plugin PHP syntax through Docker.
+docker compose run --rm --entrypoint php wordpress -l wp-content/plugins/ggsa-teacher-pathway/ggsa-teacher-pathway.php
 ```
 
 ## Configuration
