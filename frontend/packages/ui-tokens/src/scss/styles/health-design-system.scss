@@ -1,18 +1,4 @@
-:root {
-  --adha-hds-primary-blue: #072e7e;
-  --adha-hds-primary-blue-dark: #002058;
-  --adha-hds-primary-blue-very-pale: #e6f3ff;
-  --adha-hds-primary-teal: #007680;
-  --adha-hds-action: #006fb0;
-  --adha-hds-text: #313131;
-  --adha-hds-border: #cccccc;
-  --adha-hds-surface: #ffffff;
-  --adha-hds-surface-muted: #f1f1f2;
-  --adha-hds-success: #0b996c;
-  --adha-hds-info: #00bfe9;
-  --adha-hds-warning: #f69900;
-  --adha-hds-error: #d60000;
-  --adha-hds-radius: 6px;
-  --adha-hds-component-padding: 3rem;
-  --adha-hds-component-padding-mobile: 1.5rem;
-}
+@charset "UTF-8";
+
+// frontend/packages/ui-tokens/src/scss/styles/health-design-system.scss
+@use "./ggsa-palette";

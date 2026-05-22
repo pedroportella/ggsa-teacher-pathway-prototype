@@ -1,14 +1,29 @@
+@use "@ggsa/ui-tokens/src/scss/styles/health-design-system.scss";
+
 * {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  background: #eef3f6;
+  background: var(--adha-hds-primary-blue-very-pale);
 }
 
 .app-shell {
   min-height: 100vh;
+}
+
+.au-header {
+  border-top-color: var(--adha-hds-primary-blue-dark);
+}
+
+.au-main-nav {
+  border-bottom-color: var(--adha-hds-primary-blue-dark);
+}
+
+.au-main-nav a:hover,
+.au-main-nav .active a {
+  border-color: var(--ggsa-colour-gold);
 }
 
 .brand__mark {
@@ -17,8 +32,8 @@ body {
   justify-content: center;
   width: 3.25rem;
   height: 2rem;
-  color: #ffffff;
-  background: #002058;
+  color: var(--adha-hds-surface);
+  background: var(--adha-hds-primary-blue-dark);
   border-radius: 0.25rem;
   font-weight: 800;
   text-decoration: none;
@@ -39,14 +54,27 @@ body {
   margin-top: 1.5rem;
 }
 
+.health-sub-header--dark {
+  background: linear-gradient(
+    to right,
+    var(--adha-hds-primary-blue-dark),
+    var(--adha-hds-primary-teal)
+  );
+}
+
+.health-sub-header--dark .portal-sub-header__actions .au-btn:not(.au-btn--secondary) {
+  background-color: var(--adha-hds-action);
+  border-color: var(--adha-hds-action);
+}
+
 .health-sub-header--dark .portal-sub-header__actions .au-btn.au-btn--secondary {
-  color: #ffffff !important;
-  border-color: #ffffff;
+  color: var(--adha-hds-surface) !important;
+  border-color: var(--adha-hds-surface);
 }
 
 .eyebrow {
   margin: 0 0 0.5rem;
-  color: #607a1f;
+  color: var(--ggsa-colour-gold);
   font-size: 0.78rem;
   font-weight: 800;
   letter-spacing: 0;
@@ -59,7 +87,7 @@ body {
 
 .portal-band {
   padding-block: 2rem;
-  border-top: 1px solid #d8e2ea;
+  border-top: 1px solid var(--adha-hds-border);
 }
 
 .portal-band:first-child {
@@ -99,12 +127,12 @@ body {
   min-height: 8rem;
   align-content: end;
   gap: 0.25rem;
-  border-top: 0.35rem solid #007680;
+  border-top: 0.35rem solid var(--adha-hds-primary-teal);
 }
 
 .metric-card__label {
   margin: 0;
-  color: #536a7c;
+  color: var(--adha-hds-muted);
   font-size: 0.9rem;
 }
 
@@ -126,12 +154,12 @@ body {
 
 .portal-priority {
   padding: 1.25rem;
-  background: #f7fafc;
-  border-left: 0.35rem solid #607a1f;
+  background: var(--adha-hds-surface-panel);
+  border-left: 0.35rem solid var(--ggsa-colour-gold);
 }
 
 .portal-priority--teal {
-  border-left-color: #007680;
+  border-left-color: var(--adha-hds-primary-teal);
 }
 
 .portal-priority__list {
@@ -147,15 +175,15 @@ body {
   min-height: 18rem;
   place-items: center;
   gap: 0.75rem;
-  color: #536a7c;
+  color: var(--adha-hds-muted);
   text-align: center;
 }
 
 .portal-spinner {
   width: 2.25rem;
   height: 2.25rem;
-  border: 0.25rem solid #d8e2ea;
-  border-top-color: #007680;
+  border: 0.25rem solid var(--adha-hds-border);
+  border-top-color: var(--adha-hds-primary-teal);
   border-radius: 50%;
   animation: portal-spin 0.8s linear infinite;
 }
@@ -177,18 +205,18 @@ body {
 }
 
 .au-body .au-tags.risk--high > li {
-  color: #7a271a;
-  background: #fde9e4;
+  color: var(--adha-hds-error);
+  background: var(--adha-hds-error-soft);
 }
 
 .au-body .au-tags.risk--medium > li {
-  color: #6a4a00;
-  background: #fff3cf;
+  color: var(--adha-hds-warning-text);
+  background: var(--adha-hds-warning-soft);
 }
 
 .au-body .au-tags.risk--low > li {
-  color: #1f5f35;
-  background: #def7e8;
+  color: var(--adha-hds-success);
+  background: var(--adha-hds-success-soft);
 }
 
 .form-grid {
@@ -204,19 +232,19 @@ body {
   gap: 1rem;
   margin: 1rem 0;
   padding: 0.75rem;
-  background: #f4f7fa;
-  border: 1px solid #d8e2ea;
+  background: var(--adha-hds-surface-panel);
+  border: 1px solid var(--adha-hds-border);
   border-radius: 0.375rem;
 }
 
 .portal-band--intake {
-  background: #ffffff;
+  background: var(--adha-hds-surface);
 }
 
 .portal-status-note {
   padding: 0.75rem;
-  background: #f4f7fa;
-  border: 1px solid #d8e2ea;
+  background: var(--adha-hds-surface-panel);
+  border: 1px solid var(--adha-hds-border);
 }
 
 .portal-page-grid {
@@ -250,12 +278,12 @@ body {
 
 .portal-process-list strong {
   margin-bottom: 0.25rem;
-  color: #002058;
+  color: var(--adha-hds-primary-blue-dark);
 }
 
 @media (max-width: 900px) {
   .portal-band--summary {
-    background: #ffffff;
+    background: var(--adha-hds-surface);
   }
 }
 

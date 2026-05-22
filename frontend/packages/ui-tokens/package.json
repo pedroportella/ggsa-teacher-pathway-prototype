@@ -5,7 +5,10 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./scss/health-design-system.scss": "./src/scss/styles/health-design-system.scss"
+    "./src/scss/styles/*.scss": "./src/scss/styles/*.scss",
+    "./scss/health-design-system.scss": "./src/scss/styles/health-design-system.scss",
+    "./scss/ggsa-palette.scss": "./src/scss/styles/ggsa-palette.scss",
+    "./scss/adha-health-design-system-palette.scss": "./src/scss/styles/adha-health-design-system-palette.scss"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
