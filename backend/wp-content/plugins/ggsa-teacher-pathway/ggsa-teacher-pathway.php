@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: GGSA Teacher Pathway Headless API
- * Description: Headless WordPress prototype API for Teacher Learning Pathways, LearnDash-style modules and evidence portfolio records.
+ * Description: Headless WordPress API for Teacher Learning Pathways, LearnDash-style modules and evidence portfolio records.
  * Version: 0.1.0
  * Author: Pedro Portella
  */

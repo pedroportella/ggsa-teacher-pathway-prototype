@@ -6,17 +6,17 @@ import { usePortalState } from './PortalContext';
 import { getPortalLinks } from './routes';
 
 export function PortalFrame({ children }: { children: ReactNode }) {
-  const { navigate, refreshRegister, route } = usePortalState();
+  const { isRegisterLoading, navigate, refreshRegister, route } = usePortalState();
   const links = getPortalLinks(route);
 
   return (
     <Layout
       links={links}
       footer={{
-        copyright: 'Copyright 2026 Good to Great Schools Australia. Teacher Pathway prototype.',
+        copyright: 'Copyright 2026 Good to Great Schools Australia. Teacher Pathway portal.',
         sections: [
           {
-            content: 'This prototype supports professional learning for teachers through structured plans, evidence portfolios and pathway readiness views aligned to the Mastery Teaching Pathway.',
+            content: 'This portal supports professional learning for teachers through structured plans, evidence portfolios and pathway readiness views aligned to the Mastery Teaching Pathway.',
           },
           {
             ariaLabel: 'Portal footer links',
@@ -36,7 +36,9 @@ export function PortalFrame({ children }: { children: ReactNode }) {
         children: (
           <div className="portal-sub-header__actions">
             <Button route="/learning-plan" onNavigate={() => navigate('learning-plan')}>Create learning plan</Button>
-            <Button className="au-btn--dark" variant="secondary" type="button" onClick={refreshRegister}>Refresh register</Button>
+            <Button className="au-btn--dark" variant="secondary" type="button" disabled={isRegisterLoading} onClick={refreshRegister}>
+              {isRegisterLoading ? 'Loading register' : 'Refresh register'}
+            </Button>
           </div>
         ),
       }}

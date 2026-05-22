@@ -9,6 +9,7 @@ export type PortalSummary = {
 
 export type PortalState = {
   addEvidence: () => void;
+  isRegisterLoading: boolean;
   isSubmitting: boolean;
   navigate: (route: PortalRoute) => void;
   notice: string;

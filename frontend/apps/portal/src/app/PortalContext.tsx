@@ -6,7 +6,6 @@ import {
   blankSubmission,
   createSubmission,
   listSubmissions,
-  seedSubmissions,
   type ControlCheck,
   type EvidenceDocument,
   type RegisterItem,
@@ -25,6 +24,7 @@ export function PortalProvider({ children }: { children: ReactNode }) {
   const [submission, setSubmission] = useState<TeacherPathwaySubmission>(blankSubmission);
   const [register, setRegister] = useState<RegisterItem[]>([]);
   const [notice, setNotice] = useState('Loading teacher learning plans from the WordPress REST API.');
+  const [isRegisterLoading, setIsRegisterLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const summary = useMemo(() => {
@@ -71,14 +71,21 @@ export function PortalProvider({ children }: { children: ReactNode }) {
   };
 
   const refreshRegister = useCallback(async () => {
+    setIsRegisterLoading(true);
+
     try {
       const items = await listSubmissions();
-      setRegister(items.length > 0 ? items : seedSubmissions);
-      setNotice('Loaded teacher learning plans from the WordPress REST API.');
+      setRegister(items);
+      setNotice(items.length > 0
+        ? 'Loaded teacher learning plans from the WordPress REST API.'
+        : 'The WordPress REST API returned no teacher learning plans.');
     }
     catch {
-      setRegister(seedSubmissions);
-      setNotice('WordPress API unavailable; showing seeded teacher pathway records for local review.');
+      setRegister([]);
+      setNotice('WordPress API unavailable; teacher learning plans could not be loaded.');
+    }
+    finally {
+      setIsRegisterLoading(false);
     }
   }, []);
 
@@ -130,6 +137,7 @@ export function PortalProvider({ children }: { children: ReactNode }) {
 
   const value: PortalState = {
     addEvidence,
+    isRegisterLoading,
     isSubmitting,
     navigate,
     notice,

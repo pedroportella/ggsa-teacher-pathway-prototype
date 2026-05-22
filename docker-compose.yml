@@ -29,7 +29,7 @@ services:
         until [ -f wp-config.php ]; do sleep 2; done;
         until wp db check --allow-root >/dev/null 2>&1; do sleep 2; done;
         if ! wp core is-installed --allow-root >/dev/null 2>&1; then
-          wp core install --url=http://localhost:8080 --title='GGSA Teacher Pathway Prototype' --admin_user=admin --admin_password=admin --admin_email=admin@example.test --skip-email --allow-root;
+          wp core install --url=http://localhost:8080 --title='GGSA Teacher Pathway Portal' --admin_user=admin --admin_password=admin --admin_email=admin@example.test --skip-email --allow-root;
         fi;
         wp plugin activate ggsa-teacher-pathway --allow-root;
         wp option update permalink_structure '/%postname%/' --allow-root;

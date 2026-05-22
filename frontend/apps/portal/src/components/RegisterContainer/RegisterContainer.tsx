@@ -2,9 +2,9 @@ import { MetricCard, Panel, Table, Tags } from '@ggsa/ui-library';
 import { formatDate } from '@ggsa/utils';
 import type { PortalState } from '../../app/portalState';
 
-type RegisterContainerProps = Pick<PortalState, 'notice' | 'register' | 'summary'>;
+type RegisterContainerProps = Pick<PortalState, 'isRegisterLoading' | 'notice' | 'register' | 'summary'>;
 
-export function RegisterContainer({ notice, register, summary }: RegisterContainerProps) {
+export function RegisterContainer({ isRegisterLoading, notice, register, summary }: RegisterContainerProps) {
   return (
     <>
       <section className="portal-band portal-band--summary" aria-labelledby="summary-heading">
@@ -37,17 +37,24 @@ export function RegisterContainer({ notice, register, summary }: RegisterContain
         <div className="row">
           <div className="col-xs-12 col-lg-8">
             <Panel id="register" title="Learning plan register" eyebrow="WordPress admin view" wide>
-              <Table
-                headers={['Reference', 'School', 'Pathway', 'Status', 'Support', 'Updated']}
-                rows={register.map((item) => [
-                  item.referenceNumber,
-                  item.organisationName,
-                  item.productName,
-                  <Tags items={[item.workflowStatus]} />,
-                  <Tags tone={item.riskLevel.toLowerCase() as 'low' | 'medium' | 'high'} items={[item.riskLevel]} />,
-                  formatDate(item.submittedAt),
-                ])}
-              />
+              {isRegisterLoading ? (
+                <div className="portal-register-loading" role="status" aria-live="polite" aria-label="Loading learning plan register">
+                  <span className="portal-spinner" aria-hidden="true" />
+                  <span>Loading learning plan register</span>
+                </div>
+              ) : (
+                <Table
+                  headers={['Reference', 'School', 'Pathway', 'Status', 'Support', 'Updated']}
+                  rows={register.map((item) => [
+                    item.referenceNumber,
+                    item.organisationName,
+                    item.productName,
+                    <Tags items={[item.workflowStatus]} />,
+                    <Tags tone={item.riskLevel.toLowerCase() as 'low' | 'medium' | 'high'} items={[item.riskLevel]} />,
+                    formatDate(item.submittedAt),
+                  ])}
+                />
+              )}
             </Panel>
           </div>
           <aside className="col-xs-12 col-lg-4 portal-aside" aria-label="Coach priorities">

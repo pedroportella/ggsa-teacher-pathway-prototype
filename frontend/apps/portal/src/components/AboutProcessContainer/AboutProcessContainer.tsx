@@ -28,7 +28,7 @@ export function AboutProcessContainer() {
             <p className="eyebrow">Architecture</p>
             <h2 id="about-heading">Headless WordPress learning architecture</h2>
             <p>
-              This prototype adapts the GGSA Teacher Pathway into a decoupled product: WordPress owns pathway content, LearnDash-style modules and editorial administration, while the React/Next.js-ready frontend renders learning plans, progress and evidence readiness.
+              The GGSA Teacher Pathway is delivered as a decoupled product: WordPress owns pathway content, LearnDash-style modules and editorial administration, while the Next.js frontend renders learning plans, progress and evidence readiness.
             </p>
           </div>
         </div>
@@ -49,7 +49,7 @@ export function AboutProcessContainer() {
             </Panel>
           </div>
           <div className="col-xs-12 col-lg-5 portal-aside">
-            <Panel id="content-model" title="Content model" eyebrow="WordPress custom post types">
+            <Panel id="content-model" title="Content model" eyebrow="WordPress custom post type">
               <ul className="portal-checklist">
                 <li>Learning plan: reference, school, teacher, career stage, pathway status and support level.</li>
                 <li>Module catalogue: prerequisites, classroom core modules and elective modules.</li>

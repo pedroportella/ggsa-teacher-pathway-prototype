@@ -1,6 +1,6 @@
 # Architecture Overview
 
-The GGSA Teacher Pathway prototype uses a decoupled architecture:
+The GGSA Teacher Pathway portal uses a decoupled production-oriented architecture:
 
 - Next.js App Router frontend with the existing design-system packages.
 - Next.js route handlers acting as a small backend-for-frontend over WordPress, while delegating upstream API details to `packages/services`.
@@ -11,6 +11,25 @@ The GGSA Teacher Pathway prototype uses a decoupled architecture:
 - `backend/Dockerfile` builds the WordPress runtime with the custom pathway plugin installed.
 - `frontend/Dockerfile` installs the PNPM workspace and runs the portal artifact.
 - `wordpress-setup` installs WordPress, activates the custom plugin and prepares REST routing for local review.
+
+## Information Architecture
+
+The information architecture is deliberately focused on the operational journey rather than broad marketing content.
+
+| Surface | Route | Role in the pathway | Users |
+| --- | --- | --- | --- |
+| Learning plan register | `/register` | Shows submitted learning plans, workflow status, support level and review actions. | GGSA coaches, school leaders |
+| Pathway readiness | `/pathway-readiness` | Summarises prerequisite, module, evidence, certification and RPL readiness. | GGSA coaches, school leaders |
+| Teacher learning plan | `/learning-plan` | Captures school, teacher, career stage, learning intent, evidence and support needs. | Teachers, school leaders |
+| Architecture | `/about` | Documents the pathway model, content model and operating model for handover. | Delivery, support and governance teams |
+
+This keeps the first navigation layer aligned to the real service workflow:
+
+```text
+Register -> Readiness review -> Learning plan intake -> Architecture handover
+```
+
+The route model should remain compact unless a new surface has a distinct user job, permission model or operational owner.
 
 The browser-facing frontend consumes same-origin Next.js API routes:
 
@@ -94,7 +113,7 @@ Application-specific composition belongs in `apps/portal` or `packages/services`
 
 ### Docker Runtime
 
-The prototype must continue to run as separate installable artifacts:
+The portal must continue to run as separate installable artifacts:
 
 - `wordpress`: WordPress runtime with the custom GGSA Teacher Pathway plugin.
 - `wordpress-setup`: local bootstrap for WordPress install, plugin activation and permalink flushing.

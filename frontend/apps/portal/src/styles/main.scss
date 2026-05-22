@@ -142,6 +142,36 @@ body {
   width: 100%;
 }
 
+.portal-register-loading {
+  display: grid;
+  min-height: 18rem;
+  place-items: center;
+  gap: 0.75rem;
+  color: #536a7c;
+  text-align: center;
+}
+
+.portal-spinner {
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 0.25rem solid #d8e2ea;
+  border-top-color: #007680;
+  border-radius: 50%;
+  animation: portal-spin 0.8s linear infinite;
+}
+
+@keyframes portal-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portal-spinner {
+    animation: none;
+  }
+}
+
 .au-body .au-tags.risk > li {
   border-color: currentcolor;
 }

@@ -1,9 +1,9 @@
 {
-  "name": "ggsa-teacher-pathway-prototype",
+  "name": "ggsa-teacher-pathway",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "GGSA Teacher Pathway prototype using React, headless WordPress, LearnDash-style data and Docker.",
+  "description": "GGSA Teacher Pathway portal using Next.js, headless WordPress, LearnDash-style data and Docker.",
   "packageManager": "pnpm@10.18.3",
   "scripts": {
     "dev": "pnpm --dir frontend dev",
