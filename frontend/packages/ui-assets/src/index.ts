@@ -1,5 +1,3 @@
-/// <reference path="./assets.d.ts" />
-
 export const ggsaBrand = {
   shortName: 'GGSA',
   productName: 'Teacher Pathway Portal',
