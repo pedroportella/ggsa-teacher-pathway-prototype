@@ -1,0 +1,8 @@
+wp-config.php
+wp-content/uploads/
+wp-content/cache/
+wp-content/upgrade/
+wp-content/debug.log
+*.log
+.DS_Store
+**/.DS_Store

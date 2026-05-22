@@ -1,0 +1,236 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #eef3f6;
+}
+
+.app-shell {
+  min-height: 100vh;
+}
+
+.brand__mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.25rem;
+  height: 2rem;
+  color: #ffffff;
+  background: #002058;
+  border-radius: 0.25rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.au-header__logo {
+  text-decoration: none;
+}
+
+.au-main-nav__menu {
+  display: block;
+}
+
+.portal-sub-header__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.health-sub-header--dark .portal-sub-header__actions .au-btn.au-btn--secondary {
+  color: #ffffff !important;
+  border-color: #ffffff;
+}
+
+.eyebrow {
+  margin: 0 0 0.5rem;
+  color: #607a1f;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.health-content {
+  padding-block: 0;
+}
+
+.portal-band {
+  padding-block: 2rem;
+  border-top: 1px solid #d8e2ea;
+}
+
+.portal-band:first-child {
+  border-top: 0;
+}
+
+.portal-band--summary {
+  padding-top: 2.5rem;
+}
+
+.portal-band--summary h2,
+.portal-band--intake h2,
+.portal-priority h2 {
+  max-width: 20rem;
+  margin-top: 0;
+  font-size: 1.65rem;
+  line-height: 1.18;
+}
+
+.portal-band--summary p,
+.portal-band--intake p {
+  max-width: 31rem;
+}
+
+.portal-metrics {
+  row-gap: 1rem;
+}
+
+.portal-metrics .health-card,
+.portal-aside .health-card,
+.portal-band--intake .health-card {
+  margin-top: 0;
+}
+
+.metric-card .health-card__body {
+  display: grid;
+  min-height: 8rem;
+  align-content: end;
+  gap: 0.25rem;
+  border-top: 0.35rem solid #007680;
+}
+
+.metric-card__label {
+  margin: 0;
+  color: #536a7c;
+  font-size: 0.9rem;
+}
+
+.metric-card__value {
+  font-size: 2.15rem;
+  line-height: 1;
+}
+
+.panel {
+  min-width: 0;
+  margin-top: 0;
+}
+
+.portal-aside {
+  display: grid;
+  align-content: start;
+  gap: 1rem;
+}
+
+.portal-priority {
+  padding: 1.25rem;
+  background: #f7fafc;
+  border-left: 0.35rem solid #607a1f;
+}
+
+.portal-priority--teal {
+  border-left-color: #007680;
+}
+
+.portal-priority__list {
+  margin-bottom: 0;
+}
+
+.health-table {
+  width: 100%;
+}
+
+.au-body .au-tags.risk > li {
+  border-color: currentcolor;
+}
+
+.au-body .au-tags.risk--high > li {
+  color: #7a271a;
+  background: #fde9e4;
+}
+
+.au-body .au-tags.risk--medium > li {
+  color: #6a4a00;
+  background: #fff3cf;
+}
+
+.au-body .au-tags.risk--low > li {
+  color: #1f5f35;
+  background: #def7e8;
+}
+
+.form-grid {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.evidence-bar,
+.readiness-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 1rem 0;
+  padding: 0.75rem;
+  background: #f4f7fa;
+  border: 1px solid #d8e2ea;
+  border-radius: 0.375rem;
+}
+
+.portal-band--intake {
+  background: #ffffff;
+}
+
+.portal-status-note {
+  padding: 0.75rem;
+  background: #f4f7fa;
+  border: 1px solid #d8e2ea;
+}
+
+.portal-page-grid {
+  row-gap: 1rem;
+}
+
+.portal-checklist {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.portal-checklist li + li {
+  margin-top: 0.75rem;
+}
+
+.portal-process-list {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+  padding-left: 1.5rem;
+}
+
+.portal-process-list li {
+  padding-left: 0.25rem;
+}
+
+.portal-process-list strong,
+.portal-process-list span {
+  display: block;
+}
+
+.portal-process-list strong {
+  margin-bottom: 0.25rem;
+  color: #002058;
+}
+
+@media (max-width: 900px) {
+  .portal-band--summary {
+    background: #ffffff;
+  }
+}
+
+@media (max-width: 560px) {
+  .portal-band {
+    padding-block: 1.25rem;
+  }
+}

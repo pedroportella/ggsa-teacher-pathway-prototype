@@ -1,0 +1,16 @@
+node_modules/
+**/node_modules/
+.pnpm-store/
+dist/
+**/dist/
+.vite/
+**/.vite/
+playwright-report/
+test-results/
+coverage/
+*.log
+.DS_Store
+**/.DS_Store
+.env
+.env.*
+!.env.example

@@ -1,0 +1,50 @@
+.au-footer__portal-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.04fr) minmax(0, 1fr);
+  gap: 2rem;
+  padding-block: 2.5rem 2rem;
+}
+
+.au-footer__portal-layout .layout__region {
+  min-width: 0;
+}
+
+.au-footer__portal-layout h2 {
+  margin-block: 0 1rem;
+  color: inherit;
+  font-size: 1.25rem;
+  line-height: 1.25;
+}
+
+.au-footer__portal-layout p {
+  max-width: 38rem;
+  margin-block: 0 1rem;
+}
+
+.au-footer__portal-layout .au-link-list {
+  display: grid;
+  gap: 0.35rem;
+  margin-block: 0;
+  padding-inline-start: 0;
+}
+
+.au-footer__portal-layout .au-btn {
+  margin-block-start: 0.25rem;
+}
+
+.au-footer__end {
+  border-top: 1px solid rgba(255, 255, 255, 0.35);
+  padding-block: 1rem;
+}
+
+.au-footer__end p {
+  margin: 0;
+}
+
+@media (max-width: 767px) {
+  .au-footer__portal-layout {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding-block-start: 2rem;
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "ggsa-teacher-pathway-prototype",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "GGSA Teacher Pathway prototype using React, headless WordPress, LearnDash-style data and Docker.",
+  "packageManager": "pnpm@10.18.3",
+  "scripts": {
+    "dev": "pnpm --dir frontend dev",
+    "build": "pnpm --dir frontend build",
+    "lint": "pnpm --dir frontend lint",
+    "test": "pnpm --dir frontend test",
+    "test:unit": "pnpm --dir frontend test:unit",
+    "test:e2e": "pnpm --dir frontend test:e2e",
+    "typecheck": "pnpm --dir frontend typecheck",
+    "docker:build": "docker compose build wordpress frontend",
+    "docker:up": "docker compose up -d mariadb wordpress wordpress-setup frontend",
+    "docker:logs": "docker compose logs -f",
+    "docker:down": "docker compose down",
+    "docker:reset": "docker compose down -v"
+  }
+}

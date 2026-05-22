@@ -1,0 +1,15 @@
+node_modules/
+.next/
+dist/
+build/
+coverage/
+.vite/
+.pnpm-store/
+playwright-report/
+test-results/
+blob-report/
+.DS_Store
+src/.DS_Store
+src/tests/.DS_Store
+.env.local
+.env.*.local

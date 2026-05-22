@@ -1,0 +1,81 @@
+.health-band {
+  padding-block: var(--health-space-8, 3rem);
+}
+
+.health-band__inner {
+  display: grid;
+  gap: var(--health-space-6, 2rem);
+}
+
+.health-band__content {
+  max-width: 68rem;
+}
+
+.health-band__eyebrow {
+  font-weight: 700;
+  margin-block: 0 var(--health-space-2, 0.5rem);
+}
+
+.health-band__title {
+  margin-block-start: 0;
+}
+
+.health-band__description {
+  font-size: 1.125rem;
+  max-width: 52rem;
+}
+
+.health-band__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--health-space-3, 1rem);
+  margin-block-start: var(--health-space-5, 1.5rem);
+}
+
+.health-band--light {
+  background: var(--health-colour-background-alt, #f5f7f8);
+}
+
+.health-band--dark {
+  background: var(--health-colour-foreground, #1b1b1b);
+  color: var(--health-colour-background, #fff);
+}
+
+.health-band--feature {
+  border-block: 4px solid var(--health-colour-primary, #007099);
+}
+
+.health-band--callout {
+  background: var(--health-colour-info-background, #e8f4f8);
+  border-left: 6px solid var(--health-colour-primary, #007099);
+}
+
+.health-band--compact {
+  padding-block: var(--health-space-4, 1.5rem);
+}
+
+.health-band--cards .health-band__body--cards {
+  display: grid;
+  gap: var(--health-space-4, 1.5rem);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+}
+
+.health-band--image .health-band__inner {
+  align-items: center;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.health-band__media img {
+  display: block;
+  width: 100%;
+}
+
+@media (min-width: 48rem) {
+  .health-band--image .health-band__inner {
+    grid-template-columns: minmax(0, 1fr) minmax(16rem, 28rem);
+  }
+
+  .health-band--image-left .health-band__inner {
+    grid-template-columns: minmax(16rem, 28rem) minmax(0, 1fr);
+  }
+}
