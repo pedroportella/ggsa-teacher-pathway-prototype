@@ -1,4 +1,4 @@
-# Architecture Overview
+# Portal Overview
 
 The GGSA Teacher Pathway portal uses a decoupled production-oriented architecture:
 
@@ -12,7 +12,7 @@ The GGSA Teacher Pathway portal uses a decoupled production-oriented architectur
 - `frontend/Dockerfile` installs the PNPM workspace and runs the portal artifact.
 - `wordpress-setup` installs WordPress, activates the custom plugin and prepares REST routing for local review.
 
-## Information Architecture
+## Portal Information Map
 
 The information architecture is deliberately focused on the operational journey rather than broad marketing content.
 
@@ -21,12 +21,12 @@ The information architecture is deliberately focused on the operational journey 
 | Learning plan register | `/register` | Shows submitted learning plans, workflow status, support level and review actions. | GGSA coaches, school leaders |
 | Pathway readiness | `/pathway-readiness` | Summarises prerequisite, module, evidence, certification and RPL readiness. | GGSA coaches, school leaders |
 | Teacher learning plan | `/learning-plan` | Captures school, teacher, career stage, learning intent, evidence and support needs. | Teachers, school leaders |
-| Architecture | `/about` | Documents the pathway model, content model and operating model for handover. | Delivery, support and governance teams |
+| About this Portal | `/about` | Explains what the portal does, the pathway model, content model and operating model for handover. | Delivery, support and governance teams |
 
 This keeps the first navigation layer aligned to the real service workflow:
 
 ```text
-Register -> Readiness review -> Learning plan intake -> Architecture handover
+Register -> Readiness review -> Learning plan intake -> About this Portal
 ```
 
 The route model should remain compact unless a new surface has a distinct user job, permission model or operational owner.

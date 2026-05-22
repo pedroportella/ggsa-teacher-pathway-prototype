@@ -2,6 +2,10 @@
   align-items: center;
 }
 
+.pillars-container {
+  border-top: 12px solid var(--ggsa-colour-teal-deep, #005664) !important;
+}
+
 .au-header__logo {
   display: inline-block;
 }

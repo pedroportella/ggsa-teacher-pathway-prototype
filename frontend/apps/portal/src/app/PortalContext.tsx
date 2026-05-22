@@ -6,6 +6,7 @@ import {
   blankSubmission,
   createSubmission,
   listSubmissions,
+  updateReadinessControls,
   type ControlCheck,
   type EvidenceDocument,
   type RegisterItem,
@@ -46,13 +47,38 @@ export function PortalProvider({ children }: { children: ReactNode }) {
     }));
   };
 
-  const updateCheck = (id: string, status: ControlCheck['status']) => {
-    setSubmission((current) => ({
-      ...current,
-      controlChecks: current.controlChecks.map((check) => (
+  const updateCheck = async (id: string, status: ControlCheck['status']) => {
+    const nextSubmission: TeacherPathwaySubmission = {
+      ...submission,
+      controlChecks: submission.controlChecks.map((check) => (
         check.id === id ? { ...check, status } : check
       )),
-    }));
+    };
+
+    setSubmission(nextSubmission);
+
+    if (!nextSubmission.id && !nextSubmission.referenceNumber) {
+      setNotice('Readiness controls updated locally; submit the learning plan before WordPress can persist them.');
+      return;
+    }
+
+    try {
+      const updated = await updateReadinessControls({
+        id: nextSubmission.id,
+        referenceNumber: nextSubmission.referenceNumber,
+        controlChecks: nextSubmission.controlChecks,
+      });
+
+      setSubmission((current) => ({
+        ...current,
+        ...updated,
+        controlChecks: updated.controlChecks,
+      }));
+      setNotice('Readiness controls saved to the WordPress pathway register.');
+    }
+    catch {
+      setNotice('Readiness controls updated locally; WordPress could not save the latest change.');
+    }
   };
 
   const addEvidence = () => {
@@ -112,6 +138,7 @@ export function PortalProvider({ children }: { children: ReactNode }) {
       };
 
       setRegister((current) => [registerItem, ...current]);
+      setSubmission(created);
       setNotice('Teacher learning plan sent to the WordPress pathway register.');
       navigate('register');
     }

@@ -30,10 +30,10 @@ export function AboutProcessContainer() {
       <section className="portal-band portal-band--summary" aria-labelledby="about-heading">
         <div className="row">
           <div className="col-xs-12 col-lg-8">
-            <p className="eyebrow">Architecture</p>
-            <h2 id="about-heading">Headless WordPress learning architecture</h2>
+            <p className="eyebrow">About this Portal</p>
+            <h2 id="about-heading">What this portal helps people do</h2>
             <p>
-              The GGSA Teacher Pathway is delivered as a decoupled product: WordPress owns pathway content, LearnDash-style modules and editorial administration, while the Next.js frontend renders learning plans, progress and evidence readiness.
+              This portal helps GGSA staff, schools and teachers keep a clear record of teacher learning plans, evidence and readiness for the Mastery Teaching Pathway. It brings registration, pathway progress and coach review into one place so non-technical users can see what needs attention next.
             </p>
           </div>
           <div className="col-xs-12 col-lg-4">
@@ -51,10 +51,10 @@ export function AboutProcessContainer() {
         </div>
       </section>
 
-      <section className="portal-band" aria-label="Process architecture">
+      <section className="portal-band" aria-label="About this Portal process">
         <div className="row">
           <div className="col-xs-12 col-lg-7">
-            <Panel id="process-model" title="Teacher pathway model" eyebrow="Information architecture">
+            <Panel id="process-model" title="Teacher pathway model" eyebrow="How it works">
               <ol className="portal-process-list">
                 {processStages.map((stage) => (
                   <li key={stage.title}>
@@ -66,14 +66,14 @@ export function AboutProcessContainer() {
             </Panel>
           </div>
           <div className="col-xs-12 col-lg-5 portal-aside">
-            <Panel id="content-model" title="Content model" eyebrow="WordPress custom post type">
+            <Panel id="content-model" title="What the portal records" eyebrow="Learning plan register">
               <ul className="portal-checklist">
                 <li>Learning plan: reference, school, teacher, career stage, pathway status and support level.</li>
                 <li>Module catalogue: prerequisites, classroom core modules and elective modules.</li>
                 <li>Evidence portfolio: certificates, classroom artefacts, mastery evidence and RPL notes.</li>
               </ul>
             </Panel>
-            <Panel id="audience-model" title="Audience model" eyebrow="Operating model">
+            <Panel id="audience-model" title="Who uses it" eyebrow="Portal users">
               <ul className="portal-checklist">
                 <li>Teachers complete professional learning and upload evidence.</li>
                 <li>School leaders monitor progress across cohorts and milestones.</li>

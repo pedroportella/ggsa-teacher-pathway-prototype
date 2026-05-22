@@ -19,6 +19,6 @@ export type PortalState = {
   submission: TeacherPathwaySubmission;
   submitEvidence: () => Promise<void>;
   summary: PortalSummary;
-  updateCheck: (id: string, status: ControlCheck['status']) => void;
+  updateCheck: (id: string, status: ControlCheck['status']) => Promise<void>;
   updateField: (field: keyof TeacherPathwaySubmission, value: string) => void;
 };

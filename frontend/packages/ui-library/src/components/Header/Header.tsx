@@ -58,7 +58,7 @@ export function Header({
             <div className="health-sub-nav text--align-right">
               <h3 className="au-sronly">Sub menu</h3>
               <ul className="au-link-list au-link-list--inline">
-                <a href="#about-us">About us</a>
+                <a href="#about">About this Portal</a>
               </ul>
             </div>
             <div className="health-search health-search--global">

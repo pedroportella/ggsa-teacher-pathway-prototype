@@ -21,6 +21,7 @@ const GGSA_TEACHER_PATHWAY_STATUSES = [
     'Certification ready',
 ];
 const GGSA_TEACHER_PATHWAY_SUPPORT_LEVELS = ['Low', 'Medium', 'High'];
+const GGSA_TEACHER_PATHWAY_CONTROL_STATUSES = ['Complete', 'Needs evidence', 'Not started'];
 
 add_action('init', 'ggsa_register_learning_plan_post_type');
 add_action('rest_api_init', 'ggsa_register_teacher_pathway_routes');
@@ -74,6 +75,16 @@ function ggsa_register_teacher_pathway_routes(): void
         [
             'methods' => WP_REST_Server::CREATABLE,
             'callback' => 'ggsa_upload_learning_plan_evidence',
+            'permission_callback' => '__return_true',
+        ]
+    );
+
+    register_rest_route(
+        'ggsa/v1',
+        '/teacher-pathway-submissions/readiness',
+        [
+            'methods' => WP_REST_Server::CREATABLE,
+            'callback' => 'ggsa_update_learning_plan_readiness',
             'permission_callback' => '__return_true',
         ]
     );
@@ -289,6 +300,43 @@ function ggsa_upload_learning_plan_evidence(WP_REST_Request $request): WP_REST_R
     ]);
 }
 
+function ggsa_update_learning_plan_readiness(WP_REST_Request $request): WP_REST_Response|WP_Error
+{
+    $payload = $request->get_json_params();
+
+    if (!is_array($payload)) {
+        return new WP_Error('ggsa_invalid_payload', 'Expected a JSON readiness controls payload.', ['status' => 400]);
+    }
+
+    $post_id = ggsa_find_learning_plan_post_id($payload);
+
+    if ($post_id === 0) {
+        return new WP_Error('ggsa_learning_plan_not_found', 'Learning plan could not be found for readiness update.', ['status' => 404]);
+    }
+
+    $control_checks = $payload['controlChecks'] ?? null;
+
+    if (!is_array($control_checks)) {
+        return new WP_Error('ggsa_missing_readiness_controls', 'Readiness controls are required.', ['status' => 422]);
+    }
+
+    $sanitized_checks = array_map('ggsa_sanitize_control_check', $control_checks);
+    ggsa_update_learning_plan_payload($post_id, ['controlChecks' => $sanitized_checks]);
+
+    $record = json_decode((string) get_post_meta($post_id, 'ggsa_learning_plan_payload', true), true);
+
+    if (!is_array($record)) {
+        $record = [];
+    }
+
+    return rest_ensure_response([
+        ...$record,
+        'id' => (string) $post_id,
+        'referenceNumber' => (string) get_post_meta($post_id, 'ggsa_reference_number', true),
+        'controlChecks' => $sanitized_checks,
+    ]);
+}
+
 function ggsa_learning_plan_to_register_item(WP_Post $post): array
 {
     return [
@@ -498,6 +546,48 @@ function ggsa_sanitize_learning_plan_status(string $status): string
 function ggsa_sanitize_support_level(string $support): string
 {
     return in_array($support, GGSA_TEACHER_PATHWAY_SUPPORT_LEVELS, true) ? $support : 'Medium';
+}
+
+function ggsa_sanitize_control_check(mixed $check): array
+{
+    if (!is_array($check)) {
+        $check = [];
+    }
+
+    $status = sanitize_text_field((string) ($check['status'] ?? 'Not started'));
+
+    return [
+        'id' => sanitize_key((string) ($check['id'] ?? '')),
+        'label' => sanitize_text_field((string) ($check['label'] ?? '')),
+        'category' => sanitize_text_field((string) ($check['category'] ?? '')),
+        'status' => in_array($status, GGSA_TEACHER_PATHWAY_CONTROL_STATUSES, true) ? $status : 'Not started',
+    ];
+}
+
+function ggsa_find_learning_plan_post_id(array $payload): int
+{
+    $id = absint($payload['id'] ?? 0);
+
+    if ($id > 0 && get_post_type($id) === GGSA_TEACHER_PATHWAY_POST_TYPE) {
+        return $id;
+    }
+
+    $reference = sanitize_text_field((string) ($payload['referenceNumber'] ?? ''));
+
+    if ($reference === '') {
+        return 0;
+    }
+
+    $posts = get_posts([
+        'post_type' => GGSA_TEACHER_PATHWAY_POST_TYPE,
+        'post_status' => 'any',
+        'meta_key' => 'ggsa_reference_number',
+        'meta_value' => $reference,
+        'fields' => 'ids',
+        'posts_per_page' => 1,
+    ]);
+
+    return (int) ($posts[0] ?? 0);
 }
 
 function ggsa_update_learning_plan_payload(int $post_id, array $updates): void

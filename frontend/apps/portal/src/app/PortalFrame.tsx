@@ -24,9 +24,9 @@ export function PortalFrame({ children }: { children: ReactNode }) {
             title: 'Using this portal',
           },
           {
-            action: { href: '/about', label: 'View architecture' },
-            content: 'The implementation keeps the design system intact and uses a headless WordPress and LearnDash-style service layer.',
-            title: 'Headless WordPress delivery',
+            action: { href: '/about', label: 'About this Portal' },
+            content: 'A plain-language guide to what the portal does for teachers, schools and GGSA coaches.',
+            title: 'About this Portal',
           },
         ],
       }}

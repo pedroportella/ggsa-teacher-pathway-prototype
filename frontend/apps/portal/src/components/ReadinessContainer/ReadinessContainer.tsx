@@ -13,9 +13,9 @@ function countChecks(checks: ControlCheck[], status: ControlCheck['status']): nu
   return checks.filter((check) => check.status === status).length;
 }
 
-type ReadinessContainerProps = Pick<PortalState, 'submission' | 'updateCheck'>;
+type ReadinessContainerProps = Pick<PortalState, 'notice' | 'submission' | 'updateCheck'>;
 
-export function ReadinessContainer({ submission, updateCheck }: ReadinessContainerProps) {
+export function ReadinessContainer({ notice, submission, updateCheck }: ReadinessContainerProps) {
   const readinessScore = calculateReadinessScore(submission);
   const outstandingCategories = getOutstandingCategories(submission.controlChecks);
 
@@ -27,6 +27,7 @@ export function ReadinessContainer({ submission, updateCheck }: ReadinessContain
             <p className="eyebrow">Pathway readiness</p>
             <h2 id="readiness-heading">Module, evidence and certification readiness</h2>
             <p>Review the learning plan before it moves into coaching, certification preparation or RPL evidence assessment.</p>
+            <p className="portal-status-note">{notice}</p>
           </div>
           <div className="col-xs-12 col-md-8">
             <div className="row portal-metrics" aria-label="Readiness summary">
@@ -63,7 +64,7 @@ export function ReadinessContainer({ submission, updateCheck }: ReadinessContain
                   label={`${check.category}: ${check.label}`}
                   options={controlStatuses}
                   value={check.status}
-                  onChange={(event) => updateCheck(check.id, event.target.value as ControlCheck['status'])}
+                  onChange={(event) => void updateCheck(check.id, event.target.value as ControlCheck['status'])}
                 />
               ))}
             </Panel>

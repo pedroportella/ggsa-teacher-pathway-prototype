@@ -63,10 +63,10 @@ The solution is implemented as a decoupled Next.js frontend and headless WordPre
 ```txt
 frontend/   Next.js portal app, shared services, UI packages and frontend tests
 backend/    WordPress runtime, custom GGSA plugin and backend Docker image
-docs/       Architecture and handover notes
+docs/       Portal overview and handover notes
 ```
 
-## Information Architecture
+## Portal Overview
 
 The portal IA is intentionally small and operational:
 
@@ -75,7 +75,7 @@ The portal IA is intentionally small and operational:
 | `/register` | Learning plan register and workflow overview | GGSA coaches, school leaders |
 | `/pathway-readiness` | Certification, RPL and support readiness review | GGSA coaches, school leaders |
 | `/learning-plan` | Teacher learning plan creation and evidence capture | Teachers, school leaders |
-| `/about` | Architecture, pathway model and operating model handover | Delivery and support teams |
+| `/about` | About this Portal, pathway model and operating model overview | Delivery and support teams |
 
 The browser consumes same-origin Next.js routes only:
 

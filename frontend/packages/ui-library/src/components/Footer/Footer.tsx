@@ -25,7 +25,7 @@ export type FooterProps = {
 const defaultSections: FooterSection[] = [
   {
     links: [
-      { href: '#about', label: 'About us' },
+      { href: '#about', label: 'About this Portal' },
       { href: '#contact', label: 'Contact us' },
       { href: '#news', label: 'News' },
       { href: '#media', label: 'Media centre' },

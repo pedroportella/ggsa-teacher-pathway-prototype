@@ -6,7 +6,7 @@ export const PORTAL_ROUTES: Array<NavLink & { route: PortalRoute }> = [
   { href: '/register', label: 'Learning plan register', route: 'register' },
   { href: '/pathway-readiness', label: 'Pathway readiness', route: 'pathway-readiness' },
   { href: '/learning-plan', label: 'Teacher learning plan', route: 'learning-plan' },
-  { href: '/about', label: 'Architecture', route: 'about' },
+  { href: '/about', label: 'About this Portal', route: 'about' },
 ];
 
 export function getRouteHref(route: PortalRoute): string {

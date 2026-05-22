@@ -1,4 +1,4 @@
-import type { EvidenceDocument, RegisterItem, TeacherPathwaySubmission } from './domain';
+import type { ControlCheck, EvidenceDocument, RegisterItem, TeacherPathwaySubmission } from './domain';
 
 const API_BASE_URL = '/api';
 
@@ -42,4 +42,24 @@ export async function uploadEvidence(file: File): Promise<EvidenceDocument> {
   }
 
   return response.json() as Promise<EvidenceDocument>;
+}
+
+export async function updateReadinessControls(payload: {
+  controlChecks: ControlCheck[];
+  id?: string;
+  referenceNumber?: string;
+}): Promise<TeacherPathwaySubmission> {
+  const response = await fetch(`${API_BASE_URL}/teacher-pathway-submissions/readiness`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    throw new Error('Unable to update readiness controls.');
+  }
+
+  return response.json() as Promise<TeacherPathwaySubmission>;
 }
