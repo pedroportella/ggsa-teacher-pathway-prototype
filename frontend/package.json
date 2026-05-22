@@ -10,6 +10,15 @@
     "pnpm": "10.18.3"
   },
   "scripts": {
+    "preinstall": "node scripts/check-node-version.mjs",
+    "predev": "node scripts/check-node-version.mjs",
+    "prebuild": "node scripts/check-node-version.mjs",
+    "prelint": "node scripts/check-node-version.mjs",
+    "pretest": "node scripts/check-node-version.mjs",
+    "pretest:unit": "node scripts/check-node-version.mjs",
+    "pretest:e2e": "node scripts/check-node-version.mjs",
+    "pretest:e2e:real": "node scripts/check-node-version.mjs",
+    "pretypecheck": "node scripts/check-node-version.mjs",
     "dev": "pnpm --filter @ggsa/portal dev",
     "build": "pnpm -r --filter './packages/**' build && pnpm --filter @ggsa/portal build",
     "lint": "pnpm -r lint",

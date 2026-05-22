@@ -9,6 +9,7 @@ WORKDIR /app
 RUN corepack enable && corepack prepare pnpm@10.18.3 --activate
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml eslint.config.js ./
+COPY scripts/check-node-version.mjs scripts/check-node-version.mjs
 COPY apps/portal/package.json apps/portal/package.json
 COPY packages/services/package.json packages/services/package.json
 COPY packages/ui-assets/package.json packages/ui-assets/package.json

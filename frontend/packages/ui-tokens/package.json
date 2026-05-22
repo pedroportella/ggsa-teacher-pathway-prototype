@@ -15,6 +15,10 @@
     "./scss/adha-health-design-system-palette.scss": "./src/scss/styles/adha-health-design-system-palette.scss"
   },
   "scripts": {
+    "prebuild": "node ../../scripts/check-node-version.mjs",
+    "pretypecheck": "node ../../scripts/check-node-version.mjs",
+    "prelint": "node ../../scripts/check-node-version.mjs",
+    "pretest": "node ../../scripts/check-node-version.mjs",
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "eslint src",
