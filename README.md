@@ -91,6 +91,8 @@ Those route handlers call `@ggsa/services`, which owns the WordPress REST base U
 
 Run from the repository root.
 
+Make sure Docker Desktop is running before using Docker Compose. On macOS, the error `failed to connect to the docker API at unix:///Users/.../.docker/run/docker.sock` means the Docker daemon is not running yet.
+
 ```bash
 corepack enable
 corepack prepare pnpm@10.18.3 --activate
@@ -98,6 +100,14 @@ corepack prepare pnpm@10.18.3 --activate
 # Build images and start WordPress, MariaDB, setup and frontend containers.
 pnpm docker:build
 pnpm docker:up
+```
+
+To start the same stack and replace the WordPress register with seed learning plans:
+
+```bash
+pnpm docker:up -- --refresh-register
+# or
+pnpm docker:up:seed
 ```
 
 The stack starts both application surfaces:
@@ -108,6 +118,7 @@ The stack starts both application surfaces:
 Useful Docker commands:
 
 ```bash
+docker compose ps
 pnpm docker:logs
 pnpm docker:down
 pnpm docker:reset
@@ -168,7 +179,7 @@ pnpm docker:reset
 
 # Build local Docker images and start the complete stack.
 pnpm docker:build
-pnpm docker:up
+pnpm docker:up -- --refresh-register
 
 # Confirm container status.
 docker compose ps
@@ -192,6 +203,9 @@ pnpm --dir frontend test:unit
 pnpm --dir frontend typecheck
 pnpm --dir frontend build
 pnpm --dir frontend test:e2e
+
+# Run the real-backend Playwright persistence test against the seeded Docker stack.
+pnpm test:e2e:real
 ```
 
 ## Daily Development Commands
@@ -201,6 +215,9 @@ Run from the repository root.
 ```bash
 # Start the local stack in the background.
 pnpm docker:up
+
+# Start the stack and refresh the WordPress register seed data.
+pnpm docker:up -- --refresh-register
 
 # Confirm container status.
 docker compose ps

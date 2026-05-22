@@ -145,6 +145,110 @@ function ggsa_create_learning_plan(WP_REST_Request $request): WP_REST_Response|W
     return rest_ensure_response($record);
 }
 
+function ggsa_seed_learning_plan_register(bool $refresh = false): array
+{
+    if ($refresh) {
+        $existing_posts = get_posts([
+            'post_type' => GGSA_TEACHER_PATHWAY_POST_TYPE,
+            'post_status' => 'any',
+            'fields' => 'ids',
+            'posts_per_page' => -1,
+        ]);
+
+        foreach ($existing_posts as $post_id) {
+            wp_delete_post((int) $post_id, true);
+        }
+    }
+
+    $seed_records = [
+        [
+            'referenceNumber' => 'GGSA-TP-2026-001',
+            'organisationName' => 'Cairns West State School',
+            'contactName' => 'Mia Thompson',
+            'contactEmail' => 'mia.thompson@example.org.au',
+            'productName' => 'Mastery Teaching Foundations',
+            'productVersion' => '2026 cohort',
+            'pathwayProfile' => 'Mastery Teaching Foundations',
+            'integrationType' => 'WordPress seed data refresh',
+            'workflowStatus' => 'In progress',
+            'riskLevel' => 'Medium',
+            'targetReleaseDate' => '2026-07-01',
+            'submittedAt' => '2026-05-17T23:45:00+10:00',
+        ],
+        [
+            'referenceNumber' => 'GGSA-TP-2026-002',
+            'organisationName' => 'Cape York Academy',
+            'contactName' => 'Noah Williams',
+            'contactEmail' => 'noah.williams@example.org.au',
+            'productName' => 'Mastery Teaching Towards Excellence',
+            'productVersion' => '2026 cohort',
+            'pathwayProfile' => 'Mastery Teaching Towards Excellence',
+            'integrationType' => 'WordPress seed data refresh',
+            'workflowStatus' => 'Coach action required',
+            'riskLevel' => 'High',
+            'targetReleaseDate' => '2026-07-15',
+            'submittedAt' => '2026-05-16T13:10:00+10:00',
+        ],
+        [
+            'referenceNumber' => 'GGSA-TP-2026-003',
+            'organisationName' => 'St Marys Catholic School',
+            'contactName' => 'Olivia Nguyen',
+            'contactEmail' => 'olivia.nguyen@example.org.au',
+            'productName' => 'Mastery Teaching Fellow',
+            'productVersion' => '2026 cohort',
+            'pathwayProfile' => 'Mastery Teaching Fellow',
+            'integrationType' => 'WordPress seed data refresh',
+            'workflowStatus' => 'Certification ready',
+            'riskLevel' => 'Low',
+            'targetReleaseDate' => '2026-08-01',
+            'submittedAt' => '2026-05-15T09:20:00+10:00',
+        ],
+    ];
+
+    $created_ids = [];
+
+    foreach ($seed_records as $record) {
+        $existing = get_posts([
+            'post_type' => GGSA_TEACHER_PATHWAY_POST_TYPE,
+            'post_status' => 'any',
+            'meta_key' => 'ggsa_reference_number',
+            'meta_value' => $record['referenceNumber'],
+            'fields' => 'ids',
+            'posts_per_page' => 1,
+        ]);
+
+        $post_id = $existing[0] ?? wp_insert_post([
+            'post_type' => GGSA_TEACHER_PATHWAY_POST_TYPE,
+            'post_title' => sprintf('%s - %s', $record['organisationName'], $record['productName']),
+            'post_status' => 'publish',
+            'post_date_gmt' => gmdate('Y-m-d H:i:s', strtotime((string) $record['submittedAt'])),
+            'post_date' => get_date_from_gmt(gmdate('Y-m-d H:i:s', strtotime((string) $record['submittedAt']))),
+        ]);
+
+        if (!is_wp_error($post_id)) {
+            ggsa_update_learning_plan_meta((int) $post_id, $record);
+            $created_ids[] = (int) $post_id;
+        }
+    }
+
+    return $created_ids;
+}
+
+function ggsa_update_learning_plan_meta(int $post_id, array $record): void
+{
+    update_post_meta($post_id, 'ggsa_learning_plan_payload', wp_json_encode($record));
+    update_post_meta($post_id, 'ggsa_reference_number', sanitize_text_field((string) ($record['referenceNumber'] ?? '')));
+    update_post_meta($post_id, 'ggsa_school_name', sanitize_text_field((string) ($record['organisationName'] ?? '')));
+    update_post_meta($post_id, 'ggsa_pathway_name', sanitize_text_field((string) ($record['productName'] ?? '')));
+    update_post_meta($post_id, 'ggsa_contact_name', sanitize_text_field((string) ($record['contactName'] ?? '')));
+    update_post_meta($post_id, 'ggsa_contact_email', sanitize_email((string) ($record['contactEmail'] ?? '')));
+    update_post_meta($post_id, 'ggsa_pathway_profile', sanitize_text_field((string) ($record['pathwayProfile'] ?? '')));
+    update_post_meta($post_id, 'ggsa_integration_type', sanitize_text_field((string) ($record['integrationType'] ?? '')));
+    update_post_meta($post_id, 'ggsa_target_release_date', sanitize_text_field((string) ($record['targetReleaseDate'] ?? '')));
+    update_post_meta($post_id, 'ggsa_workflow_status', ggsa_sanitize_learning_plan_status((string) ($record['workflowStatus'] ?? 'Enrolled')));
+    update_post_meta($post_id, 'ggsa_support_level', ggsa_sanitize_support_level((string) ($record['riskLevel'] ?? 'Medium')));
+}
+
 function ggsa_upload_learning_plan_evidence(WP_REST_Request $request): WP_REST_Response
 {
     $files = $request->get_file_params();

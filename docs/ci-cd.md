@@ -73,11 +73,21 @@ For an end-to-end local stack check:
 
 ```bash
 pnpm docker:build
-pnpm docker:up
+pnpm docker:up -- --refresh-register
 curl -i http://localhost:5173/status
 curl -i http://localhost:5173/api/teacher-pathway-submissions
 curl -i http://localhost:8080/wp-json/ggsa/v1/teacher-pathway-submissions
 ```
+
+The `pnpm docker:up` shortcut starts MariaDB, WordPress, WordPress setup and the frontend. Add `-- --refresh-register` or use `pnpm docker:up:seed` when a test run needs the WordPress register replaced with known seed learning plans.
+
+```bash
+pnpm test:e2e:real
+```
+
+The real Playwright run verifies the seeded register, submits a random learning plan, reloads the portal, and confirms the new record is still served from WordPress.
+
+If Docker Compose reports that it cannot connect to `unix:///Users/.../.docker/run/docker.sock`, start Docker Desktop and wait until the engine is running, then retry the command.
 
 ## Production Gates To Add
 

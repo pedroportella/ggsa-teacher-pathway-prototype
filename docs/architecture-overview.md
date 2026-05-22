@@ -120,6 +120,22 @@ The portal must continue to run as separate installable artifacts:
 - `frontend`: Next.js production artifact built from the PNPM workspace.
 - `mariadb`: WordPress persistence.
 
+Use the repository shortcut to run the full local stack:
+
+```sh
+pnpm docker:up
+```
+
+Docker Desktop must be running before this command can reach the local Docker API socket.
+
+Use the seed option when the WordPress register should be reset to known local data before manual checks or real-backend Playwright runs:
+
+```sh
+pnpm docker:up -- --refresh-register
+# or
+pnpm docker:up:seed
+```
+
 The frontend container reaches WordPress through server-side service code. Browser code should only call same-origin Next.js routes.
 
 ### Environment
@@ -158,6 +174,7 @@ Smoke-test the running artifact:
 ```sh
 curl -s -w '\nHTTP %{http_code}\n' http://127.0.0.1:5173/status
 curl -s -w '\nHTTP %{http_code}\n' http://127.0.0.1:5173/api/teacher-pathway-submissions
+pnpm test:e2e:real
 ```
 
 Continuous integration mirrors the same frontend quality gates in `.github/workflows/ci.yml` and adds Playwright smoke coverage plus PHP syntax validation for the WordPress plugin. See `docs/ci-cd.md` for the full workflow contract and local parity commands.

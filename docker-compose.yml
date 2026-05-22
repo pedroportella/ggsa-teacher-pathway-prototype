@@ -17,6 +17,7 @@ services:
         define('WP_DEBUG_DISPLAY', false);
     volumes:
       - wordpress-data:/var/www/html
+      - ./backend/wp-content/plugins/ggsa-teacher-pathway:/usr/src/ggsa-plugins/ggsa-teacher-pathway:ro
     depends_on:
       - mariadb
 
@@ -33,12 +34,16 @@ services:
         fi;
         wp plugin activate ggsa-teacher-pathway --allow-root;
         wp option update permalink_structure '/%postname%/' --allow-root;
-        wp rewrite flush --hard --allow-root
+        wp rewrite flush --hard --allow-root;
+        if [ "$$GGSA_REFRESH_REGISTER_SEED" = "1" ]; then
+          wp eval 'if (function_exists("ggsa_seed_learning_plan_register")) { ggsa_seed_learning_plan_register(true); }' --allow-root;
+        fi
     environment:
       WORDPRESS_DB_HOST: mariadb:3306
       WORDPRESS_DB_NAME: ggsa_teacher_pathway
       WORDPRESS_DB_USER: ggsa_teacher_pathway
       WORDPRESS_DB_PASSWORD: ggsa_teacher_pathway
+      GGSA_REFRESH_REGISTER_SEED: ${GGSA_REFRESH_REGISTER_SEED:-0}
     volumes:
       - wordpress-data:/var/www/html
     depends_on:

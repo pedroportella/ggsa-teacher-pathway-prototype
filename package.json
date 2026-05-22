@@ -12,9 +12,11 @@
     "test": "pnpm --dir frontend test",
     "test:unit": "pnpm --dir frontend test:unit",
     "test:e2e": "pnpm --dir frontend test:e2e",
+    "test:e2e:real": "pnpm --dir frontend test:e2e:real",
     "typecheck": "pnpm --dir frontend typecheck",
     "docker:build": "docker compose build wordpress frontend",
-    "docker:up": "docker compose up -d mariadb wordpress wordpress-setup frontend",
+    "docker:up": "sh scripts/docker-up.sh",
+    "docker:up:seed": "sh scripts/docker-up.sh --refresh-register",
     "docker:logs": "docker compose logs -f",
     "docker:down": "docker compose down",
     "docker:reset": "docker compose down -v"

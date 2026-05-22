@@ -15,6 +15,7 @@
     "test": "pnpm -r test",
     "test:unit": "pnpm -r --filter './packages/**' test && pnpm --filter @ggsa/portal test:unit",
     "test:e2e": "pnpm --filter @ggsa/portal test:e2e",
+    "test:e2e:real": "pnpm --filter @ggsa/portal test:e2e:real",
     "typecheck": "pnpm -r typecheck"
   },
   "devDependencies": {
