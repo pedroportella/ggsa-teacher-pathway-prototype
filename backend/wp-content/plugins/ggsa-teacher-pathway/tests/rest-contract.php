@@ -124,6 +124,13 @@ ggsa_assert(
 	&& isset( $created['integrationContext']['learnDash']['modules'][0]['courseId'] ),
 	'valid create payload includes adapter integration context'
 );
+ggsa_assert(
+	is_array( $created )
+	&& isset( $created['generatedFrom']['membershipRole'] )
+	&& isset( $created['evidenceSummary']['assignedModuleCount'] )
+	&& count( $created['controlChecks'] ?? [] ) >= 4,
+	'valid create payload is generated from enrolment context'
+);
 
 $readiness_update = ggsa_rest_request(
 	'POST',

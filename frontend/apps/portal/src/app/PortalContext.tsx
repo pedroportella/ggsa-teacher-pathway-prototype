@@ -6,6 +6,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from 'react';
@@ -13,6 +14,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import {
   blankSubmission,
   createSubmission,
+  generateTeacherLearningPlan,
   listSubmissions,
   updateReadinessControls,
   type ControlCheck,
@@ -37,6 +39,7 @@ export function PortalProvider({ children }: { children: ReactNode }) {
   );
   const [isRegisterLoading, setIsRegisterLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const hasManualSubmissionOverride = useRef(false);
 
   const summary = useMemo(() => {
     const highRisk = register.filter((item) => item.riskLevel === 'High').length;
@@ -53,6 +56,8 @@ export function PortalProvider({ children }: { children: ReactNode }) {
   };
 
   const updateField = (field: keyof TeacherPathwaySubmission, value: string) => {
+    hasManualSubmissionOverride.current = true;
+
     setSubmission((current) => ({
       ...current,
       [field]: value,
@@ -131,6 +136,24 @@ export function PortalProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     void refreshRegister();
   }, [refreshRegister]);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function seedGeneratedLearningPlan() {
+      const generated = await generateTeacherLearningPlan();
+
+      if (isMounted && !hasManualSubmissionOverride.current) {
+        setSubmission(generated);
+      }
+    }
+
+    void seedGeneratedLearningPlan();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const submitEvidence = async () => {
     setIsSubmitting(true);

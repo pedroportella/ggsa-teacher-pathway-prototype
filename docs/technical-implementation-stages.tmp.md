@@ -318,7 +318,33 @@ Validated locally:
 - `pnpm typecheck`.
 - `pnpm php:quality`.
 
-## Stage 5: Generated Learning Plan Service
+## Stage 5: Generated Learning Plan Service - Done
+
+Status: completed with backend generator coverage, frontend generator coverage and local FE+BE Playwright.
+
+Completed:
+
+- Added `includes/Domain/TeacherLearningPlanGenerator.php`.
+- Moved PHP learning-plan enrichment into a domain generator that combines:
+  - membership teacher profile;
+  - WooCommerce entitlement;
+  - LearnDash assigned modules;
+  - certificate/evidence summary;
+  - RPL readiness control checks.
+- Wired WordPress REST creation and seed records through the generator.
+- Added frontend `generateTeacherLearningPlan()` service.
+- Seeded the learning-plan screen from generated local adapter data instead of only `blankSubmission`.
+- Kept manual form edits as prototype overrides after the generated seed loads.
+- Added frontend unit coverage for the generated learning plan service.
+- Extended REST contract coverage for generated enrolment context.
+
+Validated locally:
+
+- `pnpm php:quality`.
+- `pnpm --dir frontend --filter @ggsa/services test`.
+- `pnpm format:check`.
+- `pnpm lint`.
+- `pnpm typecheck`.
 
 ### Goal
 

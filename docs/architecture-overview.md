@@ -80,6 +80,12 @@ The custom WordPress plugin mirrors the same boundary style for upstream platfor
 
 These classes live under `backend/wp-content/plugins/ggsa-teacher-pathway/includes/Integrations`. They should be the only plugin code that knows about LearnDash, WooCommerce or membership-platform APIs. REST controllers may consume their normalized arrays, but should not call production plugin APIs directly.
 
+### Generated Learning Plans
+
+`GGSA_Teacher_Pathway_Learning_Plan_Generator` combines the WordPress integration adapters into a Teacher Learning Plan record. It owns the generated defaults for teacher, school, pathway profile, LearnDash module checks, evidence summary and RPL readiness inputs.
+
+The frontend mirrors this with `generateTeacherLearningPlan()` in `frontend/packages/services/src/generateLearningPlan.ts`, which seeds the learning-plan screen from local adapter data. Form fields remain editable as prototype overrides, but the initial state now represents an enrolment-generated plan.
+
 ### Route Handlers
 
 Next.js route handlers are allowed as the same-origin browser contract:
