@@ -4,7 +4,7 @@ import { Footnotes } from './Footnotes';
 
 describe('Footnotes', () => {
   it('renders', () => {
-    render(<Footnotes items={['Example footnote']}/>);
+    render(<Footnotes items={['Example footnote']} />);
     expect(screen.getAllByText(/Example/i).length).toBeGreaterThan(0);
   });
 });

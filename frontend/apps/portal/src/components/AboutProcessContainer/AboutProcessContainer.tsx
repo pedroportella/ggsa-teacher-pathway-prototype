@@ -33,11 +33,17 @@ export function AboutProcessContainer() {
             <p className="eyebrow">About this Portal</p>
             <h2 id="about-heading">What this portal helps people do</h2>
             <p>
-              This portal helps GGSA staff, schools and teachers review enrolment-generated learning plans, evidence and readiness for the Mastery Teaching Pathway. It brings pathway progress and coach review into one place so non-technical users can see what needs attention next.
+              This portal helps GGSA staff, schools and teachers review enrolment-generated learning
+              plans, evidence and readiness for the Mastery Teaching Pathway. It brings pathway
+              progress and coach review into one place so non-technical users can see what needs
+              attention next.
             </p>
           </div>
           <div className="col-xs-12 col-lg-4">
-            <div className="about-brand-lockup" aria-label="Good to Great Schools Australia brand marks">
+            <div
+              className="about-brand-lockup"
+              aria-label="Good to Great Schools Australia brand marks"
+            >
               <img
                 alt="Good to Great Schools Australia"
                 className="about-brand-lockup__wordmark"
@@ -66,11 +72,24 @@ export function AboutProcessContainer() {
             </Panel>
           </div>
           <div className="col-xs-12 col-lg-5 portal-aside">
-            <Panel id="content-model" title="What the portal records" eyebrow="Learning plan register">
+            <Panel
+              id="content-model"
+              title="What the portal records"
+              eyebrow="Learning plan register"
+            >
               <ul className="portal-checklist">
-                <li>Learning plan: reference, school, teacher, career stage, pathway status and support level.</li>
-                <li>Module catalogue: prerequisites, classroom core modules and elective modules sourced through adapter-ready LMS boundaries.</li>
-                <li>Evidence portfolio: certificates, classroom artefacts, mastery evidence and RPL notes.</li>
+                <li>
+                  Learning plan: reference, school, teacher, career stage, pathway status and
+                  support level.
+                </li>
+                <li>
+                  Module catalogue: prerequisites, classroom core modules and elective modules
+                  sourced through adapter-ready LMS boundaries.
+                </li>
+                <li>
+                  Evidence portfolio: certificates, classroom artefacts, mastery evidence and RPL
+                  notes.
+                </li>
               </ul>
             </Panel>
             <Panel id="audience-model" title="Who uses it" eyebrow="Portal users">

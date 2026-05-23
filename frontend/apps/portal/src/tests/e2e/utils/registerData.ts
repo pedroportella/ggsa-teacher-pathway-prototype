@@ -12,7 +12,11 @@ function safeId() {
 
 export function generateRandomLearningPlan(): TeacherPathwaySubmission {
   const id = safeId();
-  const workflowStatus: WorkflowStatus = choice(['Enrolled', 'In progress', 'Coach action required']);
+  const workflowStatus: WorkflowStatus = choice([
+    'Enrolled',
+    'In progress',
+    'Coach action required',
+  ]);
   const riskLevel: RiskLevel = choice(['Low', 'Medium', 'High']);
   const schoolName = `${choice(words)} Test School ${id}`;
 

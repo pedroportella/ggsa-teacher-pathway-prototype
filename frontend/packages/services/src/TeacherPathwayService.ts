@@ -1,4 +1,9 @@
-import type { ControlCheck, EvidenceDocument, RegisterItem, TeacherPathwaySubmission } from './domain';
+import type {
+  ControlCheck,
+  EvidenceDocument,
+  RegisterItem,
+  TeacherPathwaySubmission,
+} from './domain';
 
 const API_BASE_URL = '/api';
 
@@ -12,7 +17,9 @@ export async function listSubmissions(): Promise<RegisterItem[]> {
   return response.json() as Promise<RegisterItem[]>;
 }
 
-export async function createSubmission(payload: TeacherPathwaySubmission): Promise<TeacherPathwaySubmission> {
+export async function createSubmission(
+  payload: TeacherPathwaySubmission,
+): Promise<TeacherPathwaySubmission> {
   const response = await fetch(`${API_BASE_URL}/teacher-pathway-submissions`, {
     method: 'POST',
     headers: {

@@ -4,7 +4,7 @@ import { Image } from './Image';
 
 describe('Image', () => {
   it('renders', () => {
-    render(<Image src="/example.png" alt="Example image"/>);
+    render(<Image src="/example.png" alt="Example image" />);
     expect(screen.getByAltText(/Example image/i)).toBeTruthy();
   });
 });

@@ -16,7 +16,8 @@ export function PortalFrame({ children }: { children: ReactNode }) {
         copyright: 'Copyright 2026 Good to Great Schools Australia. Teacher Pathway portal.',
         sections: [
           {
-            content: 'This portal supports professional learning for teachers through structured plans, evidence portfolios and pathway readiness views aligned to the Mastery Teaching Pathway.',
+            content:
+              'This portal supports professional learning for teachers through structured plans, evidence portfolios and pathway readiness views aligned to the Mastery Teaching Pathway.',
           },
           {
             ariaLabel: 'Portal footer links',
@@ -25,18 +26,28 @@ export function PortalFrame({ children }: { children: ReactNode }) {
           },
           {
             action: { href: '/about', label: 'About this Portal' },
-            content: 'A plain-language guide to what the portal does for teachers, schools and GGSA coaches.',
+            content:
+              'A plain-language guide to what the portal does for teachers, schools and GGSA coaches.',
             title: 'About this Portal',
           },
         ],
       }}
       subHeader={{
-        introduction: 'A working GGSA Teacher Pathway portal for enrolment-generated learning plans, prerequisite and core modules, evidence portfolios and RPL support.',
+        introduction:
+          'A working GGSA Teacher Pathway portal for enrolment-generated learning plans, prerequisite and core modules, evidence portfolios and RPL support.',
         title: 'Teacher Learning Pathways powered by headless WordPress.',
         children: (
           <div className="portal-sub-header__actions">
-            <Button route="/learning-plan" onNavigate={() => navigate('learning-plan')}>Review generated plan</Button>
-            <Button className="au-btn--dark" variant="secondary" type="button" disabled={isRegisterLoading} onClick={refreshRegister}>
+            <Button route="/learning-plan" onNavigate={() => navigate('learning-plan')}>
+              Review generated plan
+            </Button>
+            <Button
+              className="au-btn--dark"
+              variant="secondary"
+              type="button"
+              disabled={isRegisterLoading}
+              onClick={refreshRegister}
+            >
               {isRegisterLoading ? 'Loading register' : 'Refresh register'}
             </Button>
           </div>

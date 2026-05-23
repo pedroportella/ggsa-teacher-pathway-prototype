@@ -4,7 +4,7 @@ import { Subtitle } from './Subtitle';
 
 describe('Subtitle', () => {
   it('renders', () => {
-    render(<Subtitle >Example content</Subtitle>);
+    render(<Subtitle>Example content</Subtitle>);
     expect(screen.getAllByText(/Example/i).length).toBeGreaterThan(0);
   });
 });

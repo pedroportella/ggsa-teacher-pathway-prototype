@@ -8,7 +8,8 @@ import { PortalProvider } from './PortalContext';
 
 export const metadata: Metadata = {
   title: 'GGSA Teacher Pathway',
-  description: 'Headless WordPress and Next.js teacher pathway portal for Good to Great Schools Australia.',
+  description:
+    'Headless WordPress and Next.js teacher pathway portal for Good to Great Schools Australia.',
 };
 
 export default function RootLayout({

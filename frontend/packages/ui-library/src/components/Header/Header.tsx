@@ -42,7 +42,11 @@ export function Header({
         <div className="row">
           <div className="col-xs-12 col-md-6">
             <a className="au-header__logo" href={homeHref} rel="home" title="Home">
-              <img alt={logoAlt} className="au-header__logo-image au-responsive-media-img" src={logoSrc} />
+              <img
+                alt={logoAlt}
+                className="au-header__logo-image au-responsive-media-img"
+                src={logoSrc}
+              />
             </a>
             <div className="au-sronly">
               <p>{screenReaderBrand}</p>
@@ -65,7 +69,9 @@ export function Header({
               <form action={searchAction} className="au-form">
                 <div className="health-search__form__input-wrapper">
                   <div className="au-form__item">
-                    <label className="au-sronly" htmlFor={searchId}>Search</label>
+                    <label className="au-sronly" htmlFor={searchId}>
+                      Search
+                    </label>
                     <input
                       autoComplete="off"
                       className="health-search__form__input au-text-input au-text-input--block"

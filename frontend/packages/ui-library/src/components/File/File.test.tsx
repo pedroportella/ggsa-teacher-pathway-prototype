@@ -4,7 +4,7 @@ import { File } from './File';
 
 describe('File', () => {
   it('renders', () => {
-    render(<File href="#" name="Example file"/>);
+    render(<File href="#" name="Example file" />);
     expect(screen.getAllByText(/Example/i).length).toBeGreaterThan(0);
   });
 });

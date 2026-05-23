@@ -69,14 +69,20 @@ export function Footer({
                   <ul className="au-link-list">
                     {section.links.map((link) => (
                       <li key={link.href}>
-                        <a aria-current={link.current ? 'page' : undefined} href={link.href}>{link.label}</a>
+                        <a aria-current={link.current ? 'page' : undefined} href={link.href}>
+                          {link.label}
+                        </a>
                       </li>
                     ))}
                   </ul>
                 </nav>
               )}
               {section.action && (
-                <Button className="au-btn--dark standard-gap" href={section.action.href} variant="secondary">
+                <Button
+                  className="au-btn--dark standard-gap"
+                  href={section.action.href}
+                  variant="secondary"
+                >
                   {section.action.label}
                 </Button>
               )}
@@ -86,7 +92,9 @@ export function Footer({
         <div className="au-footer__end">
           <div className="row">
             <div className="col-xs-12">
-              <p><small>{copyright}</small></p>
+              <p>
+                <small>{copyright}</small>
+              </p>
             </div>
           </div>
         </div>

@@ -4,7 +4,7 @@ import { Tags } from './Tags';
 
 describe('Tags', () => {
   it('renders', () => {
-    render(<Tags items={['Example tag']}/>);
+    render(<Tags items={['Example tag']} />);
     expect(screen.getAllByText(/Example/i).length).toBeGreaterThan(0);
   });
 });

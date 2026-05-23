@@ -120,7 +120,11 @@ export const blankSubmission: TeacherPathwaySubmission = {
   workflowStatus: 'Learning plan draft',
   riskLevel: 'Medium',
   targetReleaseDate: '2026-07-01',
-  standards: ['Australian Professional Standards for Teachers', 'Recognition of Prior Learning', 'WCAG 2.1 AA'],
+  standards: [
+    'Australian Professional Standards for Teachers',
+    'Recognition of Prior Learning',
+    'WCAG 2.1 AA',
+  ],
   controlChecks: initialControlChecks,
   evidenceDocuments: [],
 };

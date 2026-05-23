@@ -4,7 +4,7 @@ import { InpageNav } from './InpageNav';
 
 describe('InpageNav', () => {
   it('renders', () => {
-    render(<InpageNav links={[{ href: '#example', label: 'Example section' }]}/>);
+    render(<InpageNav links={[{ href: '#example', label: 'Example section' }]} />);
     expect(screen.getAllByText(/Example/i).length).toBeGreaterThan(0);
   });
 });

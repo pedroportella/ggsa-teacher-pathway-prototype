@@ -2,200 +2,210 @@
 
 declare(strict_types=1);
 
-if (!defined('ABSPATH')) {
-    exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 
-class GGSA_Teacher_Pathway_REST_Controller
-{
-    public function __construct(
-        private GGSA_Teacher_Pathway_Meta_Repository $repository,
-        private GGSA_Teacher_Pathway_Permissions $permissions
-    ) {
-    }
+class GGSA_Teacher_Pathway_REST_Controller {
 
-    public function register_hooks(): void
-    {
-        add_action('rest_api_init', [$this, 'register_routes']);
-    }
+	public function __construct(
+		private GGSA_Teacher_Pathway_Meta_Repository $repository,
+		private GGSA_Teacher_Pathway_Permissions $permissions
+	) {
+	}
 
-    public function register_routes(): void
-    {
-        register_rest_route(
-            'ggsa/v1',
-            '/teacher-pathway-submissions',
-            [
-                [
-                    'methods' => WP_REST_Server::READABLE,
-                    'callback' => [$this, 'list_learning_plans'],
-                    'permission_callback' => [$this->permissions, 'can_access_api'],
-                ],
-                [
-                    'methods' => WP_REST_Server::CREATABLE,
-                    'callback' => [$this, 'create_learning_plan'],
-                    'permission_callback' => [$this->permissions, 'can_access_api'],
-                ],
-            ]
-        );
+	public function register_hooks(): void {
+		add_action( 'rest_api_init', [ $this, 'register_routes' ] );
+	}
 
-        register_rest_route(
-            'ggsa/v1',
-            '/teacher-pathway-submissions/evidence',
-            [
-                'methods' => WP_REST_Server::CREATABLE,
-                'callback' => [$this, 'upload_learning_plan_evidence'],
-                'permission_callback' => [$this->permissions, 'can_access_api'],
-            ]
-        );
+	public function register_routes(): void {
+		register_rest_route(
+			'ggsa/v1',
+			'/teacher-pathway-submissions',
+			[
+				[
+					'methods'             => WP_REST_Server::READABLE,
+					'callback'            => [ $this, 'list_learning_plans' ],
+					'permission_callback' => [ $this->permissions, 'can_access_api' ],
+				],
+				[
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => [ $this, 'create_learning_plan' ],
+					'permission_callback' => [ $this->permissions, 'can_access_api' ],
+				],
+			]
+		);
 
-        register_rest_route(
-            'ggsa/v1',
-            '/teacher-pathway-submissions/readiness',
-            [
-                'methods' => WP_REST_Server::CREATABLE,
-                'callback' => [$this, 'update_learning_plan_readiness'],
-                'permission_callback' => [$this->permissions, 'can_access_api'],
-            ]
-        );
-    }
+		register_rest_route(
+			'ggsa/v1',
+			'/teacher-pathway-submissions/evidence',
+			[
+				'methods'             => WP_REST_Server::CREATABLE,
+				'callback'            => [ $this, 'upload_learning_plan_evidence' ],
+				'permission_callback' => [ $this->permissions, 'can_access_api' ],
+			]
+		);
 
-    public function list_learning_plans(): WP_REST_Response
-    {
-        $query = new WP_Query([
-            'post_type' => GGSA_TEACHER_PATHWAY_POST_TYPE,
-            'post_status' => ['publish', 'draft'],
-            'posts_per_page' => 50,
-            'orderby' => 'date',
-            'order' => 'DESC',
-        ]);
+		register_rest_route(
+			'ggsa/v1',
+			'/teacher-pathway-submissions/readiness',
+			[
+				'methods'             => WP_REST_Server::CREATABLE,
+				'callback'            => [ $this, 'update_learning_plan_readiness' ],
+				'permission_callback' => [ $this->permissions, 'can_access_api' ],
+			]
+		);
+	}
 
-        $items = array_map(
-            fn (WP_Post $post): array => $this->repository->learning_plan_to_register_item($post),
-            $query->posts
-        );
+	public function list_learning_plans(): WP_REST_Response {
+		$query = new WP_Query(
+			[
+				'post_type'      => GGSA_TEACHER_PATHWAY_POST_TYPE,
+				'post_status'    => [ 'publish', 'draft' ],
+				'posts_per_page' => 50,
+				'orderby'        => 'date',
+				'order'          => 'DESC',
+			]
+		);
 
-        return rest_ensure_response($items);
-    }
+		$items = array_map(
+			fn ( WP_Post $post ): array => $this->repository->learning_plan_to_register_item( $post ),
+			$query->posts
+		);
 
-    public function create_learning_plan(WP_REST_Request $request): WP_REST_Response|WP_Error
-    {
-        $payload = $request->get_json_params();
+		return rest_ensure_response( $items );
+	}
 
-        if (!is_array($payload)) {
-            return new WP_Error('ggsa_invalid_payload', 'Expected a JSON learning plan payload.', ['status' => 400]);
-        }
+	public function create_learning_plan( WP_REST_Request $request ): WP_REST_Response|WP_Error {
+		$payload = $request->get_json_params();
 
-        $school = sanitize_text_field((string) ($payload['organisationName'] ?? ''));
-        $pathway = sanitize_text_field((string) ($payload['productName'] ?? 'Teacher Learning Plan'));
+		if ( ! is_array( $payload ) ) {
+			return new WP_Error( 'ggsa_invalid_payload', 'Expected a JSON learning plan payload.', [ 'status' => 400 ] );
+		}
 
-        if ($school === '') {
-            return new WP_Error('ggsa_missing_school', 'School or organisation is required.', ['status' => 422]);
-        }
+		$school  = sanitize_text_field( (string) ( $payload['organisationName'] ?? '' ) );
+		$pathway = sanitize_text_field( (string) ( $payload['productName'] ?? 'Teacher Learning Plan' ) );
 
-        $post_id = wp_insert_post([
-            'post_type' => GGSA_TEACHER_PATHWAY_POST_TYPE,
-            'post_title' => sprintf('%s - %s', $school, $pathway),
-            'post_status' => 'publish',
-        ], true);
+		if ( $school === '' ) {
+			return new WP_Error( 'ggsa_missing_school', 'School or organisation is required.', [ 'status' => 422 ] );
+		}
 
-        if (is_wp_error($post_id)) {
-            return $post_id;
-        }
+		$post_id = wp_insert_post(
+			[
+				'post_type'   => GGSA_TEACHER_PATHWAY_POST_TYPE,
+				'post_title'  => sprintf( '%s - %s', $school, $pathway ),
+				'post_status' => 'publish',
+			],
+			true
+		);
 
-        $reference = sprintf('GGSA-TP-%s-%03d', gmdate('Y'), (int) $post_id);
-        $record = [
-            'id' => (string) $post_id,
-            'referenceNumber' => $reference,
-            'submittedAt' => gmdate(DATE_ATOM),
-            ...$payload,
-        ];
+		if ( is_wp_error( $post_id ) ) {
+			return $post_id;
+		}
 
-        $this->repository->update_learning_plan_meta((int) $post_id, [
-            ...$record,
-            'organisationName' => $school,
-            'productName' => $pathway,
-        ]);
+		$reference = sprintf( 'GGSA-TP-%s-%03d', gmdate( 'Y' ), (int) $post_id );
+		$record    = [
+			'id'              => (string) $post_id,
+			'referenceNumber' => $reference,
+			'submittedAt'     => gmdate( DATE_ATOM ),
+			...$payload,
+		];
 
-        return rest_ensure_response($record);
-    }
+		$this->repository->update_learning_plan_meta(
+			(int) $post_id,
+			[
+				...$record,
+				'organisationName' => $school,
+				'productName'      => $pathway,
+			]
+		);
 
-    public function upload_learning_plan_evidence(WP_REST_Request $request): WP_REST_Response
-    {
-        $files = $request->get_file_params();
-        $file = $files['file'] ?? null;
+		return rest_ensure_response( $record );
+	}
 
-        if (!is_array($file)) {
-            return rest_ensure_response([
-                'fileId' => 'sample-evidence',
-                'fileName' => 'teacher-pathway-evidence.pdf',
-                'fileType' => 'application/pdf',
-                'fileSize' => 428000,
-                'uploadedAt' => gmdate(DATE_ATOM),
-            ]);
-        }
+	public function upload_learning_plan_evidence( WP_REST_Request $request ): WP_REST_Response {
+		$files = $request->get_file_params();
+		$file  = $files['file'] ?? null;
 
-        require_once ABSPATH . 'wp-admin/includes/file.php';
+		if ( ! is_array( $file ) ) {
+			return rest_ensure_response(
+				[
+					'fileId'     => 'sample-evidence',
+					'fileName'   => 'teacher-pathway-evidence.pdf',
+					'fileType'   => 'application/pdf',
+					'fileSize'   => 428000,
+					'uploadedAt' => gmdate( DATE_ATOM ),
+				]
+			);
+		}
 
-        $upload = wp_handle_upload($file, ['test_form' => false]);
+		require_once ABSPATH . 'wp-admin/includes/file.php';
 
-        if (isset($upload['error'])) {
-            return rest_ensure_response([
-                'fileId' => uniqid('evidence-', true),
-                'fileName' => sanitize_file_name((string) ($file['name'] ?? 'teacher-pathway-evidence.pdf')),
-                'fileType' => sanitize_text_field((string) ($file['type'] ?? 'application/octet-stream')),
-                'fileSize' => (int) ($file['size'] ?? 0),
-                'uploadedAt' => gmdate(DATE_ATOM),
-                'error' => sanitize_text_field((string) $upload['error']),
-            ]);
-        }
+		$upload = wp_handle_upload( $file, [ 'test_form' => false ] );
 
-        return rest_ensure_response([
-            'fileId' => sanitize_title((string) ($upload['file'] ?? uniqid('evidence-', true))),
-            'fileName' => sanitize_file_name((string) ($file['name'] ?? 'teacher-pathway-evidence.pdf')),
-            'fileType' => sanitize_text_field((string) ($file['type'] ?? 'application/octet-stream')),
-            'fileSize' => (int) ($file['size'] ?? 0),
-            'uploadedAt' => gmdate(DATE_ATOM),
-            'url' => esc_url_raw((string) ($upload['url'] ?? '')),
-        ]);
-    }
+		if ( isset( $upload['error'] ) ) {
+			return rest_ensure_response(
+				[
+					'fileId'     => uniqid( 'evidence-', true ),
+					'fileName'   => sanitize_file_name( (string) ( $file['name'] ?? 'teacher-pathway-evidence.pdf' ) ),
+					'fileType'   => sanitize_text_field( (string) ( $file['type'] ?? 'application/octet-stream' ) ),
+					'fileSize'   => (int) ( $file['size'] ?? 0 ),
+					'uploadedAt' => gmdate( DATE_ATOM ),
+					'error'      => sanitize_text_field( (string) $upload['error'] ),
+				]
+			);
+		}
 
-    public function update_learning_plan_readiness(WP_REST_Request $request): WP_REST_Response|WP_Error
-    {
-        $payload = $request->get_json_params();
+		return rest_ensure_response(
+			[
+				'fileId'     => sanitize_title( (string) ( $upload['file'] ?? uniqid( 'evidence-', true ) ) ),
+				'fileName'   => sanitize_file_name( (string) ( $file['name'] ?? 'teacher-pathway-evidence.pdf' ) ),
+				'fileType'   => sanitize_text_field( (string) ( $file['type'] ?? 'application/octet-stream' ) ),
+				'fileSize'   => (int) ( $file['size'] ?? 0 ),
+				'uploadedAt' => gmdate( DATE_ATOM ),
+				'url'        => esc_url_raw( (string) ( $upload['url'] ?? '' ) ),
+			]
+		);
+	}
 
-        if (!is_array($payload)) {
-            return new WP_Error('ggsa_invalid_payload', 'Expected a JSON readiness controls payload.', ['status' => 400]);
-        }
+	public function update_learning_plan_readiness( WP_REST_Request $request ): WP_REST_Response|WP_Error {
+		$payload = $request->get_json_params();
 
-        $post_id = $this->repository->find_learning_plan_post_id($payload);
+		if ( ! is_array( $payload ) ) {
+			return new WP_Error( 'ggsa_invalid_payload', 'Expected a JSON readiness controls payload.', [ 'status' => 400 ] );
+		}
 
-        if ($post_id === 0) {
-            return new WP_Error('ggsa_learning_plan_not_found', 'Learning plan could not be found for readiness update.', ['status' => 404]);
-        }
+		$post_id = $this->repository->find_learning_plan_post_id( $payload );
 
-        $control_checks = $payload['controlChecks'] ?? null;
+		if ( $post_id === 0 ) {
+			return new WP_Error( 'ggsa_learning_plan_not_found', 'Learning plan could not be found for readiness update.', [ 'status' => 404 ] );
+		}
 
-        if (!is_array($control_checks)) {
-            return new WP_Error('ggsa_missing_readiness_controls', 'Readiness controls are required.', ['status' => 422]);
-        }
+		$control_checks = $payload['controlChecks'] ?? null;
 
-        $sanitized_checks = array_map(
-            fn (mixed $check): array => $this->repository->sanitize_control_check($check),
-            $control_checks
-        );
-        $this->repository->update_learning_plan_payload($post_id, ['controlChecks' => $sanitized_checks]);
+		if ( ! is_array( $control_checks ) ) {
+			return new WP_Error( 'ggsa_missing_readiness_controls', 'Readiness controls are required.', [ 'status' => 422 ] );
+		}
 
-        $record = json_decode((string) get_post_meta($post_id, 'ggsa_learning_plan_payload', true), true);
+		$sanitized_checks = array_map(
+			fn ( mixed $check ): array => $this->repository->sanitize_control_check( $check ),
+			$control_checks
+		);
+		$this->repository->update_learning_plan_payload( $post_id, [ 'controlChecks' => $sanitized_checks ] );
 
-        if (!is_array($record)) {
-            $record = [];
-        }
+		$record = json_decode( (string) get_post_meta( $post_id, 'ggsa_learning_plan_payload', true ), true );
 
-        return rest_ensure_response([
-            ...$record,
-            'id' => (string) $post_id,
-            'referenceNumber' => (string) get_post_meta($post_id, 'ggsa_reference_number', true),
-            'controlChecks' => $sanitized_checks,
-        ]);
-    }
+		if ( ! is_array( $record ) ) {
+			$record = [];
+		}
+
+		return rest_ensure_response(
+			[
+				...$record,
+				'id'              => (string) $post_id,
+				'referenceNumber' => (string) get_post_meta( $post_id, 'ggsa_reference_number', true ),
+				'controlChecks'   => $sanitized_checks,
+			]
+		);
+	}
 }

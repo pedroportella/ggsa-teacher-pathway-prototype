@@ -4,7 +4,7 @@ import { Table } from './Table';
 
 describe('Table', () => {
   it('renders', () => {
-    render(<Table headers={['Example heading']} rows={[['Example cell']]}/>);
+    render(<Table headers={['Example heading']} rows={[['Example cell']]} />);
     expect(screen.getAllByText(/Example/i).length).toBeGreaterThan(0);
   });
 });

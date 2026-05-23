@@ -1,6 +1,14 @@
 'use client';
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import {
   blankSubmission,
@@ -24,13 +32,17 @@ export function PortalProvider({ children }: { children: ReactNode }) {
   const route = getRouteFromPath(pathname);
   const [submission, setSubmission] = useState<TeacherPathwaySubmission>(blankSubmission);
   const [register, setRegister] = useState<RegisterItem[]>([]);
-  const [notice, setNotice] = useState('Loading teacher learning plans from the WordPress REST API.');
+  const [notice, setNotice] = useState(
+    'Loading teacher learning plans from the WordPress REST API.',
+  );
   const [isRegisterLoading, setIsRegisterLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const summary = useMemo(() => {
     const highRisk = register.filter((item) => item.riskLevel === 'High').length;
-    const actionRequired = register.filter((item) => item.workflowStatus === 'Coach action required').length;
+    const actionRequired = register.filter(
+      (item) => item.workflowStatus === 'Coach action required',
+    ).length;
     const ready = register.filter((item) => item.workflowStatus === 'RPL evidence ready').length;
 
     return { highRisk, actionRequired, ready };
@@ -50,15 +62,17 @@ export function PortalProvider({ children }: { children: ReactNode }) {
   const updateCheck = async (id: string, status: ControlCheck['status']) => {
     const nextSubmission: TeacherPathwaySubmission = {
       ...submission,
-      controlChecks: submission.controlChecks.map((check) => (
-        check.id === id ? { ...check, status } : check
-      )),
+      controlChecks: submission.controlChecks.map((check) =>
+        check.id === id ? { ...check, status } : check,
+      ),
     };
 
     setSubmission(nextSubmission);
 
     if (!nextSubmission.id && !nextSubmission.referenceNumber) {
-      setNotice('Readiness controls updated locally; submit the learning plan before WordPress can persist them.');
+      setNotice(
+        'Readiness controls updated locally; submit the learning plan before WordPress can persist them.',
+      );
       return;
     }
 
@@ -75,8 +89,7 @@ export function PortalProvider({ children }: { children: ReactNode }) {
         controlChecks: updated.controlChecks,
       }));
       setNotice('Readiness controls saved to the WordPress pathway register.');
-    }
-    catch {
+    } catch {
       setNotice('Readiness controls updated locally; WordPress could not save the latest change.');
     }
   };
@@ -102,15 +115,15 @@ export function PortalProvider({ children }: { children: ReactNode }) {
     try {
       const items = await listSubmissions();
       setRegister(items);
-      setNotice(items.length > 0
-        ? 'Loaded teacher learning plans from the WordPress REST API.'
-        : 'The WordPress REST API returned no teacher learning plans.');
-    }
-    catch {
+      setNotice(
+        items.length > 0
+          ? 'Loaded teacher learning plans from the WordPress REST API.'
+          : 'The WordPress REST API returned no teacher learning plans.',
+      );
+    } catch {
       setRegister([]);
       setNotice('WordPress API unavailable; teacher learning plans could not be loaded.');
-    }
-    finally {
+    } finally {
       setIsRegisterLoading(false);
     }
   }, []);
@@ -141,8 +154,7 @@ export function PortalProvider({ children }: { children: ReactNode }) {
       setSubmission(created);
       setNotice('Teacher learning plan sent to the WordPress pathway register.');
       navigate('register');
-    }
-    catch {
+    } catch {
       const fallbackItem: RegisterItem = {
         id: `local-${Date.now()}`,
         referenceNumber: `GGSA-TP-${new Date().getFullYear()}-DRAFT`,
@@ -154,10 +166,11 @@ export function PortalProvider({ children }: { children: ReactNode }) {
       };
 
       setRegister((current) => [fallbackItem, ...current]);
-      setNotice('Teacher learning plan captured locally; WordPress can persist it when the backend is running.');
+      setNotice(
+        'Teacher learning plan captured locally; WordPress can persist it when the backend is running.',
+      );
       navigate('register');
-    }
-    finally {
+    } finally {
       setIsSubmitting(false);
     }
   };

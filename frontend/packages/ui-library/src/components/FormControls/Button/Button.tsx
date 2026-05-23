@@ -1,4 +1,10 @@
-import type { AnchorHTMLAttributes, ButtonHTMLAttributes, MouseEvent, MouseEventHandler, ReactNode } from 'react';
+import type {
+  AnchorHTMLAttributes,
+  ButtonHTMLAttributes,
+  MouseEvent,
+  MouseEventHandler,
+  ReactNode,
+} from 'react';
 import { classNames } from '@ggsa/utils';
 import './Button.scss';
 

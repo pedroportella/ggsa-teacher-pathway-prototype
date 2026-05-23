@@ -63,6 +63,7 @@ Run these from the repository root before handing over a change.
 volta install node@20.19.5 pnpm@10.18.3
 export PATH="$HOME/.volta/bin:$PATH"
 pnpm --dir frontend install
+pnpm format:check
 pnpm --dir frontend lint
 pnpm --dir frontend test:unit
 pnpm --dir frontend typecheck
@@ -73,6 +74,12 @@ composer --working-dir=backend/wp-content/plugins/ggsa-teacher-pathway install
 composer --working-dir=backend/wp-content/plugins/ggsa-teacher-pathway run quality
 docker compose run --rm --entrypoint php wordpress -l wp-content/plugins/ggsa-teacher-pathway/ggsa-teacher-pathway.php
 ```
+
+## Style Contract
+
+Frontend style is enforced by Prettier. ESLint remains responsible for TypeScript, React hooks and application-quality rules. CI or local handover checks should fail when `pnpm format:check` fails.
+
+Backend style is enforced by PHPCS with WordPress Coding Standards, PHP compatibility checks and focused exclusions for modern PHP syntax and the existing plugin file layout. PHPStan and REST contract checks run as part of `composer run quality`.
 
 For an end-to-end local stack check:
 

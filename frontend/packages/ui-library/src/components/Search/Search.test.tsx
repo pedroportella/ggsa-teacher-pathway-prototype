@@ -4,7 +4,7 @@ import { Search } from './Search';
 
 describe('Search', () => {
   it('renders', () => {
-    render(<Search label="Example search" placeholder="Example" action="#"/>);
+    render(<Search label="Example search" placeholder="Example" action="#" />);
     expect(screen.getAllByText(/Example/i).length).toBeGreaterThan(0);
   });
 });

@@ -7,7 +7,9 @@ export function Breadcrumb({ links }: { links: NavLink[] }) {
       <ol className="au-link-list au-link-list--inline">
         {links.map((link) => (
           <li key={link.href}>
-            <a aria-current={link.current ? 'page' : undefined} href={link.href}>{link.label}</a>
+            <a aria-current={link.current ? 'page' : undefined} href={link.href}>
+              {link.label}
+            </a>
           </li>
         ))}
       </ol>

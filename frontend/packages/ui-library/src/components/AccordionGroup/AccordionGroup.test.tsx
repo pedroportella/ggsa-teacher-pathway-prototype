@@ -4,7 +4,11 @@ import { AccordionGroup } from './AccordionGroup';
 
 describe('AccordionGroup', () => {
   it('renders', () => {
-    render(<AccordionGroup items={[{ id: 'example', title: 'Example accordion', content: 'Example body' }]} />);
+    render(
+      <AccordionGroup
+        items={[{ id: 'example', title: 'Example accordion', content: 'Example body' }]}
+      />,
+    );
     expect(screen.getAllByText(/Example/i).length).toBeGreaterThan(0);
   });
 });

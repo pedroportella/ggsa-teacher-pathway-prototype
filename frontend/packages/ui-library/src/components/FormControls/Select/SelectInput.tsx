@@ -10,14 +10,15 @@ export type SelectOption = {
   value: string;
 };
 
-export type SelectInputProps = FormControlToneProps & Omit<SelectHTMLAttributes<HTMLSelectElement>, 'children' | 'onChange'> & {
-  id: string;
-  label: ReactNode;
-  onChange?: ChangeEventHandler<HTMLSelectElement>;
-  onValueChange?: (value: string | string[]) => void;
-  options: readonly (SelectOption | string)[];
-  width?: 'sm' | 'md' | 'lg' | 'full' | string;
-};
+export type SelectInputProps = FormControlToneProps &
+  Omit<SelectHTMLAttributes<HTMLSelectElement>, 'children' | 'onChange'> & {
+    id: string;
+    label: ReactNode;
+    onChange?: ChangeEventHandler<HTMLSelectElement>;
+    onValueChange?: (value: string | string[]) => void;
+    options: readonly (SelectOption | string)[];
+    width?: 'sm' | 'md' | 'lg' | 'full' | string;
+  };
 
 function normaliseOption(option: SelectOption | string): SelectOption {
   return typeof option === 'string' ? { label: option, value: option } : option;
@@ -55,13 +56,21 @@ export function SelectInput({
     >
       <select
         {...props}
-        className={classNames('au-select', `au-field-width--${width}`, error ? 'au-select--error' : undefined, success ? 'au-select--valid' : undefined, className)}
+        className={classNames(
+          'au-select',
+          `au-field-width--${width}`,
+          error ? 'au-select--error' : undefined,
+          success ? 'au-select--valid' : undefined,
+          className,
+        )}
         id={id}
         multiple={multiple}
         name={props.name ?? id}
         onChange={(event) => {
           onChange?.(event);
-          const selected = Array.from(event.currentTarget.selectedOptions).map((option) => option.value);
+          const selected = Array.from(event.currentTarget.selectedOptions).map(
+            (option) => option.value,
+          );
           onValueChange?.(multiple ? selected : selected[0]);
         }}
         required={required}

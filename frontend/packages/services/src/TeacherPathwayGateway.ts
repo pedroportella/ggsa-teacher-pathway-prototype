@@ -16,9 +16,9 @@ function portalAuthHeaders(headers: HeadersInit = {}): HeadersInit {
   return token === ''
     ? headers
     : {
-      ...headers,
-      'X-GGSA-Portal-Token': token,
-    };
+        ...headers,
+        'X-GGSA-Portal-Token': token,
+      };
 }
 
 export async function requestTeacherPathwaySubmissions() {
@@ -28,7 +28,10 @@ export async function requestTeacherPathwaySubmissions() {
   });
 }
 
-export async function submitTeacherPathwayRecord(payload: string, contentType = 'application/json') {
+export async function submitTeacherPathwayRecord(
+  payload: string,
+  contentType = 'application/json',
+) {
   return fetch(teacherPathwayApiEndpoint(TEACHER_PATHWAY_SUBMISSIONS_PATH), {
     method: 'POST',
     headers: portalAuthHeaders({
@@ -46,7 +49,10 @@ export async function submitTeacherPathwayEvidence(formData: FormData) {
   });
 }
 
-export async function submitTeacherPathwayReadiness(payload: string, contentType = 'application/json') {
+export async function submitTeacherPathwayReadiness(
+  payload: string,
+  contentType = 'application/json',
+) {
   return fetch(teacherPathwayApiEndpoint(TEACHER_PATHWAY_READINESS_PATH), {
     method: 'POST',
     headers: portalAuthHeaders({

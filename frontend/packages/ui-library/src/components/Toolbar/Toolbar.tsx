@@ -27,7 +27,9 @@ export function Toolbar({
             </li>
           ))}
         </ul>
-      ) : children}
+      ) : (
+        children
+      )}
     </div>
   );
 }

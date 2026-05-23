@@ -50,6 +50,9 @@ importers:
       jsdom:
         specifier: ^24.1.3
         version: 24.1.3
+      prettier:
+        specifier: ^3.6.2
+        version: 3.8.3
       sass:
         specifier: ^1.83.4
         version: 1.99.0
@@ -2680,6 +2683,11 @@ packages:
   prepend-http@1.0.4:
     resolution: {integrity: sha512-PhmXi5XmoyKw1Un4E+opM2KcsJInDvKyuOumcjjw3waw86ZNjHwVUOOWLc4bCzLdcKNaWBH9e99sbWzDQsVaYg==}
     engines: {node: '>=0.10.0'}
+
+  prettier@3.8.3:
+    resolution: {integrity: sha512-7igPTM53cGHMW8xWuVTydi2KO233VFiTNyF5hLJqpilHfmn8C8gPf+PS7dUT64YcXFbiMGZxS9pCSxL/Dxm/Jw==}
+    engines: {node: '>=14'}
+    hasBin: true
 
   pretty-format@27.5.1:
     resolution: {integrity: sha512-Qb1gy5OrP5+zDf2Bvnzdl3jsTf1qXVMazbvCoKhtKqVs4/YK4ozX4gKQJJVyNe+cajNPn0KoC0MC3FUmaHWEmQ==}
@@ -5970,6 +5978,8 @@ snapshots:
   prelude-ls@1.2.1: {}
 
   prepend-http@1.0.4: {}
+
+  prettier@3.8.3: {}
 
   pretty-format@27.5.1:
     dependencies:

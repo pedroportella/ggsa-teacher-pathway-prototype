@@ -4,14 +4,8 @@ import { VendorProviderSubmissionPage } from '../pages';
 import { usePortalState } from '../PortalContext';
 
 export function LearningPlanRoute() {
-  const {
-    addEvidence,
-    isSubmitting,
-    notice,
-    submission,
-    submitEvidence,
-    updateField,
-  } = usePortalState();
+  const { addEvidence, isSubmitting, notice, submission, submitEvidence, updateField } =
+    usePortalState();
 
   return (
     <VendorProviderSubmissionPage

@@ -70,18 +70,35 @@ export function Band({
       <div className={classNames(contained && 'container', 'health-band__inner')}>
         {hasImage && image.position === 'left' && (
           <div className="health-band__media">
-            <img alt={image.alt ?? ''} className="health-image au-responsive-media-img" src={image.src} />
+            <img
+              alt={image.alt ?? ''}
+              className="health-image au-responsive-media-img"
+              src={image.src}
+            />
           </div>
         )}
         <div className="health-band__content">
           {eyebrow && <p className="health-band__eyebrow">{eyebrow}</p>}
-          {title && <h2 className="health-band__title" id={headingId}>{title}</h2>}
+          {title && (
+            <h2 className="health-band__title" id={headingId}>
+              {title}
+            </h2>
+          )}
           {description && <p className="health-band__description">{description}</p>}
-          {children && <div className={classNames('health-band__body', variant === 'cards' && 'health-band__body--cards')}>{children}</div>}
+          {children && (
+            <div
+              className={classNames(
+                'health-band__body',
+                variant === 'cards' && 'health-band__body--cards',
+              )}
+            >
+              {children}
+            </div>
+          )}
           {actions.length > 0 && (
             <div className="health-band__actions">
               {actions.map(({ label, ...action }, index) => (
-                <Button key={index} {...action as ButtonProps}>
+                <Button key={index} {...(action as ButtonProps)}>
                   {label}
                 </Button>
               ))}
@@ -90,7 +107,11 @@ export function Band({
         </div>
         {hasImage && image.position !== 'left' && (
           <div className="health-band__media">
-            <img alt={image.alt ?? ''} className="health-image au-responsive-media-img" src={image.src} />
+            <img
+              alt={image.alt ?? ''}
+              className="health-image au-responsive-media-img"
+              src={image.src}
+            />
           </div>
         )}
       </div>

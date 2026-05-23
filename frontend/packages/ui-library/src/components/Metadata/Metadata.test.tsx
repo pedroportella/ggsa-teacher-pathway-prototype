@@ -4,7 +4,7 @@ import { Metadata } from './Metadata';
 
 describe('Metadata', () => {
   it('renders', () => {
-    render(<Metadata items={[{ label: 'Example label', value: 'Example value' }]}/>);
+    render(<Metadata items={[{ label: 'Example label', value: 'Example value' }]} />);
     expect(screen.getAllByText(/Example/i).length).toBeGreaterThan(0);
   });
 });

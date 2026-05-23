@@ -4,7 +4,7 @@ import { SearchResult } from './SearchResult';
 
 describe('SearchResult', () => {
   it('renders', () => {
-    render(<SearchResult title="Example result" href="#"/>);
+    render(<SearchResult title="Example result" href="#" />);
     expect(screen.getAllByText(/Example/i).length).toBeGreaterThan(0);
   });
 });

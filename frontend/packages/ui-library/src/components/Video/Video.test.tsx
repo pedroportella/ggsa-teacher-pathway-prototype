@@ -4,7 +4,7 @@ import { Video } from './Video';
 
 describe('Video', () => {
   it('renders', () => {
-    render(<Video title="Example video"/>);
+    render(<Video title="Example video" />);
     expect(screen.getAllByText(/Example/i).length).toBeGreaterThan(0);
   });
 });

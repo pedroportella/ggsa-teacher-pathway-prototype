@@ -11,10 +11,14 @@ export type FormControlToneProps = {
 };
 
 export function getDescribedBy(id: string, props: FormControlToneProps) {
-  return [
-    props.error ? `${id}-error` : undefined,
-    props.success ? `${id}-success` : undefined,
-    props.alert ? `${id}-alert` : undefined,
-    props.description || props.hint ? `${id}-hint` : undefined,
-  ].filter(Boolean).join(' ') || undefined;
+  return (
+    [
+      props.error ? `${id}-error` : undefined,
+      props.success ? `${id}-success` : undefined,
+      props.alert ? `${id}-alert` : undefined,
+      props.description || props.hint ? `${id}-hint` : undefined,
+    ]
+      .filter(Boolean)
+      .join(' ') || undefined
+  );
 }

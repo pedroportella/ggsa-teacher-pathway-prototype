@@ -277,6 +277,29 @@ docker compose run --rm --entrypoint php wordpress -l wp-content/plugins/ggsa-te
 pnpm test:e2e:real
 ```
 
+## Style Hardening: Frontend And WordPress Standards - Done
+
+Status: completed before Stage 4 so the integration adapter work lands on a consistent review surface.
+
+Completed:
+
+- Added root `.editorconfig`.
+- Added frontend Prettier configuration and ignore file.
+- Added root `pnpm format` and `pnpm format:check` scripts.
+- Added frontend `format` and `format:check` scripts.
+- Added Prettier to the frontend workspace.
+- Ran Prettier across the frontend workspace.
+- Expanded backend PHPCS to include WordPress-Core style checks, tests and modern PHP-targeted exclusions.
+- Ran PHPCBF across the WordPress plugin.
+- Documented the style contract in README and CI docs.
+
+Validated locally:
+
+- `pnpm format:check`.
+- `pnpm lint`.
+- `pnpm typecheck`.
+- `pnpm php:quality`.
+
 ## Stage 5: Generated Learning Plan Service
 
 ### Goal
@@ -465,12 +488,13 @@ Manual WordPress admin/page check may be required.
 1. Stage 1: WordPress Plugin Structure.
 2. Stage 2: Composer And PHP Quality Tooling.
 3. Stage 3: WordPress REST Contract Tests.
-4. Stage 4: PHP-Side Integration Adapters.
-5. Stage 5: Generated Learning Plan Service.
-6. Stage 6: Evidence Upload Policy.
-7. Stage 7: Accessibility And UX Quality Gates.
-8. Stage 8: CI Expansion.
-9. Stage 9: Divi / Existing WordPress Deployment Strategy.
+4. Style Hardening: Frontend And WordPress Standards.
+5. Stage 4: PHP-Side Integration Adapters.
+6. Stage 5: Generated Learning Plan Service.
+7. Stage 6: Evidence Upload Policy.
+8. Stage 7: Accessibility And UX Quality Gates.
+9. Stage 8: CI Expansion.
+10. Stage 9: Divi / Existing WordPress Deployment Strategy.
 
 ## Notes For Each Stage
 

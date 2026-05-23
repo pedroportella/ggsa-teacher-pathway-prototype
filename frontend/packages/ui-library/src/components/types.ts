@@ -5,4 +5,7 @@ export interface NavLink {
   href: string;
   label: string;
 }
-export interface TemplateProps { title: string; children: ReactNode }
+export interface TemplateProps {
+  title: string;
+  children: ReactNode;
+}

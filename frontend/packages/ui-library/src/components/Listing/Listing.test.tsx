@@ -4,7 +4,11 @@ import { Listing } from './Listing';
 
 describe('Listing', () => {
   it('renders', () => {
-    render(<Listing title="Example listing" href="#">Example content</Listing>);
+    render(
+      <Listing title="Example listing" href="#">
+        Example content
+      </Listing>,
+    );
     expect(screen.getAllByText(/Example/i).length).toBeGreaterThan(0);
   });
 });

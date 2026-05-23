@@ -1,4 +1,4 @@
-@use "@ggsa/ui-tokens/src/scss/styles/health-design-system.scss";
+@use '@ggsa/ui-tokens/src/scss/styles/health-design-system.scss';
 
 * {
   box-sizing: border-box;
@@ -20,8 +20,8 @@ body {
 }
 
 .app-shell :where(button, input, select, textarea),
-.app-shell [class^="au-"],
-.app-shell [class*=" au-"] {
+.app-shell [class^='au-'],
+.app-shell [class*=' au-'] {
   font-family: var(--ggsa-font-family-body, Calibri, Helvetica, Arial, sans-serif);
 }
 

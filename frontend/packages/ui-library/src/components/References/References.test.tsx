@@ -4,7 +4,7 @@ import { References } from './References';
 
 describe('References', () => {
   it('renders', () => {
-    render(<References items={['Example reference']}/>);
+    render(<References items={['Example reference']} />);
     expect(screen.getAllByText(/Example/i).length).toBeGreaterThan(0);
   });
 });

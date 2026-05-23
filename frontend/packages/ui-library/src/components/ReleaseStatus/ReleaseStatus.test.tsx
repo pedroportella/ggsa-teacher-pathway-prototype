@@ -4,7 +4,7 @@ import { ReleaseStatus } from './ReleaseStatus';
 
 describe('ReleaseStatus', () => {
   it('renders', () => {
-    render(<ReleaseStatus >Example content</ReleaseStatus>);
+    render(<ReleaseStatus>Example content</ReleaseStatus>);
     expect(screen.getAllByText(/Example/i).length).toBeGreaterThan(0);
   });
 });

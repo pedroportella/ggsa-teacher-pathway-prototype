@@ -4,7 +4,7 @@ import { QuickExit } from './QuickExit';
 
 describe('QuickExit', () => {
   it('renders', () => {
-    render(<QuickExit href="#"/>);
+    render(<QuickExit href="#" />);
     expect(screen.getAllByText(/Example/i).length).toBeGreaterThan(0);
   });
 });

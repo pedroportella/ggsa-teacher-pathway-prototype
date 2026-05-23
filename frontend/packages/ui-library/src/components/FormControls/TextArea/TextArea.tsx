@@ -48,7 +48,14 @@ export function TextArea({
     >
       <textarea
         {...props}
-        className={classNames('au-text-input', 'au-text-input--block', `au-field-width--${width}`, error ? 'au-text-input--error' : undefined, success ? 'au-text-input--valid' : undefined, className)}
+        className={classNames(
+          'au-text-input',
+          'au-text-input--block',
+          `au-field-width--${width}`,
+          error ? 'au-text-input--error' : undefined,
+          success ? 'au-text-input--valid' : undefined,
+          className,
+        )}
         id={id}
         name={props.name ?? id}
         required={required}

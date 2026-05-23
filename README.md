@@ -190,6 +190,7 @@ Useful frontend checks:
 
 ```bash
 pnpm --dir frontend lint
+pnpm --dir frontend format:check
 pnpm --dir frontend test:unit
 pnpm --dir frontend typecheck
 pnpm --dir frontend build
@@ -277,14 +278,21 @@ pnpm docker:logs
 docker compose run --rm --entrypoint wp wordpress-setup rewrite flush --hard --allow-root
 
 # Run frontend checks.
+pnpm format:check
 pnpm --dir frontend lint
 pnpm --dir frontend test:unit
 pnpm --dir frontend typecheck
 pnpm --dir frontend build
 
-# Validate the WordPress plugin PHP syntax through Docker.
-docker compose run --rm --entrypoint php wordpress -l wp-content/plugins/ggsa-teacher-pathway/ggsa-teacher-pathway.php
+# Run WordPress plugin syntax, PHPCS, PHPStan and REST contract checks.
+pnpm php:quality
 ```
+
+## Code Style
+
+Frontend code is formatted with Prettier and checked with ESLint plus strict TypeScript. Use 2-space indentation, single quotes, semicolons and trailing commas. Run `pnpm format` to format the frontend workspace and `pnpm format:check` before handover.
+
+Backend plugin code follows WordPress Coding Standards through PHPCS, with targeted allowances for modern PHP 8.3 structure, short array syntax and the existing namespaced folder layout. PHP files use tabs for indentation, WordPress-style spacing around function calls and explicit sanitisation/escaping at WordPress boundaries. Run `pnpm php:quality` before handover.
 
 ## Configuration
 

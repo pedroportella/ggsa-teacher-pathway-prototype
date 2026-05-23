@@ -4,7 +4,7 @@ import { Breadcrumb } from './Breadcrumb';
 
 describe('Breadcrumb', () => {
   it('renders', () => {
-    render(<Breadcrumb links={[{ href: '#', label: 'Example crumb' }]}/>);
+    render(<Breadcrumb links={[{ href: '#', label: 'Example crumb' }]} />);
     expect(screen.getAllByText(/Example/i).length).toBeGreaterThan(0);
   });
 });

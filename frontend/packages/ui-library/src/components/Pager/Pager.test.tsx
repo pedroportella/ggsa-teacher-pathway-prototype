@@ -4,7 +4,7 @@ import { Pager } from './Pager';
 
 describe('Pager', () => {
   it('renders', () => {
-    render(<Pager previousHref="#" nextHref="#"/>);
+    render(<Pager previousHref="#" nextHref="#" />);
     expect(screen.getAllByText(/Example/i).length).toBeGreaterThan(0);
   });
 });

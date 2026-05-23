@@ -52,6 +52,8 @@ test('captures a teacher pathway submission into the register', async ({ page })
   await page.getByRole('button', { name: 'Add prototype evidence' }).click();
   await page.getByRole('button', { name: 'Sync to pathway register' }).click();
 
-  await expect(page.getByText(/Teacher learning plan captured locally|Teacher learning plan sent/)).toBeVisible();
+  await expect(
+    page.getByText(/Teacher learning plan captured locally|Teacher learning plan sent/),
+  ).toBeVisible();
   await expect(page.getByRole('cell', { name: organisationName })).toBeVisible();
 });

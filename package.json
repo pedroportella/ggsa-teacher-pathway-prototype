@@ -16,6 +16,8 @@
   "scripts": {
     "dev": "pnpm --dir frontend dev",
     "build": "pnpm --dir frontend build",
+    "format": "pnpm --dir frontend format",
+    "format:check": "pnpm --dir frontend format:check",
     "lint": "pnpm --dir frontend lint",
     "php:install": "composer --working-dir=backend/wp-content/plugins/ggsa-teacher-pathway install",
     "php:lint": "composer --working-dir=backend/wp-content/plugins/ggsa-teacher-pathway run lint",

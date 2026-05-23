@@ -2,9 +2,17 @@ import { MetricCard, Panel, Table, Tags } from '@ggsa/ui-library';
 import { formatDate } from '@ggsa/utils';
 import type { PortalState } from '../../app/portalState';
 
-type RegisterContainerProps = Pick<PortalState, 'isRegisterLoading' | 'notice' | 'register' | 'summary'>;
+type RegisterContainerProps = Pick<
+  PortalState,
+  'isRegisterLoading' | 'notice' | 'register' | 'summary'
+>;
 
-export function RegisterContainer({ isRegisterLoading, notice, register, summary }: RegisterContainerProps) {
+export function RegisterContainer({
+  isRegisterLoading,
+  notice,
+  register,
+  summary,
+}: RegisterContainerProps) {
   return (
     <>
       <section className="portal-band portal-band--summary" aria-labelledby="summary-heading">
@@ -36,9 +44,20 @@ export function RegisterContainer({ isRegisterLoading, notice, register, summary
       <section className="portal-band" aria-label="Teacher pathway register and coach priorities">
         <div className="row">
           <div className="col-xs-12 col-lg-8">
-            <Panel id="register" title="Learning plan register" eyebrow="WordPress admin view" wide className="ggsa-panel">
+            <Panel
+              id="register"
+              title="Learning plan register"
+              eyebrow="WordPress admin view"
+              wide
+              className="ggsa-panel"
+            >
               {isRegisterLoading ? (
-                <div className="portal-register-loading" role="status" aria-live="polite" aria-label="Loading learning plan register">
+                <div
+                  className="portal-register-loading"
+                  role="status"
+                  aria-live="polite"
+                  aria-label="Loading learning plan register"
+                >
                   <span className="portal-spinner" aria-hidden="true" />
                   <span>Loading learning plan register</span>
                 </div>
@@ -50,7 +69,10 @@ export function RegisterContainer({ isRegisterLoading, notice, register, summary
                     item.organisationName,
                     item.productName,
                     <Tags items={[item.workflowStatus]} />,
-                    <Tags tone={item.riskLevel.toLowerCase() as 'low' | 'medium' | 'high'} items={[item.riskLevel]} />,
+                    <Tags
+                      tone={item.riskLevel.toLowerCase() as 'low' | 'medium' | 'high'}
+                      items={[item.riskLevel]}
+                    />,
                     formatDate(item.submittedAt),
                   ])}
                 />
@@ -62,15 +84,24 @@ export function RegisterContainer({ isRegisterLoading, notice, register, summary
               <p className="eyebrow">Priority work</p>
               <h2>Focus pathway support</h2>
               <ul className="au-link-list portal-priority__list">
-                <li><a href="/learning-plan">Review enrolment-generated plan</a></li>
-                <li><a href="/pathway-readiness">Check module and evidence readiness</a></li>
-                <li><a href="#register">Review high-support cohorts first</a></li>
+                <li>
+                  <a href="/learning-plan">Review enrolment-generated plan</a>
+                </li>
+                <li>
+                  <a href="/pathway-readiness">Check module and evidence readiness</a>
+                </li>
+                <li>
+                  <a href="#register">Review high-support cohorts first</a>
+                </li>
               </ul>
             </section>
             <section className="portal-priority portal-priority--teal">
               <p className="eyebrow">Operating principle</p>
               <h2>One plan, many milestones</h2>
-              <p>Learning plan data, module completion, evidence quality and RPL readiness are treated as connected views of the same teacher pathway.</p>
+              <p>
+                Learning plan data, module completion, evidence quality and RPL readiness are
+                treated as connected views of the same teacher pathway.
+              </p>
             </section>
           </aside>
         </div>

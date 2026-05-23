@@ -1,9 +1,14 @@
 import { expect, test } from '@playwright/test';
 import { generateRandomLearningPlan } from './utils/registerData';
 
-test.skip(process.env.E2E_USE_MOCK !== 'false', 'Fresh register persistence test requires the real WordPress backend.');
+test.skip(
+  process.env.E2E_USE_MOCK !== 'false',
+  'Fresh register persistence test requires the real WordPress backend.',
+);
 
-test('loads refreshed seed data, creates a random record, and finds it after reloads', async ({ page }) => {
+test('loads refreshed seed data, creates a random record, and finds it after reloads', async ({
+  page,
+}) => {
   const record = generateRandomLearningPlan();
 
   await page.goto('/register');
@@ -25,7 +30,9 @@ test('loads refreshed seed data, creates a random record, and finds it after rel
   await page.getByRole('button', { name: 'Add prototype evidence' }).click();
   await page.getByRole('button', { name: 'Sync to pathway register' }).click();
 
-  await expect(page.getByText('Teacher learning plan sent to the WordPress pathway register.')).toBeVisible();
+  await expect(
+    page.getByText('Teacher learning plan sent to the WordPress pathway register.'),
+  ).toBeVisible();
   await expect(page.getByRole('cell', { name: record.organisationName })).toBeVisible();
 
   await page.reload();
