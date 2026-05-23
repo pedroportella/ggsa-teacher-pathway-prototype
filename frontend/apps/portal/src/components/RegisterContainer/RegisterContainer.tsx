@@ -36,7 +36,7 @@ export function RegisterContainer({ isRegisterLoading, notice, register, summary
       <section className="portal-band" aria-label="Teacher pathway register and coach priorities">
         <div className="row">
           <div className="col-xs-12 col-lg-8">
-            <Panel id="register" title="Learning plan register" eyebrow="WordPress admin view" wide>
+            <Panel id="register" title="Learning plan register" eyebrow="WordPress admin view" wide className="ggsa-panel">
               {isRegisterLoading ? (
                 <div className="portal-register-loading" role="status" aria-live="polite" aria-label="Loading learning plan register">
                   <span className="portal-spinner" aria-hidden="true" />

@@ -51,7 +51,7 @@ export function ReadinessContainer({ notice, submission, updateCheck }: Readines
       <section className="portal-band" aria-label="Pathway readiness pages">
         <div className="row">
           <div className="col-xs-12 col-lg-7">
-            <Panel id="readiness-controls" title="Readiness controls" eyebrow="Pathway readiness page">
+            <Panel id="readiness-controls" title="Readiness controls" eyebrow="Pathway readiness page" className="ggsa-panel">
               <div className="readiness-summary">
                 <Field label="Outstanding categories" inline>
                   {outstandingCategories.length > 0 ? <Tags items={outstandingCategories} /> : 'None'}
@@ -70,14 +70,14 @@ export function ReadinessContainer({ notice, submission, updateCheck }: Readines
             </Panel>
           </div>
           <div className="col-xs-12 col-lg-5 portal-aside">
-            <Panel id="readiness-evidence" title="Evidence portfolio" eyebrow="Pathway readiness page">
+            <Panel id="readiness-evidence" title="Evidence portfolio" eyebrow="Pathway readiness page" className="ggsa-panel">
               <ul className="portal-checklist">
                 <li>Learning plan has a school, owner, cohort and selected teacher course.</li>
                 <li>Prerequisite, core and elective modules are visible in the plan.</li>
                 <li>Certificates, classroom artefacts and mastery evidence can support RPL review.</li>
               </ul>
             </Panel>
-            <Panel id="readiness-decisioning" title="Certification readiness" eyebrow="Pathway readiness page">
+            <Panel id="readiness-decisioning" title="Certification readiness" eyebrow="Pathway readiness page" className="ggsa-panel">
               <ul className="portal-checklist">
                 <li>Support level helps coaches prioritise schools and cohorts.</li>
                 <li>Outstanding evidence categories can be turned into clear coach actions.</li>

@@ -1,1 +1,11 @@
-.card { }
+.health-card {
+  &.ggsa-card,
+  &.ggsa-panel {
+    margin-top: 0;
+
+    .health-card__title {
+      margin-top: 1rem;
+    }
+  }
+}
+
