@@ -30,6 +30,7 @@ pnpm-debug.log*
 .env.*
 !.env.example
 *.local
+.do/app.generated.yml
 
 # WordPress local runtime and uploads
 backend/.cache/
