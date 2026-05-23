@@ -23,7 +23,26 @@ Already completed:
   - real-backend Playwright tests;
   - PHP syntax lint.
 
-## Stage 1: WordPress Plugin Structure
+## Stage 1: WordPress Plugin Structure - Done
+
+Status: completed with local FE/BE checks.
+
+Completed:
+
+- Split the WordPress plugin bootstrap from implementation classes.
+- Added `includes/Plugin.php`.
+- Added `includes/PostTypes/LearningPlanPostType.php`.
+- Added `includes/Rest/TeacherPathwayController.php`.
+- Added `includes/Security/Permissions.php`.
+- Added `includes/Support/MetaRepository.php`.
+- Kept `ggsa_seed_learning_plan_register()` available for the existing seed script.
+
+Validated locally:
+
+- `php -l` on every plugin PHP file.
+- `pnpm lint`.
+- `pnpm typecheck`.
+- `pnpm test`.
 
 ### Goal
 
@@ -409,4 +428,3 @@ For every stage:
 - run `pnpm test:e2e:real` after any WordPress/API behavior change;
 - update docs in the same stage when behavior or positioning changes;
 - avoid introducing real production secrets or environment-specific values.
-
