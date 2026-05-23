@@ -1,212 +1,61 @@
-# Portal Overview
+# Architecture Overview
 
-The GGSA Teacher Pathway portal uses a decoupled production-oriented architecture:
-
-- Next.js App Router frontend with the existing design-system packages.
-- Next.js route handlers acting as a small backend-for-frontend over WordPress, while delegating upstream API details to `packages/services`.
-- Headless WordPress backend exposed through custom REST routes.
-- Adapter-ready content boundaries for LearnDash prerequisites, modules, progress and evidence.
-- MariaDB persistence through WordPress.
-- Docker for local parity.
-- `backend/Dockerfile` builds the WordPress runtime with the custom pathway plugin installed.
-- `frontend/Dockerfile` installs the PNPM workspace and runs the portal artifact.
-- `wordpress-setup` installs WordPress, activates the custom plugin and prepares REST routing for local review.
-
-## Portal Information Map
-
-The information architecture is deliberately focused on the operational journey rather than broad marketing content.
-
-| Surface | Route | Role in the pathway | Users |
-| --- | --- | --- | --- |
-| Learning plan register | `/register` | Shows submitted learning plans, workflow status, support level and review actions. | GGSA coaches, school leaders |
-| Pathway readiness | `/pathway-readiness` | Summarises prerequisite, module, evidence, certification and RPL readiness. | GGSA coaches, school leaders |
-| Teacher learning plan | `/learning-plan` | Captures school, teacher, career stage, learning intent, evidence and support needs. | Teachers, school leaders |
-| About this Portal | `/about` | Explains what the portal does, the pathway model, content model and operating model for handover. | Delivery, support and governance teams |
-
-This keeps the first navigation layer aligned to the real service workflow:
+## Shape
 
 ```text
-Register -> Readiness review -> Learning plan intake -> About this Portal
+Browser
+  -> Next.js app routes
+  -> @ggsa/services
+  -> WordPress REST API
+  -> ggsa_learning_plan custom post type
 ```
 
-The route model should remain compact unless a new surface has a distinct user job, permission model or operational owner.
+The frontend stays decoupled from upstream WordPress URLs. Browser code calls same-origin Next.js routes. `frontend/packages/services` owns WordPress endpoint construction, fallback data and domain types.
 
-The browser-facing frontend consumes same-origin Next.js API routes:
+## Surfaces
 
-```text
-GET  /api/teacher-pathway-submissions
-POST /api/teacher-pathway-submissions
-POST /api/teacher-pathway-submissions/evidence
-```
+| Route | Purpose |
+| --- | --- |
+| `/register` | Submitted learning plans and workflow status |
+| `/pathway-readiness` | Module, evidence, certification and RPL readiness |
+| `/learning-plan` | Enrolment-generated learning plan with editable prototype overrides |
+| `/about` | Plain-language portal and integration explanation |
 
-Those route handlers proxy to WordPress:
+## Backend
 
-```text
-GET  /wp-json/ggsa/v1/teacher-pathway-submissions
-POST /wp-json/ggsa/v1/teacher-pathway-submissions
-POST /wp-json/ggsa/v1/teacher-pathway-submissions/evidence
-```
+The WordPress plugin owns:
 
-WordPress owns editorial and administrative visibility through the `ggsa_learning_plan` custom post type.
+- `ggsa_learning_plan` post type;
+- REST routes under `/wp-json/ggsa/v1`;
+- secured portal-token/admin-capability checks;
+- evidence upload validation;
+- admin fields and columns;
+- Divi shortcode `[ggsa_teacher_pathway_portal]`.
 
-For the existing GGSA WordPress/Divi site, the plugin also registers the `ggsa_teacher_pathway_portal` shortcode. The recommended production shape is to place that shortcode in a Divi module as a launch card to a dedicated Next.js portal URL, keeping iframe embedding and headless page replacement as later decisions. See `docs/divi-deployment-strategy.md`.
+## Adapter Boundaries
 
-## Implementation Patterns
+Production systems are isolated behind gateway classes:
 
-These patterns are intentionally aligned with the RBDM implementation style and should guide future changes.
+- `MembershipUserGateway`
+- `WooCommerceEntitlementGateway`
+- `LearnDashGateway`
 
-### App Boundary
+The local prototype returns deterministic fallback data when production plugins are unavailable. This keeps the prototype honest: adapter-ready, not a fake LearnDash/WooCommerce replacement.
 
-The app should stay as an orchestration shell. Files under `frontend/apps/portal/src/app` own routing, layouts, providers, page composition and Next.js request/response adaptation.
+## Evidence
 
-The app should not know how to reach WordPress. Do not put `WORDPRESS_API_BASE_URL`, `wp-json` paths or raw upstream API construction in app routes, pages or components.
+Evidence uploads are validated by WordPress and attached to the learning-plan payload. Current prototype policy allows PDF, PNG, JPG/JPEG and DOCX with a 10 MB default limit.
 
-### Service Boundary
+Production still needs private storage, malware scanning, retention and privacy decisions.
 
-`frontend/packages/services` owns API visibility. This package contains:
+## Runtime
 
-- public browser-facing service functions, such as `listSubmissions`, `createSubmission` and `uploadEvidence`;
-- server-side gateway functions, such as `requestTeacherPathwaySubmissions`, `submitTeacherPathwayRecord` and `submitTeacherPathwayEvidence`;
-- environment resolution for upstream systems, currently `WORDPRESS_API_BASE_URL` and the server-side portal API token;
-- domain types, seed data and workflow/readiness business logic.
+- Fast local FE+BE: PHP built-in server, WordPress, SQLite.
+- Full parity: Docker Compose with WordPress, MariaDB, setup container and frontend container.
 
-If the frontend needs new data, add or update a named function in `packages/services` first. The app should import that function instead of building URLs or calling the upstream API directly.
+## Rules Of Thumb
 
-### WordPress Integration Adapters
-
-The custom WordPress plugin mirrors the same boundary style for upstream platform concepts:
-
-- `GGSA_Teacher_Pathway_Membership_User_Gateway` resolves the current teacher profile and membership role.
-- `GGSA_Teacher_Pathway_WooCommerce_Entitlement_Gateway` resolves product access, subscription or school entitlement state.
-- `GGSA_Teacher_Pathway_LearnDash_Gateway` resolves assigned courses/modules, progress and certificates.
-
-These classes live under `backend/wp-content/plugins/ggsa-teacher-pathway/includes/Integrations`. They should be the only plugin code that knows about LearnDash, WooCommerce or membership-platform APIs. REST controllers may consume their normalized arrays, but should not call production plugin APIs directly.
-
-### Generated Learning Plans
-
-`GGSA_Teacher_Pathway_Learning_Plan_Generator` combines the WordPress integration adapters into a Teacher Learning Plan record. It owns the generated defaults for teacher, school, pathway profile, LearnDash module checks, evidence summary and RPL readiness inputs.
-
-The frontend mirrors this with `generateTeacherLearningPlan()` in `frontend/packages/services/src/generateLearningPlan.ts`, which seeds the learning-plan screen from local adapter data. Form fields remain editable as prototype overrides, but the initial state now represents an enrolment-generated plan.
-
-### Evidence Upload Policy
-
-`GGSA_Teacher_Pathway_Evidence_Upload_Policy` validates evidence before WordPress stores it. Current local policy requires a learning plan ID or reference number, allows PDF, PNG, JPG/JPEG and DOCX, rejects executable/archive-style uploads by omission, and defaults to a 10 MB limit configurable through `GGSA_TEACHER_PATHWAY_MAX_EVIDENCE_BYTES`.
-
-Successful upload responses include owner metadata and retention placeholders. Before production, GGSA should decide whether evidence lives in private WordPress media, protected object storage or an LMS-owned evidence store. Production also needs malware scanning, access-control review, retention rules for teacher/classroom artefacts and privacy handling for student-identifiable content.
-
-### Route Handlers
-
-Next.js route handlers are allowed as the same-origin browser contract:
-
-```text
-Browser -> /api/... -> @ggsa/services -> WordPress REST API
-```
-
-Their job is deliberately small:
-
-- read the incoming `NextRequest`;
-- call a named service or gateway function;
-- translate the returned `Response` into `NextResponse`.
-
-They should not contain upstream endpoint strings, WordPress base URLs, DTO mapping, validation policy or business workflow decisions.
-
-### Client Components
-
-Interactive route files use explicit client boundaries. Route-level client components should gather state from `PortalContext`, compose feature containers and call service functions through the provider layer.
-
-Keep reusable display and form UI in component packages or feature containers. Avoid embedding API policy in presentational components.
-
-### Domain And Workflow
-
-Teacher Pathway records model an adapter-ready learning journey:
-
-- prerequisites;
-- core modules;
-- evidence portfolio;
-- RPL evidence readiness;
-- workflow status;
-- risk level.
-
-WordPress is the system of record for submitted learning plans. The frontend may keep seed data for local resilience, but once WordPress is running, submissions and status review happen through the WordPress custom post type and REST API.
-
-### Design System
-
-Keep the existing design-system workspace intact. `frontend/packages/ui-library`, `ui-assets`, `ui-tokens` and `utils` should remain framework/API agnostic.
-
-Application-specific composition belongs in `apps/portal` or `packages/services`; shared visual primitives belong in the UI packages only when they are genuinely reusable.
-
-### Docker Runtime
-
-The portal must continue to run as separate installable artifacts:
-
-- `wordpress`: WordPress runtime with the custom GGSA Teacher Pathway plugin.
-- `wordpress-setup`: local bootstrap for WordPress install, plugin activation and permalink flushing.
-- `frontend`: Next.js production artifact built from the PNPM workspace.
-- `mariadb`: WordPress persistence.
-
-Use the repository shortcut to run the full local stack:
-
-```sh
-pnpm docker:up
-```
-
-Docker Desktop must be running before this command can reach the local Docker API socket.
-
-Use the seed option when the WordPress register should be reset to known local data before manual checks or real-backend Playwright runs:
-
-```sh
-pnpm docker:up -- --refresh-register
-# or
-pnpm docker:up:seed
-```
-
-The frontend container reaches WordPress through server-side service code. Browser code should only call same-origin Next.js routes.
-
-### Environment
-
-Use `.env.local` for local frontend overrides when needed. Do not commit secrets or machine-specific values.
-
-The default local WordPress API base is:
-
-```text
-http://localhost:8080/wp-json/ggsa/v1
-```
-
-Docker overrides this for container networking:
-
-```text
-http://wordpress/wp-json/ggsa/v1
-```
-
-Both URL values are resolved inside `packages/services`, not inside the app.
-
-The local WordPress plugin also requires a portal API token for REST access outside an authenticated WordPress admin session:
-
-```text
-GGSA_TEACHER_PATHWAY_API_TOKEN=local-teacher-pathway-portal-token
-```
-
-Docker wires the same local token into the frontend and WordPress containers. Production environments should replace this value with an environment-specific secret and layer in user-level authentication and role-based authorization.
-
-### Verification
-
-For changes that affect the service boundary, API routes or Docker runtime, run the narrowest useful set of checks:
-
-```sh
-pnpm --filter @ggsa/services typecheck
-pnpm --filter @ggsa/portal lint
-pnpm --filter @ggsa/portal build
-pnpm test:unit
-docker compose build frontend
-docker compose up -d frontend
-```
-
-Smoke-test the running artifact:
-
-```sh
-curl -s -w '\nHTTP %{http_code}\n' http://127.0.0.1:5173/status
-curl -s -w '\nHTTP %{http_code}\n' http://127.0.0.1:5173/api/teacher-pathway-submissions
-pnpm test:e2e:real
-```
-
-Continuous integration mirrors the same frontend quality gates in `.github/workflows/ci.yml` and adds mocked Playwright, real-backend Playwright, Docker build validation, PHP syntax linting, PHPCS, PHPStan and REST contract checks for the WordPress plugin. See `docs/ci-cd.md` for the full workflow contract and local parity commands.
+- Keep app routes thin.
+- Keep WordPress/API details inside services and gateway classes.
+- Keep reusable UI in `ui-library`; keep Teacher Pathway workflow in the app/services/plugin.
+- Treat WordPress as the workflow record system of record once backend is running.

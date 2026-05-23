@@ -1,204 +1,82 @@
 # GGSA Teacher Pathway Portal
 
-## Overview
+Working prototype of a Teacher Pathway portal for Good to Great Schools Australia.
 
-This repository contains a full-stack Teacher Pathway portal for Good to Great Schools Australia professional learning operations.
+The prototype shows a decoupled Next.js frontend, a custom headless WordPress plugin, adapter-ready boundaries for LearnDash/WooCommerce/membership concepts, evidence upload, readiness review, WordPress admin visibility and local/CI validation.
 
-The application supports learning plan intake, pathway readiness review, evidence capture, WordPress administration visibility, local Docker runtime parity and automated frontend validation.
+## What Is Real
 
-The solution is implemented as a decoupled Next.js frontend and headless WordPress backend. The frontend keeps the existing design-system workspace intact, while WordPress owns submitted learning plan workflow records, adapter-ready pathway integration points and editorial administration.
+- Next.js App Router portal with register, readiness, learning-plan and about views.
+- Same-origin Next.js API routes over WordPress REST.
+- Custom WordPress plugin with:
+  - `ggsa_learning_plan` custom post type;
+  - secured REST routes;
+  - learning plan creation/listing/readiness/evidence endpoints;
+  - admin visibility for submitted plans;
+  - Divi-friendly portal launch shortcode.
+- Local PHP/SQLite WordPress runtime for fast real-backend E2E.
+- Docker Compose runtime for full-stack parity.
+- Playwright accessibility, contrast, keyboard and workflow coverage.
+- PHP syntax, PHPCS, PHPStan and REST contract tests.
 
-## Screenshot
+## What Is Simulated
 
-### Frontend portal
+- LearnDash course/module/progress data is adapter-backed local fallback data.
+- WooCommerce entitlement data is adapter-backed local fallback data.
+- Membership/teacher-role enrolment data is adapter-backed local fallback data.
+- Evidence upload policy is real prototype validation, but production storage, malware scanning, retention and privacy rules still need GGSA decisions.
 
-![Frontend portal](docs/screenshots/frontend-smoke.png)
+## Tech Stack
 
-## Delivered Capabilities
+- Frontend: Next.js 15, React 18, TypeScript, Sass, Playwright, Vitest.
+- Backend: WordPress, PHP 8.3, custom REST plugin, custom post type.
+- Runtime: local PHP/SQLite for fast FE+BE checks, Docker Compose with WordPress/MariaDB for parity.
+- Tooling: pnpm 10.18.3, Node 20.19.x, Composer, GitHub Actions.
 
-### Frontend
+## Run Locally
 
-- Next.js App Router application built with React 18 and TypeScript.
-- Learning plan register for reviewing submitted teacher pathway records.
-- Teacher learning plan intake for school, teacher, career stage, prerequisite, module, evidence and support data.
-- Pathway readiness view for certification, RPL and coach follow-up decisions.
-- Same-origin API route handlers over the WordPress REST API.
-- Seeded fallback data when the WordPress API is unavailable.
-- Vitest and Playwright-ready validation coverage.
-
-### Backend
-
-- WordPress runtime with the custom `GGSA Teacher Pathway Headless API` plugin.
-- Custom `ggsa_learning_plan` post type for submitted learning plans.
-- REST endpoints for learning plan creation, retrieval and evidence upload.
-- MariaDB-backed persistence through WordPress.
-- WordPress administration visibility for submitted learning plans and workflow status updates.
-- Docker bootstrap for WordPress installation, plugin activation and permalink setup.
-
-### Test Automation
-
-- Unit coverage for shared readiness logic and reusable UI components.
-- Playwright smoke coverage for the portal journey.
-- TypeScript, linting and production build commands for the frontend workspace.
-- GitHub Actions CI for frontend verification, Playwright smoke testing, real-backend Playwright, Docker build validation and WordPress plugin quality checks.
-
-## Technology Summary
-
-- Frontend: Next.js 15, React 18, TypeScript, Sass, Zustand.
-- Backend: WordPress, PHP, custom REST routes and custom post types.
-- Database: MariaDB in Docker; SQLite for the lightweight local WordPress runtime.
-- Runtime: Docker Compose for full-stack parity, or local PHP for fast FE+BE checks.
-- Testing: Vitest and Playwright.
-- Package manager: pnpm 10.18.3 through Volta locally and Corepack in CI/Docker.
-
-## Runtime Requirements
-
-- Docker Desktop, Docker and Docker Compose for the complete local stack.
-- PHP 8.3+ with `pdo_sqlite` for the lightweight local WordPress backend.
-- Volta for local Node.js and pnpm selection.
-- Node.js 20.19.x for local frontend commands and CI. Root Docker helper scripts also run on Node 22.
-- pnpm 10.18.3, managed through Volta locally and Corepack in CI/Docker.
-- Playwright Chromium dependencies for local browser tests.
-
-## Repository Structure
-
-```txt
-frontend/   Next.js portal app, shared services, UI packages and frontend tests
-backend/    WordPress runtime, custom GGSA plugin and backend Docker image
-docs/       Portal overview and handover notes
-```
-
-## Portal Overview
-
-The portal IA is intentionally small and operational:
-
-| Route | Purpose | Primary users |
-| --- | --- | --- |
-| `/register` | Learning plan register and workflow overview | GGSA coaches, school leaders |
-| `/pathway-readiness` | Certification, RPL and support readiness review | GGSA coaches, school leaders |
-| `/learning-plan` | Teacher learning plan creation and evidence capture | Teachers, school leaders |
-| `/about` | About this Portal, pathway model and operating model overview | Delivery and support teams |
-
-The browser consumes same-origin Next.js routes only:
-
-```txt
-GET  /api/teacher-pathway-submissions
-POST /api/teacher-pathway-submissions
-POST /api/teacher-pathway-submissions/evidence
-```
-
-Those route handlers call `@ggsa/services`, which owns the WordPress REST base URL and upstream endpoint details.
-
-## Quick Start With Docker
-
-Run from the repository root.
-
-Make sure Docker Desktop is running before using Docker Compose. On macOS, the error `failed to connect to the docker API at unix:///Users/.../.docker/run/docker.sock` means the Docker daemon is not running yet.
-
-Use the current Docker stack when you want to keep the existing local WordPress database, uploaded files and containers:
-
-```bash
-volta install node@20.19.5 pnpm@10.18.3
-export PATH="$HOME/.volta/bin:$PATH"
-
-# Build images and start WordPress, MariaDB, setup and frontend containers.
-pnpm docker:build
-pnpm docker:up
-```
-
-To start the current stack and replace the WordPress register with seed learning plans:
-
-```bash
-pnpm docker:up -- --refresh-register
-# or
-pnpm docker:up:seed
-```
-
-Use a fresh Docker stack when you want to remove the local containers, Compose networks, WordPress and MariaDB volumes, local Compose-built images and orphaned containers before rebuilding:
-
-```bash
-pnpm docker:fresh
-```
-
-The manual equivalent is:
-
-```bash
-pnpm docker:clean
-pnpm docker:build
-pnpm docker:up:seed
-```
-
-`pnpm docker:clean` removes local Docker state for this Compose project. It deletes the local WordPress and database volumes, so submitted learning plans and uploaded local evidence files are removed.
-
-The stack starts both application surfaces:
-
-- Frontend: `http://localhost:5173`
-- WordPress backend: `http://localhost:8080`
-
-Useful Docker commands:
-
-```bash
-docker compose ps
-pnpm docker:logs
-pnpm docker:down
-pnpm docker:reset
-pnpm docker:clean
-pnpm docker:fresh
-```
-
-## Local Access
-
-| Area | URL | Notes |
-| --- | --- | --- |
-| Frontend | `http://localhost:5173` | GGSA Teacher Pathway portal |
-| WordPress backend | `http://localhost:8080` | WordPress runtime |
-| WordPress admin | `http://localhost:8080/wp-admin` | Login with `admin` / `admin` after local setup |
-| Next.js API | `http://localhost:5173/api/teacher-pathway-submissions` | Same-origin frontend API contract |
-| WordPress API | `http://localhost:8080/wp-json/ggsa/v1/teacher-pathway-submissions` | Learning plan REST endpoint |
-| Evidence API | `http://localhost:8080/wp-json/ggsa/v1/teacher-pathway-submissions/evidence` | Evidence upload endpoint |
-| MariaDB | `localhost:3307` | Local database exposed from Docker |
-
-Local WordPress administrator credentials:
-
-```txt
-Username: admin
-Password: admin
-```
-
-Submitted learning plans can be reviewed in WordPress under `Teacher Learning Plans`.
-
-## Frontend-Only Development
-
-Use this path when iterating on the Next.js workspace without the WordPress stack.
+Install the pinned frontend toolchain:
 
 ```bash
 volta install node@20.19.5 pnpm@10.18.3
 export PATH="$HOME/.volta/bin:$PATH"
 pnpm --dir frontend install
-pnpm --dir frontend dev
+composer --working-dir=backend/wp-content/plugins/ggsa-teacher-pathway install
 ```
 
-Volta reads the root `package.json` and selects the pinned local toolchain. `export PATH="$HOME/.volta/bin:$PATH"` makes sure Volta's `node` and `pnpm` shims win over older `nvm`, `fnm` or `asdf` entries in the current shell. To make that permanent, put the same export before other Node version manager setup in `~/.zshrc`.
-
-If you use another version manager instead of Volta, switch to the root `.node-version` or `.nvmrc` version before running frontend commands.
-
-The frontend falls back to seeded local data when the backend is unavailable.
-
-The frontend-only dev server runs at `http://localhost:5174`. The Docker frontend runs at `http://localhost:5173`.
-
-Useful frontend checks:
+Fast local real-backend path, no Docker:
 
 ```bash
-pnpm --dir frontend lint
-pnpm --dir frontend format:check
-pnpm --dir frontend test:unit
-pnpm --dir frontend typecheck
-pnpm --dir frontend build
-pnpm --dir frontend exec playwright install chromium
-pnpm --dir frontend test:e2e
+pnpm backend:setup:local
+pnpm test:e2e:local:real
 ```
 
-Root CI parity shortcuts are also available:
+Full Docker path:
+
+```bash
+pnpm docker:build
+pnpm docker:up:seed
+```
+
+Local URLs:
+
+- Frontend: `http://localhost:5173`
+- WordPress: `http://localhost:8080`
+- WordPress admin: `http://localhost:8080/wp-admin` with `admin` / `admin`
+
+## Main Checks
+
+```bash
+pnpm format:check
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm php:quality
+pnpm test:e2e
+pnpm test:e2e:local:real
+```
+
+Grouped shortcuts:
 
 ```bash
 pnpm ci:quick
@@ -206,133 +84,18 @@ pnpm ci:real
 pnpm ci:docker
 ```
 
-`pnpm ci:quick` runs the fast non-Docker frontend, backend and mocked Playwright checks. `pnpm ci:real` runs the local PHP/SQLite WordPress backend E2E suite. `pnpm ci:docker` builds the WordPress and frontend Docker images.
+## Key Docs
 
-## Local FE And BE Without Docker
+- [Architecture overview](docs/architecture-overview.md)
+- [Integration alignment](docs/integration-alignment.md)
+- [Divi deployment strategy](docs/divi-deployment-strategy.md)
+- [CI/CD](docs/ci-cd.md)
+- [Implementation summary](docs/technical-implementation-stages.tmp.md)
 
-Use this path for fast real-backend Playwright feedback without starting Docker. The setup creates an ignored WordPress runtime in `backend/.wordpress`, uses SQLite for local data, symlinks the custom GGSA plugin and seeds the learning plan register.
+## Production Next Steps
 
-```bash
-# Create or refresh the local WordPress runtime and seed data.
-pnpm backend:setup:local
-
-# Optional: keep WordPress running locally for manual frontend work.
-pnpm backend:start:local
-
-# Run Playwright with Next.js and the local WordPress backend.
-pnpm test:e2e:local:real
-```
-
-Local WordPress runs at `http://localhost:8080`. The admin login is `admin` / `admin`.
-
-## Full Local Verification
-
-Run these commands from the repository root for a clean local verification.
-
-```bash
-# Remove containers, networks, volumes, local Compose images and orphans.
-pnpm docker:clean
-
-# Build local Docker images and start the complete stack.
-pnpm docker:build
-pnpm docker:up -- --refresh-register
-
-# Confirm container status.
-docker compose ps
-
-# Check the frontend health endpoint.
-curl -i http://localhost:5173/status
-
-# Check the same-origin API route.
-curl -i http://localhost:5173/api/teacher-pathway-submissions
-
-# Check the WordPress API directly through the local portal token.
-curl -i -H 'X-GGSA-Portal-Token: local-teacher-pathway-portal-token' http://localhost:8080/wp-json/ggsa/v1/teacher-pathway-submissions
-
-# Install frontend dependencies for local quality checks.
-pnpm --dir frontend install
-pnpm --dir frontend exec playwright install chromium
-
-# Run frontend validation.
-pnpm --dir frontend lint
-pnpm --dir frontend test:unit
-pnpm --dir frontend typecheck
-pnpm --dir frontend build
-pnpm --dir frontend test:e2e
-
-# Run the real-backend Playwright persistence test against the seeded Docker stack.
-pnpm test:e2e:real
-
-# Validate the WordPress plugin PHP syntax through the Docker PHP runtime.
-docker compose run --rm --entrypoint php wordpress -l wp-content/plugins/ggsa-teacher-pathway/ggsa-teacher-pathway.php
-```
-
-## Daily Development Commands
-
-Run from the repository root.
-
-```bash
-# Start the local stack in the background.
-pnpm docker:up
-
-# Start the stack and refresh the WordPress register seed data.
-pnpm docker:up -- --refresh-register
-
-# Confirm container status.
-docker compose ps
-
-# View service logs.
-pnpm docker:logs
-
-# Flush WordPress rewrites after route or permalink changes.
-docker compose run --rm --entrypoint wp wordpress-setup rewrite flush --hard --allow-root
-
-# Run frontend checks.
-pnpm format:check
-pnpm --dir frontend lint
-pnpm --dir frontend test:unit
-pnpm --dir frontend typecheck
-pnpm --dir frontend build
-
-# Run WordPress plugin syntax, PHPCS, PHPStan and REST contract checks.
-pnpm php:quality
-```
-
-## Code Style
-
-Frontend code is formatted with Prettier and checked with ESLint plus strict TypeScript. Use 2-space indentation, single quotes, semicolons and trailing commas. Run `pnpm format` to format the frontend workspace and `pnpm format:check` before handover.
-
-Backend plugin code follows WordPress Coding Standards through PHPCS, with targeted allowances for modern PHP 8.3 structure, short array syntax and the existing namespaced folder layout. PHP files use tabs for indentation, WordPress-style spacing around function calls and explicit sanitisation/escaping at WordPress boundaries. Run `pnpm php:quality` before handover.
-
-## Configuration
-
-The Next.js server reads upstream WordPress configuration from environment variables:
-
-| Variable | Local default | Docker value | Description |
-| --- | --- | --- | --- |
-| `WORDPRESS_API_BASE_URL` | `http://localhost:8080/wp-json/ggsa/v1` | `http://wordpress/wp-json/ggsa/v1` | WordPress REST base URL used by `@ggsa/services`. |
-| `GGSA_TEACHER_PATHWAY_API_TOKEN` | `local-teacher-pathway-portal-token` | `local-teacher-pathway-portal-token` | Shared server-side token accepted by the local WordPress plugin for portal API calls. Use an environment-specific secret outside local development. |
-
-Docker database settings are configured in `docker-compose.yml`:
-
-| Variable | Value |
-| --- | --- |
-| `WORDPRESS_DB_HOST` | `mariadb:3306` |
-| `WORDPRESS_DB_NAME` | `ggsa_teacher_pathway` |
-| `WORDPRESS_DB_USER` | `ggsa_teacher_pathway` |
-| `WORDPRESS_DB_PASSWORD` | `ggsa_teacher_pathway` |
-
-## Handover Notes
-
-- Keep upstream WordPress API details inside `frontend/packages/services`; app routes should stay thin and same-origin.
-- Keep reusable visual primitives in `frontend/packages/ui-library`, `ui-assets`, `ui-tokens` and `utils`.
-- Keep application-specific teacher pathway composition in `frontend/apps/portal` or `frontend/packages/services`.
-- Treat WordPress as the submitted learning-plan system of record once the backend is running.
-- Use seeded frontend data for local resilience only, not as production persistence.
-- Replace the local shared API token with environment-specific secrets, then add user authentication, role-based permissions, file storage policy and operational secret management before public deployment.
-
-## Documentation
-
-- `docs/architecture-overview.md`: system structure, IA, boundaries, runtime and verification guidance.
-- `docs/ci-cd.md`: GitHub Actions workflow, local parity checks and future production gates.
-- `docs/divi-deployment-strategy.md`: shortcode, subdomain, reverse-proxy and embed options for the existing WordPress/Divi site.
+- Replace local shared API token with production authentication and role-aware authorization.
+- Connect adapters to real LearnDash, WooCommerce and membership systems.
+- Decide evidence storage, malware scanning, privacy and retention rules.
+- Confirm whether GraphQL/Hasura is required for reporting.
+- Use the Divi shortcode launch-card path first, preferably pointing to a dedicated portal subdomain.
