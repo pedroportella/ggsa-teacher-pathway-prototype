@@ -524,6 +524,79 @@ pnpm php:quality
 pnpm test:e2e:local:real
 ```
 
+## Stage 6C: Shared FileUpload Component - Done
+
+Status: completed with UI-library unit coverage and local FE/BE checks.
+
+Completed:
+
+- Added a reusable `FileUpload` component to `@ggsa/ui-library`.
+- Kept the shared component domain-neutral:
+  - no LearnDash knowledge;
+  - no RPL evidence knowledge;
+  - no WordPress owner/reference knowledge;
+  - no Teacher Pathway category rules.
+- Moved the reusable upload UI mechanics into the shared component:
+  - file input;
+  - label and hint;
+  - disabled state;
+  - empty guidance message;
+  - staged/uploaded/error file list;
+  - remove action;
+  - status styling.
+- Refactored the portal `EvidenceUpload` wrapper to compose `FileUpload`.
+- Kept evidence category selection and evidence-to-upload mapping inside the portal wrapper.
+- Removed portal-specific duplicate upload-list styling that now belongs to the UI library.
+- Added unit coverage for:
+  - selected file callback;
+  - staged file rendering;
+  - remove action;
+  - disabled empty message.
+
+Validated locally:
+
+- `pnpm --dir frontend --filter @ggsa/ui-library test`.
+- `pnpm typecheck`.
+
+### Goal
+
+Promote the proven Stage 6B upload mechanics into a reusable UI-library component, following the stronger RBDM pattern without importing RBDM's donor-specific domain model.
+
+### Implementation
+
+Create:
+
+```text
+frontend/packages/ui-library/src/components/FileUpload/
+  FileUpload.tsx
+  FileUpload.scss
+  FileUpload.test.tsx
+  index.ts
+```
+
+Refactor:
+
+```text
+frontend/apps/portal/src/components/SubmissionContainer/EvidenceUpload.tsx
+```
+
+### Acceptance Criteria
+
+- The portal evidence upload screen uses `@ggsa/ui-library` for upload mechanics.
+- The shared component is reusable outside the Teacher Pathway domain.
+- E2E selectors remain stable through `getByLabel('Evidence file')`.
+- Existing evidence upload behavior remains unchanged.
+
+### Validation
+
+```bash
+pnpm --dir frontend --filter @ggsa/ui-library test
+pnpm format:check
+pnpm lint
+pnpm typecheck
+pnpm test:e2e:local:real
+```
+
 ## Stage 7: Accessibility And UX Quality Gates
 
 ### Goal
@@ -629,9 +702,10 @@ Manual WordPress admin/page check may be required.
 6. Stage 5: Generated Learning Plan Service.
 7. Stage 6: Evidence Upload Policy.
 8. Stage 6B: Real Evidence Upload UI And Playwright Coverage.
-9. Stage 7: Accessibility And UX Quality Gates.
-10. Stage 8: CI Expansion.
-11. Stage 9: Divi / Existing WordPress Deployment Strategy.
+9. Stage 6C: Shared FileUpload Component.
+10. Stage 7: Accessibility And UX Quality Gates.
+11. Stage 8: CI Expansion.
+12. Stage 9: Divi / Existing WordPress Deployment Strategy.
 
 ## Notes For Each Stage
 

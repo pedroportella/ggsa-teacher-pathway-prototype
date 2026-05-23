@@ -11,6 +11,7 @@ export * from './components/Field';
 export * from './components/FieldGroups';
 export * from './components/Figure';
 export * from './components/File';
+export * from './components/FileUpload';
 export * from './components/Filter';
 export * from './components/Footer';
 export * from './components/Footnotes';
