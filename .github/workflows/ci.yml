@@ -12,6 +12,9 @@ on:
 permissions:
   contents: read
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   frontend-quality:
     name: Frontend quality
@@ -27,8 +30,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
-          cache: pnpm
-          cache-dependency-path: frontend/pnpm-lock.yaml
 
       - name: Enable pnpm
         run: |
@@ -73,11 +74,18 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
+          extensions: curl, pdo_sqlite, sqlite3, zip
           coverage: none
           tools: composer:v2
 
+      - name: Configure Composer GitHub token
+        run: composer config --global github-oauth.github.com "${{ github.token }}"
+
       - name: Install Composer dependencies
         run: composer --working-dir=backend/wp-content/plugins/ggsa-teacher-pathway install --no-interaction --prefer-dist
+
+      - name: Prepare local WordPress runtime
+        run: sh scripts/local-backend-setup.sh
 
       - name: PHP syntax, PHPCS, PHPStan and REST contracts
         run: composer --working-dir=backend/wp-content/plugins/ggsa-teacher-pathway run quality
@@ -98,8 +106,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
-          cache: pnpm
-          cache-dependency-path: frontend/pnpm-lock.yaml
 
       - name: Enable pnpm
         run: |
@@ -138,8 +144,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
-          cache: pnpm
-          cache-dependency-path: frontend/pnpm-lock.yaml
 
       - name: Enable pnpm
         run: |
@@ -153,6 +157,9 @@ jobs:
           extensions: curl, pdo_sqlite, sqlite3, zip
           coverage: none
           tools: composer:v2
+
+      - name: Configure Composer GitHub token
+        run: composer config --global github-oauth.github.com "${{ github.token }}"
 
       - name: Install frontend dependencies
         run: pnpm --dir frontend install --frozen-lockfile

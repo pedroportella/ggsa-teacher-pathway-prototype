@@ -63,7 +63,7 @@ export function Header({
               <h3 className="au-sronly">Sub menu</h3>
               <ul className="au-link-list au-link-list--inline">
                 <li>
-                  <a href="#about">About this Portal</a>
+                  <a href="/about">About this Portal</a>
                 </li>
               </ul>
             </div>
