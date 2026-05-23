@@ -161,7 +161,12 @@ export function SubmissionContainer({
             </Panel>
           </div>
           <div className="col-xs-12 col-md-4">
-            <Panel id="submission-register" title="WordPress handover" eyebrow="Headless CMS">
+            <Panel
+              id="submission-register"
+              title="WordPress handover"
+              eyebrow="Headless CMS"
+              className="ggsa-panel"
+            >
               <p>
                 Creates the register item consumed by the Next.js frontend and administered in
                 WordPress.

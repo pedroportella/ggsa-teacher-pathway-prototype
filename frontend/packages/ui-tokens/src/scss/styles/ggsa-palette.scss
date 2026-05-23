@@ -19,7 +19,7 @@
   --ggsa-colour-surface-panel: #f4f7fa;
   --ggsa-colour-success: #1f5f35;
   --ggsa-colour-success-soft: #def7e8;
-  --ggsa-colour-info: #2392b2;
+  --ggsa-colour-info: #0c6b83;
   --ggsa-colour-warning: #6a4a00;
   --ggsa-colour-warning-soft: #fff3cf;
   --ggsa-colour-error: #7a271a;
@@ -55,13 +55,13 @@
   --brand-colour-3: var(--ggsa-colour-gold);
   --brand-colour-4: var(--ggsa-colour-teal-deep);
   --primary-gradient-bg--start: var(--ggsa-colour-teal-deep);
-  --primary-gradient-bg--end: var(--ggsa-colour-teal);
+  --primary-gradient-bg--end: var(--ggsa-colour-teal-dark);
   --secondary-gradient-bg--start: var(--ggsa-colour-teal-dark);
-  --secondary-gradient-bg--end: var(--ggsa-colour-teal);
+  --secondary-gradient-bg--end: var(--ggsa-colour-teal-dark);
   --subheader-gradient-bg--start: var(--ggsa-colour-teal-deep);
-  --subheader-gradient-bg--end: var(--ggsa-colour-teal);
+  --subheader-gradient-bg--end: var(--ggsa-colour-teal-dark);
   --subheader-gradient-content-bg--start: var(--ggsa-colour-teal-deep);
-  --subheader-gradient-content-bg--end: var(--ggsa-colour-teal);
+  --subheader-gradient-content-bg--end: var(--ggsa-colour-teal-dark);
   --subheader-text: var(--ggsa-colour-surface);
   --hero-bg: var(--ggsa-colour-teal-deep);
   --hero-bg--inset-opaque: var(--ggsa-colour-teal-ink);
@@ -79,5 +79,5 @@
   --neutral-link-text: var(--ggsa-colour-teal-dark);
   --neutral--darker-link-text: var(--ggsa-colour-teal-dark);
   --footer-gradient-bg--start: var(--ggsa-colour-teal-deep);
-  --footer-gradient-bg--end: var(--ggsa-colour-teal);
+  --footer-gradient-bg--end: var(--ggsa-colour-teal-dark);
 }

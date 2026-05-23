@@ -597,7 +597,51 @@ pnpm typecheck
 pnpm test:e2e:local:real
 ```
 
-## Stage 7: Accessibility And UX Quality Gates
+## Stage 7: Accessibility And UX Quality Gates - Done
+
+Status: completed with dependency-free Playwright accessibility, keyboard, semantic markup and contrast coverage.
+
+Completed:
+
+- Added `frontend/apps/portal/src/tests/e2e/accessibility.spec.ts`.
+- Added route-level accessibility smoke checks for:
+  - `/`;
+  - `/learning-plan`;
+  - `/pathway-readiness`;
+  - `/about`.
+- Added metadata assertions for page title and description.
+- Added structural accessibility checks for:
+  - required landmarks;
+  - one `h1` per route;
+  - image `alt` attributes;
+  - form-control accessible names;
+  - interactive-control accessible names;
+  - list links wrapped in `li`;
+  - skip links pointing to real targets;
+  - duplicate IDs.
+- Fixed the header sub-navigation markup so the `About this Portal` link is wrapped in an `li`.
+- Hardened colour contrast for normal-sized text by:
+  - moving eyebrow text from bright gold to the darker warning text token;
+  - darkening the info token used by upload status text;
+  - darkening teal gradient endpoints used behind white subheader/footer text;
+  - replacing the undefined file upload subtle-text token with the shared muted-text token.
+- Added a contrast smoke test for key foreground/background token pairs.
+- Added keyboard navigation coverage for:
+  - skip link to main content;
+  - evidence category select;
+  - evidence file input;
+  - learning plan submit button;
+  - readiness status select.
+- Kept the test dependency-free rather than adding `axe-core`, while leaving room to adopt axe later.
+
+Validated locally:
+
+- `pnpm --dir frontend --filter @ggsa/portal test:e2e -- --project=chromium --workers=1`.
+- `pnpm test:e2e:local:real`.
+
+### Notes
+
+This stage covers high-signal accessibility gates for the prototype review. A later production hardening pass can add `axe-core`, Lighthouse budgets and cross-browser/mobile accessibility checks if the team wants a broader audit suite.
 
 ### Goal
 
@@ -607,7 +651,7 @@ Cover accessibility, SEO and frontend quality expectations from the position des
 
 Add:
 
-- Playwright accessibility smoke tests using `axe-core` or equivalent;
+- Playwright accessibility smoke tests using dependency-free DOM checks;
 - keyboard navigation checks for register, learning plan and readiness pages;
 - basic metadata assertions for public routes;
 - optional Lighthouse/performance budget notes.

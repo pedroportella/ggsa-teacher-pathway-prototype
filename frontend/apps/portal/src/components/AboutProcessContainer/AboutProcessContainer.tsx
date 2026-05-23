@@ -60,7 +60,12 @@ export function AboutProcessContainer() {
       <section className="portal-band" aria-label="About this Portal process">
         <div className="row">
           <div className="col-xs-12 col-lg-7">
-            <Panel id="process-model" title="Teacher pathway model" eyebrow="How it works">
+            <Panel
+              id="process-model"
+              title="Teacher pathway model"
+              eyebrow="How it works"
+              className="ggsa-panel"
+            >
               <ol className="portal-process-list">
                 {processStages.map((stage) => (
                   <li key={stage.title}>
@@ -76,6 +81,7 @@ export function AboutProcessContainer() {
               id="content-model"
               title="What the portal records"
               eyebrow="Learning plan register"
+              className="ggsa-panel"
             >
               <ul className="portal-checklist">
                 <li>
@@ -92,7 +98,12 @@ export function AboutProcessContainer() {
                 </li>
               </ul>
             </Panel>
-            <Panel id="audience-model" title="Who uses it" eyebrow="Portal users">
+            <Panel
+              id="audience-model"
+              title="Who uses it"
+              eyebrow="Portal users"
+              className="ggsa-panel"
+            >
               <ul className="portal-checklist">
                 <li>Teachers complete professional learning and upload evidence.</li>
                 <li>School leaders monitor progress across cohorts and milestones.</li>
