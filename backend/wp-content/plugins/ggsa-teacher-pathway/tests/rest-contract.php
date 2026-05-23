@@ -97,6 +97,27 @@ ggsa_assert( $admin_response->get_status() === 200, 'admin-capability request is
 
 wp_set_current_user( 0 );
 
+$shortcode_output = do_shortcode(
+	'[ggsa_teacher_pathway_portal url="https://portal.example.test/teacher-pathway" title="Pathway portal" cta="Launch portal"]'
+);
+ggsa_assert( shortcode_exists( 'ggsa_teacher_pathway_portal' ), 'Divi portal shortcode is registered' );
+ggsa_assert(
+	str_contains( $shortcode_output, 'ggsa-teacher-pathway-portal-card' )
+	&& str_contains( $shortcode_output, 'https://portal.example.test/teacher-pathway' )
+	&& str_contains( $shortcode_output, 'Launch portal' ),
+	'Divi portal shortcode renders a launch card'
+);
+
+$embed_shortcode_output = do_shortcode(
+	'[ggsa_teacher_pathway_portal mode="embed" url="https://portal.example.test/teacher-pathway" height="900" title="Embedded pathway portal"]'
+);
+ggsa_assert(
+	str_contains( $embed_shortcode_output, '<iframe' )
+	&& str_contains( $embed_shortcode_output, 'sandbox=' )
+	&& str_contains( $embed_shortcode_output, 'min-height: 900px' ),
+	'Divi portal shortcode renders a sandboxed embed'
+);
+
 $malformed_create = ggsa_rest_request(
 	'POST',
 	'/ggsa/v1/teacher-pathway-submissions',

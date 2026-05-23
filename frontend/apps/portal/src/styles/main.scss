@@ -84,6 +84,13 @@ body {
   border-color: var(--adha-hds-surface);
 }
 
+.health-sub-header--dark .portal-sub-header__actions .au-btn.au-btn--secondary:hover,
+.health-sub-header--dark .portal-sub-header__actions .au-btn.au-btn--secondary:focus {
+  color: var(--adha-hds-primary-blue-dark) !important;
+  background: var(--adha-hds-surface) !important;
+  border-color: var(--adha-hds-surface) !important;
+}
+
 .eyebrow {
   margin: 0 0 0.5rem;
   color: var(--adha-hds-warning-text);

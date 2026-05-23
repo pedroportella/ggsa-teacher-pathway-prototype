@@ -25,7 +25,7 @@ This is a useful technical slice because it proves the frontend, backend-for-fro
 | WordPress development | Custom plugin, custom post type and REST routes | Good baseline, but routes are prototype-grade and currently unauthenticated | Harden permissions, validation, nonce/auth handling and plugin structure |
 | LearnDash | Adapter-ready local prerequisites, modules, progress and evidence | No real LearnDash course, lesson, topic, quiz, certificate or user-progress integration yet | Add a LearnDash adapter that reads assigned courses, module progress and certificates when LearnDash is available |
 | WooCommerce | No current integration | Position description calls out WooCommerce, likely for purchases, enrolments, memberships or entitlements | Add an entitlement adapter that can resolve whether a user/school has access through WooCommerce or membership data |
-| Divi | No current integration | Live GGSA page is WordPress/Divi-rendered; prototype is a separate Next.js app | Document deployment options: embedded app block/shortcode, separate portal subdomain or headless page replacement |
+| Divi | WordPress shortcode launch card or optional iframe embed | Live GGSA page is WordPress/Divi-rendered; prototype is a separate Next.js app | Use the shortcode as the first integration path, preferably linking to a separate portal subdomain before considering iframe or headless replacement |
 | Membership Platform | UI mentions membership journey but no actual account, role or enrolment source | Live page says selecting the Teacher role automatically generates a Teacher Learning Plan | Add a membership user adapter and make learning plans generated from role/enrolment events rather than manual creation only |
 | GraphQL/Hasura | No current integration | Position description asks for GraphQL APIs, particularly Hasura | Treat GraphQL/Hasura as optional reporting/query infrastructure unless GGSA confirms it is production-critical |
 | Evidence Portfolio | Local sample evidence and upload endpoint | Live page says certificates of completion are automatically stored in the Evidence Portfolio | Model certificates as LMS-derived evidence and keep manual uploads as supplementary artefacts |
@@ -117,7 +117,7 @@ Optional future boundary for GraphQL or Hasura. This should only be built when G
 4. Change the learning plan copy and flow so plans are generated from enrolment or Teacher role selection, with manual entry framed as a local prototype fallback.
 5. Expand the readiness model to include electives and classroom application, matching the live Teacher Pathway page.
 6. Keep workflow labels aligned to "RPL evidence ready" or "Ready for partner assessment" rather than implying GGSA grants accreditation.
-7. Add documentation for deployment options with Divi: embedded portal, linked subdomain or headless replacement.
+7. Use the Divi shortcode launch-card path documented in `docs/divi-deployment-strategy.md`, then confirm whether GGSA wants subdomain, reverse proxy, iframe embed or headless replacement.
 8. Add a short stakeholder confirmation checklist before building deeper integrations.
 
 ## Stakeholder Confirmation Checklist

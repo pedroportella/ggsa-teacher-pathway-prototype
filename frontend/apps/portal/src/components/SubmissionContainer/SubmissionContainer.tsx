@@ -141,6 +141,7 @@ export function SubmissionContainer({
               id="submission-profile"
               title="Personalised learning plan"
               eyebrow="Adapter-ready model"
+              className="ggsa-panel"
             >
               <p>
                 Represents the plan generated from teacher role, career stage and school goals,
@@ -153,6 +154,7 @@ export function SubmissionContainer({
               id="submission-evidence"
               title="Evidence portfolio"
               eyebrow="Certification support"
+              className="ggsa-panel"
             >
               <p>
                 Groups certificates of completion, classroom practice artefacts and mastery evidence

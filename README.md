@@ -335,3 +335,4 @@ Docker database settings are configured in `docker-compose.yml`:
 
 - `docs/architecture-overview.md`: system structure, IA, boundaries, runtime and verification guidance.
 - `docs/ci-cd.md`: GitHub Actions workflow, local parity checks and future production gates.
+- `docs/divi-deployment-strategy.md`: shortcode, subdomain, reverse-proxy and embed options for the existing WordPress/Divi site.

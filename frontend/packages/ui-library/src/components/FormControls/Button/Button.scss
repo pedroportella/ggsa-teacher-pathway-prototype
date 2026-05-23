@@ -1,2 +1,19 @@
-.button {
+.au-btn.au-btn--secondary {
+  color: var(--adha-hds-primary-blue-dark);
+  border-color: currentcolor;
+  background-color: transparent;
+}
+
+.au-btn.au-btn--secondary:hover,
+.au-btn.au-btn--secondary:focus {
+  color: var(--adha-hds-surface);
+  border-color: var(--adha-hds-primary-blue-dark);
+  background-color: var(--adha-hds-primary-blue-dark);
+}
+
+.au-btn.au-btn--secondary.au-btn--dark:hover,
+.au-btn.au-btn--secondary.au-btn--dark:focus {
+  color: var(--adha-hds-primary-blue-dark) !important;
+  background: var(--adha-hds-surface) !important;
+  border-color: var(--adha-hds-surface) !important;
 }

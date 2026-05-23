@@ -739,7 +739,45 @@ composer run phpstan
 composer run test
 ```
 
-## Stage 9: Divi / Existing WordPress Deployment Strategy
+## Stage 9: Divi / Existing WordPress Deployment Strategy - Done
+
+Status: completed with a Divi-friendly WordPress shortcode, deployment strategy documentation and local FE+BE validation.
+
+Completed:
+
+- Added `GGSA_Teacher_Pathway_Portal_Launch_Shortcode`.
+- Registered the `[ggsa_teacher_pathway_portal]` shortcode from the WordPress plugin.
+- Shortcode supports:
+  - launch-card mode for a Divi Code/Text module;
+  - optional iframe embed mode;
+  - configurable URL, title, summary, CTA and iframe height;
+  - `GGSA_TEACHER_PATHWAY_PORTAL_URL` or `ggsa_teacher_pathway_portal_url` for environment-level portal URLs.
+- Added PHP contract tests proving the shortcode is registered and renders both launch-card and sandboxed embed markup.
+- Added `docs/divi-deployment-strategy.md`.
+- Updated README, architecture and integration-alignment docs to recommend the shortcode launch-card plus portal subdomain path first.
+
+Recommended production direction:
+
+- Keep the existing GGSA WordPress/Divi page live.
+- Add the shortcode to the Divi page as a launch card.
+- Serve the Next.js portal from a dedicated subdomain first.
+- Treat iframe embedding and headless Divi replacement as later decisions after auth/session, CSP, privacy and accessibility implications are confirmed.
+
+Validated locally without Docker:
+
+- `php -l backend/wp-content/plugins/ggsa-teacher-pathway/includes/Shortcodes/PortalLaunchShortcode.php`.
+- `pnpm php:quality`.
+- `pnpm format:check`.
+- `pnpm lint`.
+- `pnpm typecheck`.
+- `pnpm test`.
+- `pnpm build`.
+- `pnpm test:e2e`.
+- `pnpm test:e2e:local:real`.
+
+The first `pnpm test:e2e` attempt was run concurrently with `pnpm build` and failed with temporary Next.js 404s. Re-running Playwright by itself passed, so the failure was validation-run interference rather than an application regression.
+
+Docker/manual WordPress admin page validation is still intentionally deferred to the final all-stages Docker pass.
 
 ### Goal
 

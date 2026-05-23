@@ -49,6 +49,8 @@ POST /wp-json/ggsa/v1/teacher-pathway-submissions/evidence
 
 WordPress owns editorial and administrative visibility through the `ggsa_learning_plan` custom post type.
 
+For the existing GGSA WordPress/Divi site, the plugin also registers the `ggsa_teacher_pathway_portal` shortcode. The recommended production shape is to place that shortcode in a Divi module as a launch card to a dedicated Next.js portal URL, keeping iframe embedding and headless page replacement as later decisions. See `docs/divi-deployment-strategy.md`.
+
 ## Implementation Patterns
 
 These patterns are intentionally aligned with the RBDM implementation style and should guide future changes.

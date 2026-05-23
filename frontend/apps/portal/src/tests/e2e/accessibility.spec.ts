@@ -260,6 +260,48 @@ test.describe('accessibility and UX quality gates', () => {
     ).toBeGreaterThanOrEqual(4.5);
   });
 
+  async function expectHoverContrast(locator: Locator) {
+    await locator.hover();
+
+    const colours = await locator.evaluate((element) => {
+      const styles = getComputedStyle(element);
+      return {
+        background: styles.backgroundColor,
+        foreground: styles.color,
+      };
+    });
+
+    expect(contrastRatio(colours.foreground, colours.background)).toBeGreaterThanOrEqual(4.5);
+  }
+
+  async function expectElementContrast(locator: Locator, backgroundLocator?: Locator) {
+    const colours = await locator.evaluate((element, hasBackgroundLocator) => {
+      const styles = getComputedStyle(element);
+      const backgroundElement = hasBackgroundLocator
+        ? element.closest('.au-footer, .health-sub-header--dark')
+        : element;
+      const backgroundStyles = getComputedStyle(backgroundElement ?? element);
+
+      return {
+        background: backgroundStyles.backgroundColor,
+        foreground: styles.color,
+      };
+    }, Boolean(backgroundLocator));
+
+    expect(contrastRatio(colours.foreground, colours.background)).toBeGreaterThanOrEqual(4.5);
+  }
+
+  test('keeps secondary button hover contrast accessible', async ({ page }) => {
+    await mockRegisterApiWhenNeeded(page);
+    await page.goto('/');
+
+    const footerButton = page.locator('.au-footer__navigation-section .au-btn--secondary').first();
+
+    await expectElementContrast(footerButton, page.locator('.au-footer'));
+    await expectHoverContrast(page.getByRole('button', { name: 'Refresh register' }));
+    await expectHoverContrast(footerButton);
+  });
+
   test('supports keyboard access through the learning plan evidence workflow', async ({ page }) => {
     await mockRegisterApiWhenNeeded(page);
     await page.goto('/learning-plan');
