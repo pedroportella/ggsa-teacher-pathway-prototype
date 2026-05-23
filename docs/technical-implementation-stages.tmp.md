@@ -668,7 +668,40 @@ Add:
 pnpm --dir frontend test:e2e
 ```
 
-## Stage 8: CI Expansion
+## Stage 8: CI Expansion - Done
+
+Status: completed with GitHub Actions workflow expansion, CI parity scripts and updated CI documentation.
+
+Completed:
+
+- Added `.github/workflows/ci.yml`.
+- Split CI into separate jobs for:
+  - frontend formatting, linting, typechecking, unit tests and production build;
+  - WordPress plugin PHP syntax lint, PHPCS, PHPStan and REST contract tests;
+  - mocked Playwright smoke/accessibility/UX coverage;
+  - real-backend Playwright against the local PHP/SQLite WordPress runtime;
+  - Docker image build validation for WordPress and frontend services.
+- Added root CI parity scripts:
+  - `pnpm ci:quick`;
+  - `pnpm ci:real`;
+  - `pnpm ci:docker`.
+- Updated `docs/ci-cd.md` with the expanded workflow contract and local reproduction commands.
+- Updated README and architecture docs to reflect real-backend Playwright, Docker build and full WordPress plugin quality coverage.
+
+Validated locally without Docker:
+
+- `node -e "JSON.parse(require('fs').readFileSync('package.json','utf8')); console.log('package.json ok')"`.
+- `ruby -e "require 'yaml'; YAML.load_file('.github/workflows/ci.yml'); puts 'ci.yml ok'"`.
+- `pnpm format:check`.
+- `pnpm lint`.
+- `pnpm typecheck`.
+- `pnpm build`.
+- `pnpm test`.
+- `pnpm php:quality`.
+- `pnpm test:e2e`.
+- `pnpm test:e2e:local:real`.
+
+Docker build validation is wired into CI as `docker-build` and exposed locally as `pnpm ci:docker`, but it was not run during this stage because the agreed stage workflow is FE+BE local only until all 9 stages are complete.
 
 ### Goal
 

@@ -207,4 +207,4 @@ curl -s -w '\nHTTP %{http_code}\n' http://127.0.0.1:5173/api/teacher-pathway-sub
 pnpm test:e2e:real
 ```
 
-Continuous integration mirrors the same frontend quality gates in `.github/workflows/ci.yml` and adds Playwright smoke coverage plus PHP syntax validation for the WordPress plugin. See `docs/ci-cd.md` for the full workflow contract and local parity commands.
+Continuous integration mirrors the same frontend quality gates in `.github/workflows/ci.yml` and adds mocked Playwright, real-backend Playwright, Docker build validation, PHP syntax linting, PHPCS, PHPStan and REST contract checks for the WordPress plugin. See `docs/ci-cd.md` for the full workflow contract and local parity commands.

@@ -7,79 +7,104 @@ on:
   pull_request:
     branches:
       - main
-  workflow_dispatch: {}
+  workflow_dispatch:
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-  PNPM_VERSION: 10.18.3
+permissions:
+  contents: read
 
 jobs:
-  install-and-verify:
-    name: Install, lint, unit tests, typecheck, build
-    runs-on: ubuntu-latest
+  frontend-quality:
+    name: Frontend quality
+    runs-on: ubuntu-22.04
     defaults:
       run:
         working-directory: frontend
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v4
         with:
-          node-version-file: '.node-version'
-          package-manager-cache: false
+          node-version-file: .node-version
+          cache: pnpm
+          cache-dependency-path: frontend/pnpm-lock.yaml
 
-      - name: Setup pnpm
+      - name: Enable pnpm
         run: |
           corepack enable
-          corepack prepare pnpm@${PNPM_VERSION} --activate
-          pnpm --version
+          corepack prepare pnpm@10.18.3 --activate
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Check formatting
+        run: pnpm format:check
+
       - name: Lint
         run: pnpm lint
-
-      - name: Unit tests
-        run: pnpm test:unit
 
       - name: Typecheck
         run: pnpm typecheck
 
+      - name: Unit tests
+        run: pnpm test:unit
+
       - name: Build
         run: pnpm build
 
-      - name: Upload frontend build
+      - name: Upload Next.js build artifact
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ggsa-teacher-pathway-portal-next-build
+          name: portal-next-build
           path: frontend/apps/portal/.next
-          include-hidden-files: true
+          if-no-files-found: ignore
+          retention-days: 7
 
-  e2e:
-    name: Playwright smoke test
+  backend-quality:
+    name: WordPress plugin quality
     runs-on: ubuntu-22.04
-    needs: install-and-verify
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+          tools: composer:v2
+
+      - name: Install Composer dependencies
+        run: composer --working-dir=backend/wp-content/plugins/ggsa-teacher-pathway install --no-interaction --prefer-dist
+
+      - name: PHP syntax, PHPCS, PHPStan and REST contracts
+        run: composer --working-dir=backend/wp-content/plugins/ggsa-teacher-pathway run quality
+
+  playwright-smoke:
+    name: Playwright smoke
+    runs-on: ubuntu-22.04
+    needs:
+      - frontend-quality
     defaults:
       run:
         working-directory: frontend
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v4
         with:
-          node-version-file: '.node-version'
-          package-manager-cache: false
+          node-version-file: .node-version
+          cache: pnpm
+          cache-dependency-path: frontend/pnpm-lock.yaml
 
-      - name: Setup pnpm
+      - name: Enable pnpm
         run: |
           corepack enable
-          corepack prepare pnpm@${PNPM_VERSION} --activate
-          pnpm --version
+          corepack prepare pnpm@10.18.3 --activate
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -87,27 +112,78 @@ jobs:
       - name: Install Playwright browser
         run: pnpm exec playwright install --with-deps chromium
 
-      - name: Run Playwright smoke test
+      - name: Run mocked Playwright suite
         run: pnpm test:e2e
 
       - name: Upload Playwright report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
+          name: playwright-smoke-report
           path: frontend/apps/portal/playwright-report
+          if-no-files-found: ignore
+          retention-days: 7
 
-  backend-validate:
-    name: Validate WordPress plugin scaffold
-    runs-on: ubuntu-latest
+  real-backend-playwright:
+    name: Real backend Playwright
+    runs-on: ubuntu-22.04
+    needs:
+      - frontend-quality
+      - backend-quality
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+          cache-dependency-path: frontend/pnpm-lock.yaml
+
+      - name: Enable pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.18.3 --activate
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
+          extensions: curl, pdo_sqlite, sqlite3, zip
+          coverage: none
+          tools: composer:v2
 
-      - name: Lint WordPress plugin
-        run: php -l backend/wp-content/plugins/ggsa-teacher-pathway/ggsa-teacher-pathway.php
+      - name: Install frontend dependencies
+        run: pnpm --dir frontend install --frozen-lockfile
+
+      - name: Install Composer dependencies
+        run: composer --working-dir=backend/wp-content/plugins/ggsa-teacher-pathway install --no-interaction --prefer-dist
+
+      - name: Install Playwright browser
+        run: pnpm --dir frontend exec playwright install --with-deps chromium
+
+      - name: Run real-backend Playwright suite
+        run: pnpm test:e2e:local:real
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-backend-playwright-report
+          path: frontend/apps/portal/playwright-report
+          if-no-files-found: ignore
+          retention-days: 7
+
+  docker-build:
+    name: Docker build
+    runs-on: ubuntu-22.04
+    needs:
+      - frontend-quality
+      - backend-quality
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build WordPress and frontend images
+        run: docker compose build wordpress frontend

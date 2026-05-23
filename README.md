@@ -40,7 +40,7 @@ The solution is implemented as a decoupled Next.js frontend and headless WordPre
 - Unit coverage for shared readiness logic and reusable UI components.
 - Playwright smoke coverage for the portal journey.
 - TypeScript, linting and production build commands for the frontend workspace.
-- GitHub Actions CI for frontend verification, Playwright smoke testing and WordPress plugin linting.
+- GitHub Actions CI for frontend verification, Playwright smoke testing, real-backend Playwright, Docker build validation and WordPress plugin quality checks.
 
 ## Technology Summary
 
@@ -197,6 +197,16 @@ pnpm --dir frontend build
 pnpm --dir frontend exec playwright install chromium
 pnpm --dir frontend test:e2e
 ```
+
+Root CI parity shortcuts are also available:
+
+```bash
+pnpm ci:quick
+pnpm ci:real
+pnpm ci:docker
+```
+
+`pnpm ci:quick` runs the fast non-Docker frontend, backend and mocked Playwright checks. `pnpm ci:real` runs the local PHP/SQLite WordPress backend E2E suite. `pnpm ci:docker` builds the WordPress and frontend Docker images.
 
 ## Local FE And BE Without Docker
 

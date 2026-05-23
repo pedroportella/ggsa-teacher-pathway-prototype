@@ -11,10 +11,13 @@ The workflow runs on pushes to `main`, pull requests to `main` and manual dispat
 ## Delivered Capability
 
 - Frontend dependency installation with frozen lockfile enforcement.
-- Frontend linting, unit testing, typechecking and production build validation.
-- Playwright browser smoke testing.
+- Frontend formatting, linting, unit testing, typechecking and production build validation.
+- Dependency-free Playwright accessibility, UX and smoke testing.
+- Real-backend Playwright testing against the local PHP/SQLite WordPress runtime.
 - Build and Playwright report artifact upload.
-- WordPress plugin PHP syntax validation.
+- WordPress plugin PHP syntax validation, PHPCS, PHPStan and REST contract tests.
+- Docker image build validation for the WordPress and frontend services.
+- Documented placeholders for future dependency, container, secret and licence scanning.
 
 ## Frontend Verification
 
@@ -22,6 +25,7 @@ Runs in the `frontend` workspace with Node.js 20.19.x from the repository `.node
 
 ```bash
 pnpm install --frozen-lockfile
+pnpm format:check
 pnpm lint
 pnpm test:unit
 pnpm typecheck
@@ -44,6 +48,19 @@ Playwright starts the portal with `pnpm --filter @ggsa/portal exec next dev -H 1
 
 The job uploads `frontend/apps/portal/playwright-report` when available.
 
+## Real Backend Browser Verification
+
+Runs after the frontend and backend jobs with Node.js 20.19.x and PHP 8.3. It uses the fast non-Docker WordPress runtime so CI proves the Next.js routes can talk to a real WordPress plugin without waiting for the full Compose stack.
+
+```bash
+pnpm --dir frontend install --frozen-lockfile
+composer --working-dir=backend/wp-content/plugins/ggsa-teacher-pathway install --no-interaction --prefer-dist
+pnpm --dir frontend exec playwright install --with-deps chromium
+pnpm test:e2e:local:real
+```
+
+The script downloads WordPress, WP-CLI and the SQLite integration into ignored backend cache/runtime folders, activates the GGSA plugin, seeds the register and runs Playwright with `E2E_USE_MOCK=false`.
+
 ## Backend Validation
 
 Runs with PHP 8.3 and validates the custom WordPress plugin syntax, WordPress security/coding checks and PHPStan static analysis.
@@ -53,7 +70,17 @@ composer --working-dir=backend/wp-content/plugins/ggsa-teacher-pathway install
 composer --working-dir=backend/wp-content/plugins/ggsa-teacher-pathway run quality
 ```
 
-This confirms the current WordPress backend scaffold can be parsed and checked without requiring a database-backed WordPress install in CI.
+This confirms the current WordPress backend scaffold can be parsed, checked and contract-tested without requiring a database-backed WordPress install in the backend-only job.
+
+## Docker Build Verification
+
+Runs after the frontend and backend quality jobs.
+
+```bash
+docker compose build wordpress frontend
+```
+
+This validates the production-like WordPress and Next.js image builds separately from the faster quality and Playwright jobs.
 
 ## Local Parity Checks
 
@@ -63,6 +90,7 @@ Run these from the repository root before handing over a change.
 volta install node@20.19.5 pnpm@10.18.3
 export PATH="$HOME/.volta/bin:$PATH"
 pnpm --dir frontend install
+composer --working-dir=backend/wp-content/plugins/ggsa-teacher-pathway install
 pnpm format:check
 pnpm --dir frontend lint
 pnpm --dir frontend test:unit
@@ -70,9 +98,17 @@ pnpm --dir frontend typecheck
 pnpm --dir frontend build
 pnpm --dir frontend exec playwright install chromium
 pnpm --dir frontend test:e2e
-composer --working-dir=backend/wp-content/plugins/ggsa-teacher-pathway install
 composer --working-dir=backend/wp-content/plugins/ggsa-teacher-pathway run quality
-docker compose run --rm --entrypoint php wordpress -l wp-content/plugins/ggsa-teacher-pathway/ggsa-teacher-pathway.php
+pnpm test:e2e:local:real
+pnpm docker:build
+```
+
+The root package also provides grouped CI parity commands:
+
+```bash
+pnpm ci:quick
+pnpm ci:real
+pnpm ci:docker
 ```
 
 ## Style Contract
@@ -103,7 +139,6 @@ If Docker Compose reports that it cannot connect to `unix:///Users/.../.docker/r
 
 ## Production Gates To Add
 
-- WordPress REST contract tests in a disposable WordPress runtime.
 - Plugin activation, route registration and permission checks in a disposable WordPress runtime.
 - API contract tests between the Next.js portal and WordPress REST routes.
 - Evidence upload policy, file storage and malware scanning validation.
