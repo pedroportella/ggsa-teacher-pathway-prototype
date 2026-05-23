@@ -68,9 +68,13 @@ export function Header({
               </ul>
             </div>
             <div className="health-search health-search--global">
-              <form action={searchAction} className="au-form">
-                <div className="health-search__form__input-wrapper">
-                  <div className="au-form__item">
+              <div className="health-search__form__input-wrapper">
+                <form
+                  action={searchAction}
+                  className="au-form health-search__form health-search__form--global"
+                  role="search"
+                >
+                  <div className="au-form__item health-search__query-field health-search__query-field--global">
                     <label className="au-sronly" htmlFor={searchId}>
                       Search
                     </label>
@@ -86,14 +90,14 @@ export function Header({
                     />
                   </div>
                   <div className="health-loading"></div>
-                </div>
-                <input
-                  className="au-btn button health-search__form__submit health-search__form__submit--global"
-                  name="submit"
-                  type="submit"
-                  value="Search"
-                />
-              </form>
+                  <input
+                    className="au-btn au-btn button health-search__form__submit health-search__form__submit--global"
+                    name="submit"
+                    type="submit"
+                    value="Search"
+                  />
+                </form>
+              </div>
             </div>
           </div>
         </div>

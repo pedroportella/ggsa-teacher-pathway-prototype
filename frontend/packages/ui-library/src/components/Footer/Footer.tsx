@@ -11,6 +11,10 @@ export type FooterSection = {
   };
   ariaLabel?: string;
   content?: ReactNode;
+  image?: {
+    alt: string;
+    src: string;
+  };
   links?: NavLink[];
   title?: ReactNode;
 };
@@ -62,6 +66,13 @@ export function Footer({
         <div className="layout layout--threecol-section layout--threecol-section--33-34-33 au-footer__portal-layout">
           {footerSections.map((section, index) => (
             <section className="layout__region au-footer__navigation-section" key={index}>
+              {section.image && (
+                <img
+                  alt={section.image.alt}
+                  className="au-footer__section-image"
+                  src={section.image.src}
+                />
+              )}
               {section.title && <h2>{section.title}</h2>}
               {section.content && <p>{section.content}</p>}
               {section.links && (

@@ -5,5 +5,6 @@ export const ggsaBrand = {
 };
 
 export { default as ggsaLogoSvg } from './ggsa-logo.svg';
+export { default as ggsaLogoShortPng } from './ggsa-logo-short.png';
 export { default as ggsaIconSvg } from './ggsa-icon.svg';
 export { default as ggsaMemberSignupLogoSvg } from './ggsa-member-signup-logo.svg';

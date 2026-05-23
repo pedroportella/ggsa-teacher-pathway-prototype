@@ -49,9 +49,6 @@ export function AboutProcessContainer() {
                 className="about-brand-lockup__wordmark"
                 src={assetSrc(ggsaLogoSvg)}
               />
-              <div className="about-brand-lockup__marks" aria-hidden="true">
-                <img className="about-brand-lockup__mark" src={assetSrc(ggsaIconSvg)} alt="" />
-              </div>
             </div>
           </div>
         </div>

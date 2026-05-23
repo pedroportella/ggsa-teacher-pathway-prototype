@@ -1,9 +1,14 @@
 'use client';
 
+import { ggsaBrand, ggsaLogoShortPng } from '@ggsa/ui-assets';
 import { Button, Layout } from '@ggsa/ui-library';
 import type { ReactNode } from 'react';
 import { usePortalState } from './PortalContext';
 import { getPortalLinks } from './routes';
+
+type ImageAsset = string | { src: string };
+
+const assetSrc = (asset: ImageAsset) => (typeof asset === 'string' ? asset : asset.src);
 
 export function PortalFrame({ children }: { children: ReactNode }) {
   const { isRegisterLoading, navigate, refreshRegister, route } = usePortalState();
@@ -18,6 +23,10 @@ export function PortalFrame({ children }: { children: ReactNode }) {
           {
             content:
               'This portal supports professional learning for teachers through structured plans, evidence portfolios and pathway readiness views aligned to the Mastery Teaching Pathway.',
+            image: {
+              alt: ggsaBrand.markLabel,
+              src: assetSrc(ggsaLogoShortPng),
+            },
           },
           {
             ariaLabel: 'Portal footer links',
