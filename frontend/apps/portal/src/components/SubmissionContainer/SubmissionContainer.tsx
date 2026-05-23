@@ -1,6 +1,7 @@
 import type { WorkflowStatus } from '@ggsa/services';
-import { Button, Field, Form, FormActions, Panel, SelectInput, TextInput } from '@ggsa/ui-library';
+import { Button, Form, FormActions, Panel, SelectInput, TextInput } from '@ggsa/ui-library';
 import type { PortalState } from '../../app/portalState';
+import { EvidenceUpload } from './EvidenceUpload';
 
 const workflowStatuses: WorkflowStatus[] = [
   'Learning plan draft',
@@ -18,13 +19,22 @@ const pathwayProfiles = [
 
 type SubmissionContainerProps = Pick<
   PortalState,
-  'addEvidence' | 'isSubmitting' | 'notice' | 'submission' | 'submitEvidence' | 'updateField'
+  | 'addEvidence'
+  | 'isSubmitting'
+  | 'notice'
+  | 'removeEvidence'
+  | 'stagedEvidenceDocuments'
+  | 'submission'
+  | 'submitEvidence'
+  | 'updateField'
 >;
 
 export function SubmissionContainer({
   addEvidence,
   isSubmitting,
   notice,
+  removeEvidence,
+  stagedEvidenceDocuments,
   submission,
   submitEvidence,
   updateField,
@@ -107,13 +117,13 @@ export function SubmissionContainer({
                   value={submission.targetReleaseDate}
                   onChange={(event) => updateField('targetReleaseDate', event.target.value)}
                 />
-                <Field label="Evidence portfolio" inline>
-                  {submission.evidenceDocuments.length} documents attached
-                </Field>
+                <EvidenceUpload
+                  addEvidence={addEvidence}
+                  documents={submission.evidenceDocuments}
+                  removeEvidence={removeEvidence}
+                  stagedDocuments={stagedEvidenceDocuments}
+                />
                 <FormActions>
-                  <Button variant="secondary" type="button" onClick={addEvidence}>
-                    Add prototype evidence
-                  </Button>
                   <Button type="submit" disabled={isSubmitting}>
                     {isSubmitting ? 'Submitting...' : 'Sync to pathway register'}
                   </Button>

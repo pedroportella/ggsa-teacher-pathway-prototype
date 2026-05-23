@@ -11,7 +11,8 @@ class GGSA_Teacher_Pathway_REST_Controller {
 	public function __construct(
 		private GGSA_Teacher_Pathway_Meta_Repository $repository,
 		private GGSA_Teacher_Pathway_Permissions $permissions,
-		private GGSA_Teacher_Pathway_Learning_Plan_Generator $learning_plan_generator
+		private GGSA_Teacher_Pathway_Learning_Plan_Generator $learning_plan_generator,
+		private GGSA_Teacher_Pathway_Evidence_Upload_Policy $evidence_upload_policy
 	) {
 	}
 
@@ -126,49 +127,70 @@ class GGSA_Teacher_Pathway_REST_Controller {
 		return rest_ensure_response( $record );
 	}
 
-	public function upload_learning_plan_evidence( WP_REST_Request $request ): WP_REST_Response {
-		$files = $request->get_file_params();
-		$file  = $files['file'] ?? null;
+	public function upload_learning_plan_evidence( WP_REST_Request $request ): WP_REST_Response|WP_Error {
+		$validated = $this->evidence_upload_policy->validate_request( $request );
 
-		if ( ! is_array( $file ) ) {
-			return rest_ensure_response(
-				[
-					'fileId'     => 'sample-evidence',
-					'fileName'   => 'teacher-pathway-evidence.pdf',
-					'fileType'   => 'application/pdf',
-					'fileSize'   => 428000,
-					'uploadedAt' => gmdate( DATE_ATOM ),
-				]
-			);
+		if ( is_wp_error( $validated ) ) {
+			return $validated;
 		}
 
 		require_once ABSPATH . 'wp-admin/includes/file.php';
 
-		$upload = wp_handle_upload( $file, [ 'test_form' => false ] );
+		$upload = wp_handle_sideload(
+			$validated['file'],
+			[
+				'test_form' => false,
+				'mimes'     => [
+					'pdf'  => 'application/pdf',
+					'png'  => 'image/png',
+					'jpg'  => 'image/jpeg',
+					'jpeg' => 'image/jpeg',
+					'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+				],
+			]
+		);
 
 		if ( isset( $upload['error'] ) ) {
-			return rest_ensure_response(
+			return new WP_Error( 'ggsa_evidence_upload_failed', sanitize_text_field( (string) $upload['error'] ), [ 'status' => 500 ] );
+		}
+
+		$document = [
+			'fileId'     => sanitize_title( (string) ( $upload['file'] ?? uniqid( 'evidence-', true ) ) ),
+			'fileName'   => $validated['fileName'],
+			'fileType'   => $validated['fileType'],
+			'fileSize'   => $validated['fileSize'],
+			'category'   => $validated['category'],
+			'owner'      => $validated['owner'],
+			'retention'  => $validated['retention'],
+			'uploadedAt' => gmdate( DATE_ATOM ),
+			'url'        => esc_url_raw( (string) ( $upload['url'] ?? '' ) ),
+		];
+
+		$post_id = $this->repository->find_learning_plan_post_id(
+			[
+				'id'              => (string) ( $validated['owner']['learningPlanId'] ?? '' ),
+				'referenceNumber' => (string) ( $validated['owner']['referenceNumber'] ?? '' ),
+			]
+		);
+
+		if ( $post_id > 0 ) {
+			$payload  = json_decode( (string) get_post_meta( $post_id, 'ggsa_learning_plan_payload', true ), true );
+			$existing = is_array( $payload ) && isset( $payload['evidenceDocuments'] ) && is_array( $payload['evidenceDocuments'] )
+				? $payload['evidenceDocuments']
+				: [];
+
+			$this->repository->update_learning_plan_payload(
+				$post_id,
 				[
-					'fileId'     => uniqid( 'evidence-', true ),
-					'fileName'   => sanitize_file_name( (string) ( $file['name'] ?? 'teacher-pathway-evidence.pdf' ) ),
-					'fileType'   => sanitize_text_field( (string) ( $file['type'] ?? 'application/octet-stream' ) ),
-					'fileSize'   => (int) ( $file['size'] ?? 0 ),
-					'uploadedAt' => gmdate( DATE_ATOM ),
-					'error'      => sanitize_text_field( (string) $upload['error'] ),
+					'evidenceDocuments' => [
+						...$existing,
+						$document,
+					],
 				]
 			);
 		}
 
-		return rest_ensure_response(
-			[
-				'fileId'     => sanitize_title( (string) ( $upload['file'] ?? uniqid( 'evidence-', true ) ) ),
-				'fileName'   => sanitize_file_name( (string) ( $file['name'] ?? 'teacher-pathway-evidence.pdf' ) ),
-				'fileType'   => sanitize_text_field( (string) ( $file['type'] ?? 'application/octet-stream' ) ),
-				'fileSize'   => (int) ( $file['size'] ?? 0 ),
-				'uploadedAt' => gmdate( DATE_ATOM ),
-				'url'        => esc_url_raw( (string) ( $upload['url'] ?? '' ) ),
-			]
-		);
+		return rest_ensure_response( $document );
 	}
 
 	public function update_learning_plan_readiness( WP_REST_Request $request ): WP_REST_Response|WP_Error {

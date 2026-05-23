@@ -1,5 +1,6 @@
 import type {
   ControlCheck,
+  EvidenceCategory,
   EvidenceDocument,
   RegisterItem,
   TeacherPathwaySubmission,
@@ -35,9 +36,25 @@ export async function createSubmission(
   return response.json() as Promise<TeacherPathwaySubmission>;
 }
 
-export async function uploadEvidence(file: File): Promise<EvidenceDocument> {
+export async function uploadEvidence(
+  file: File,
+  owner: {
+    category: EvidenceCategory;
+    learningPlanId?: string;
+    referenceNumber?: string;
+  },
+): Promise<EvidenceDocument> {
   const body = new FormData();
   body.append('file', file);
+  body.append('category', owner.category);
+
+  if (owner.learningPlanId) {
+    body.append('learningPlanId', owner.learningPlanId);
+  }
+
+  if (owner.referenceNumber) {
+    body.append('referenceNumber', owner.referenceNumber);
+  }
 
   const response = await fetch(`${API_BASE_URL}/teacher-pathway-submissions/evidence`, {
     method: 'POST',

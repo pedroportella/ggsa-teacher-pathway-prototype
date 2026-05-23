@@ -15,6 +15,7 @@ class GGSA_Teacher_Pathway_Plugin {
 	private GGSA_Teacher_Pathway_WooCommerce_Entitlement_Gateway $woocommerce_gateway;
 	private GGSA_Teacher_Pathway_LearnDash_Gateway $learndash_gateway;
 	private GGSA_Teacher_Pathway_Learning_Plan_Generator $learning_plan_generator;
+	private GGSA_Teacher_Pathway_Evidence_Upload_Policy $evidence_upload_policy;
 
 	public function __construct() {
 		$this->repository              = new GGSA_Teacher_Pathway_Meta_Repository();
@@ -27,12 +28,14 @@ class GGSA_Teacher_Pathway_Plugin {
 			$this->woocommerce_gateway,
 			$this->learndash_gateway
 		);
+		$this->evidence_upload_policy  = new GGSA_Teacher_Pathway_Evidence_Upload_Policy();
 
 		$this->post_type       = new GGSA_Teacher_Pathway_Learning_Plan_Post_Type( $this->repository );
 		$this->rest_controller = new GGSA_Teacher_Pathway_REST_Controller(
 			$this->repository,
 			$permissions,
-			$this->learning_plan_generator
+			$this->learning_plan_generator,
+			$this->evidence_upload_policy
 		);
 	}
 

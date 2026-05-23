@@ -86,6 +86,12 @@ These classes live under `backend/wp-content/plugins/ggsa-teacher-pathway/includ
 
 The frontend mirrors this with `generateTeacherLearningPlan()` in `frontend/packages/services/src/generateLearningPlan.ts`, which seeds the learning-plan screen from local adapter data. Form fields remain editable as prototype overrides, but the initial state now represents an enrolment-generated plan.
 
+### Evidence Upload Policy
+
+`GGSA_Teacher_Pathway_Evidence_Upload_Policy` validates evidence before WordPress stores it. Current local policy requires a learning plan ID or reference number, allows PDF, PNG, JPG/JPEG and DOCX, rejects executable/archive-style uploads by omission, and defaults to a 10 MB limit configurable through `GGSA_TEACHER_PATHWAY_MAX_EVIDENCE_BYTES`.
+
+Successful upload responses include owner metadata and retention placeholders. Before production, GGSA should decide whether evidence lives in private WordPress media, protected object storage or an LMS-owned evidence store. Production also needs malware scanning, access-control review, retention rules for teacher/classroom artefacts and privacy handling for student-identifiable content.
+
 ### Route Handlers
 
 Next.js route handlers are allowed as the same-origin browser contract:

@@ -392,7 +392,29 @@ pnpm typecheck
 pnpm test:e2e
 ```
 
-## Stage 6: Evidence Upload Policy
+## Stage 6: Evidence Upload Policy - Done
+
+Status: completed with backend REST contract coverage.
+
+Completed:
+
+- Added `includes/Domain/EvidenceUploadPolicy.php`.
+- Added a file type allowlist for PDF, PNG, JPG/JPEG and DOCX.
+- Added configurable max upload size via `GGSA_TEACHER_PATHWAY_MAX_EVIDENCE_BYTES`, defaulting to 10 MB.
+- Required evidence uploads to include a learning plan ID or reference number.
+- Changed invalid evidence uploads to return `WP_Error` responses with useful status codes.
+- Successful uploads now return file, owner and retention/policy metadata.
+- Added malware scanning and privacy review placeholders to returned metadata.
+- Documented private storage, malware scanning, retention and privacy gaps before production.
+- Added REST contract coverage for:
+  - valid PDF upload;
+  - missing owner/reference;
+  - disallowed file type;
+  - oversized file.
+
+Validated locally:
+
+- `pnpm php:quality`.
 
 ### Goal
 
@@ -430,6 +452,76 @@ Suggested policy:
 ```bash
 pnpm test:e2e:real
 composer run test
+```
+
+## Stage 6B: Real Evidence Upload UI And Playwright Coverage - Done
+
+Status: completed with local frontend/backend checks.
+
+Completed:
+
+- Compared the RBDM file upload implementation and reused the useful pattern rather than copying it wholesale.
+- Added GGSA evidence categories:
+  - LearnDash certificate;
+  - Classroom artefact;
+  - Mastery evidence;
+  - RPL supporting document.
+- Replaced synthetic "Add prototype evidence" metadata with a real file input on the learning-plan screen.
+- Added local staging for selected evidence files with category, status and validation errors.
+- Added frontend validation for PDF, PNG, JPG/JPEG and DOCX files up to 10 MB.
+- Updated the frontend upload service to send learning plan ID/reference and category with multipart evidence uploads.
+- Updated the WordPress upload policy to require and validate evidence category.
+- Updated the WordPress upload route to attach uploaded evidence metadata back to the learning-plan payload.
+- Updated Playwright coverage to use `setInputFiles` with in-memory PDF evidence, following the mature RBDM test pattern.
+
+Validated locally:
+
+- `pnpm format:check`.
+- `pnpm typecheck`.
+- `pnpm php:quality`.
+- `pnpm test:e2e:local:real`.
+
+### Goal
+
+Close the gap between backend evidence policy and the frontend prototype by using real browser file selection and real WordPress upload ownership.
+
+### Implementation
+
+Keep the component GGSA-specific for now:
+
+```text
+frontend/apps/portal/src/components/SubmissionContainer/EvidenceUpload.tsx
+```
+
+Use the RBDM ideas that transfer cleanly:
+
+- category before file selection;
+- staged file preview;
+- visible upload status/error;
+- Playwright `setInputFiles` coverage;
+- backend policy as the final authority.
+
+Avoid copying:
+
+- donor buckets;
+- donor-specific categories;
+- DCR explanation rules;
+- larger page-object structure until the GGSA e2e suite needs it.
+
+### Acceptance Criteria
+
+- Users select real evidence files rather than adding synthetic metadata.
+- Evidence upload requests include learning plan owner/reference and evidence category.
+- WordPress stores evidence metadata against the learning plan payload.
+- Playwright proves the file input path.
+
+### Validation
+
+```bash
+pnpm format:check
+pnpm typecheck
+pnpm php:quality
+pnpm test:e2e:local:real
 ```
 
 ## Stage 7: Accessibility And UX Quality Gates
@@ -536,9 +628,10 @@ Manual WordPress admin/page check may be required.
 5. Stage 4: PHP-Side Integration Adapters.
 6. Stage 5: Generated Learning Plan Service.
 7. Stage 6: Evidence Upload Policy.
-8. Stage 7: Accessibility And UX Quality Gates.
-9. Stage 8: CI Expansion.
-10. Stage 9: Divi / Existing WordPress Deployment Strategy.
+8. Stage 6B: Real Evidence Upload UI And Playwright Coverage.
+9. Stage 7: Accessibility And UX Quality Gates.
+10. Stage 8: CI Expansion.
+11. Stage 9: Divi / Existing WordPress Deployment Strategy.
 
 ## Notes For Each Stage
 

@@ -17,16 +17,25 @@ import {
   generateTeacherLearningPlan,
   listSubmissions,
   updateReadinessControls,
+  uploadEvidence,
   type ControlCheck,
+  type EvidenceCategory,
   type EvidenceDocument,
   type RegisterItem,
   type TeacherPathwaySubmission,
 } from '@ggsa/services';
-import type { PortalState } from './portalState';
+import type { PortalState, StagedEvidenceDocument } from './portalState';
 import type { PortalRoute } from './routes';
 import { getRouteFromPath, getRouteHref } from './routes';
 
 const PortalContext = createContext<PortalState | null>(null);
+const evidenceMaxBytes = 10 * 1024 * 1024;
+const allowedEvidenceTypes = new Set([
+  'application/pdf',
+  'image/png',
+  'image/jpeg',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+]);
 
 export function PortalProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname();
@@ -36,6 +45,9 @@ export function PortalProvider({ children }: { children: ReactNode }) {
   const [register, setRegister] = useState<RegisterItem[]>([]);
   const [notice, setNotice] = useState(
     'Loading teacher learning plans from the WordPress REST API.',
+  );
+  const [stagedEvidenceDocuments, setStagedEvidenceDocuments] = useState<StagedEvidenceDocument[]>(
+    [],
   );
   const [isRegisterLoading, setIsRegisterLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -99,19 +111,33 @@ export function PortalProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const addEvidence = () => {
-    const document: EvidenceDocument = {
-      fileId: `local-${Date.now()}`,
-      fileName: `teacher-pathway-evidence-${submission.evidenceDocuments.length + 1}.pdf`,
-      fileType: 'application/pdf',
-      fileSize: 428000,
-      uploadedAt: new Date().toISOString(),
-    };
+  const addEvidence = (file: File, category: EvidenceCategory) => {
+    const validationError =
+      !allowedEvidenceTypes.has(file.type) && !file.name.toLowerCase().endsWith('.docx')
+        ? 'Use PDF, PNG, JPG or DOCX evidence files.'
+        : file.size > evidenceMaxBytes
+          ? 'Evidence files must be 10 MB or smaller.'
+          : file.size <= 0
+            ? 'Evidence file is empty.'
+            : undefined;
 
-    setSubmission((current) => ({
+    setStagedEvidenceDocuments((current) => [
       ...current,
-      evidenceDocuments: [...current.evidenceDocuments, document],
-    }));
+      {
+        id: crypto.randomUUID(),
+        category,
+        error: validationError,
+        file,
+        fileName: file.name,
+        fileSize: file.size,
+        fileType: file.type || 'application/octet-stream',
+        status: validationError ? 'error' : 'ready',
+      },
+    ]);
+  };
+
+  const removeEvidence = (id: string) => {
+    setStagedEvidenceDocuments((current) => current.filter((item) => item.id !== id));
   };
 
   const refreshRegister = useCallback(async () => {
@@ -155,6 +181,44 @@ export function PortalProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
+  const updateStagedEvidence = (id: string, patch: Partial<StagedEvidenceDocument>) => {
+    setStagedEvidenceDocuments((current) =>
+      current.map((item) => (item.id === id ? { ...item, ...patch } : item)),
+    );
+  };
+
+  const uploadStagedEvidence = async (
+    created: TeacherPathwaySubmission,
+  ): Promise<EvidenceDocument[]> => {
+    const uploadable = stagedEvidenceDocuments.filter((item) => item.status === 'ready');
+    const uploaded: EvidenceDocument[] = [];
+
+    for (const item of uploadable) {
+      updateStagedEvidence(item.id, { status: 'uploading', error: undefined });
+
+      try {
+        const document = await uploadEvidence(item.file, {
+          category: item.category,
+          learningPlanId: created.id,
+          referenceNumber: created.referenceNumber,
+        });
+        uploaded.push({ ...document, category: document.category ?? item.category });
+        updateStagedEvidence(item.id, { status: 'uploaded' });
+      } catch {
+        updateStagedEvidence(item.id, {
+          status: 'error',
+          error: 'WordPress could not store this evidence file.',
+        });
+      }
+    }
+
+    if (uploaded.length > 0) {
+      setStagedEvidenceDocuments((current) => current.filter((item) => item.status !== 'uploaded'));
+    }
+
+    return uploaded;
+  };
+
   const submitEvidence = async () => {
     setIsSubmitting(true);
 
@@ -173,11 +237,33 @@ export function PortalProvider({ children }: { children: ReactNode }) {
         submittedAt: created.submittedAt ?? new Date().toISOString(),
       };
 
+      const uploadedDocuments = await uploadStagedEvidence(created);
+      const createdWithEvidence = {
+        ...created,
+        evidenceDocuments: [...created.evidenceDocuments, ...uploadedDocuments],
+      };
+
       setRegister((current) => [registerItem, ...current]);
-      setSubmission(created);
-      setNotice('Teacher learning plan sent to the WordPress pathway register.');
+      setSubmission(createdWithEvidence);
+      setNotice(
+        uploadedDocuments.length > 0
+          ? 'Teacher learning plan and evidence sent to the WordPress pathway register.'
+          : 'Teacher learning plan sent to the WordPress pathway register.',
+      );
       navigate('register');
     } catch {
+      const fallbackEvidence = stagedEvidenceDocuments
+        .filter((item) => item.status === 'ready')
+        .map(
+          (item): EvidenceDocument => ({
+            fileId: item.id,
+            fileName: item.fileName,
+            fileType: item.fileType,
+            fileSize: item.fileSize,
+            category: item.category,
+            uploadedAt: new Date().toISOString(),
+          }),
+        );
       const fallbackItem: RegisterItem = {
         id: `local-${Date.now()}`,
         referenceNumber: `GGSA-TP-${new Date().getFullYear()}-DRAFT`,
@@ -189,6 +275,11 @@ export function PortalProvider({ children }: { children: ReactNode }) {
       };
 
       setRegister((current) => [fallbackItem, ...current]);
+      setSubmission((current) => ({
+        ...current,
+        evidenceDocuments: [...current.evidenceDocuments, ...fallbackEvidence],
+      }));
+      setStagedEvidenceDocuments((current) => current.filter((item) => item.status === 'error'));
       setNotice(
         'Teacher learning plan captured locally; WordPress can persist it when the backend is running.',
       );
@@ -204,11 +295,13 @@ export function PortalProvider({ children }: { children: ReactNode }) {
     isSubmitting,
     navigate,
     notice,
+    removeEvidence,
     refreshRegister,
     register,
     route,
     submission,
     submitEvidence,
+    stagedEvidenceDocuments,
     summary,
     updateCheck,
     updateField,

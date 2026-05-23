@@ -7,12 +7,22 @@ export type WorkflowStatus =
 
 export type RiskLevel = 'Low' | 'Medium' | 'High';
 
+export const evidenceCategories = [
+  'LearnDash certificate',
+  'Classroom artefact',
+  'Mastery evidence',
+  'RPL supporting document',
+] as const;
+
+export type EvidenceCategory = (typeof evidenceCategories)[number];
+
 export interface EvidenceDocument {
   fileId: string;
   fileName: string;
   fileType: string;
   fileSize: number;
   uploadedAt: string;
+  category?: EvidenceCategory | string;
   url?: string;
 }
 

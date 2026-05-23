@@ -58,6 +58,18 @@ function ggsa_rest_request( string $method, string $route, ?array $payload = nul
 	return rest_do_request( $request );
 }
 
+function ggsa_evidence_request( array $file, array $params = [] ): WP_REST_Response {
+	$request = new WP_REST_Request( 'POST', '/ggsa/v1/teacher-pathway-submissions/evidence' );
+	$request->set_file_params( [ 'file' => $file ] );
+	$request->set_header( 'x-ggsa-portal-token', 'local-teacher-pathway-portal-token' );
+
+	foreach ( $params as $key => $value ) {
+		$request->set_param( (string) $key, $value );
+	}
+
+	return rest_do_request( $request );
+}
+
 wp_set_current_user( 0 );
 
 $unauthenticated = ggsa_rest_request( 'GET', '/ggsa/v1/teacher-pathway-submissions' );
@@ -158,6 +170,101 @@ ggsa_assert(
 	&& $readiness_data['controlChecks'][0]['status'] === 'Complete',
 	'readiness update persists controlChecks'
 );
+
+$valid_pdf_path = tempnam( sys_get_temp_dir(), 'ggsa-evidence-' );
+file_put_contents( $valid_pdf_path, "%PDF-1.4\n% GGSA contract evidence\n" );
+
+$valid_evidence       = ggsa_evidence_request(
+	[
+		'name'     => 'teacher-evidence.pdf',
+		'type'     => 'application/pdf',
+		'tmp_name' => $valid_pdf_path,
+		'error'    => UPLOAD_ERR_OK,
+		'size'     => filesize( $valid_pdf_path ),
+	],
+	[
+		'learningPlanId'  => (string) $created_id,
+		'referenceNumber' => is_array( $created ) ? (string) ( $created['referenceNumber'] ?? '' ) : '',
+		'category'        => 'Classroom artefact',
+	]
+);
+$valid_evidence_data  = $valid_evidence->get_data();
+$payload_after_upload = json_decode( (string) get_post_meta( $created_id, 'ggsa_learning_plan_payload', true ), true );
+
+ggsa_assert( $valid_evidence->get_status() === 200, 'valid evidence upload is accepted' );
+ggsa_assert(
+	is_array( $valid_evidence_data )
+	&& isset( $valid_evidence_data['owner']['learningPlanId'] )
+	&& (int) $valid_evidence_data['owner']['learningPlanId'] === $created_id
+	&& isset( $valid_evidence_data['category'] )
+	&& $valid_evidence_data['category'] === 'Classroom artefact'
+	&& isset( $valid_evidence_data['retention']['malwareScanning'] ),
+	'valid evidence upload returns owner and policy metadata'
+);
+ggsa_assert(
+	is_array( $payload_after_upload )
+	&& isset( $payload_after_upload['evidenceDocuments'][0]['fileName'] )
+	&& $payload_after_upload['evidenceDocuments'][0]['fileName'] === 'teacher-evidence.pdf',
+	'valid evidence upload attaches metadata to the learning plan payload'
+);
+
+$missing_owner_path = tempnam( sys_get_temp_dir(), 'ggsa-evidence-' );
+file_put_contents( $missing_owner_path, "%PDF-1.4\n% GGSA missing owner\n" );
+$missing_owner = ggsa_evidence_request(
+	[
+		'name'     => 'teacher-evidence.pdf',
+		'type'     => 'application/pdf',
+		'tmp_name' => $missing_owner_path,
+		'error'    => UPLOAD_ERR_OK,
+		'size'     => filesize( $missing_owner_path ),
+	]
+);
+ggsa_assert( $missing_owner->get_status() === 422, 'evidence upload requires owner or reference' );
+
+$invalid_type_path = tempnam( sys_get_temp_dir(), 'ggsa-evidence-' );
+file_put_contents( $invalid_type_path, '#!/bin/sh' );
+$invalid_type = ggsa_evidence_request(
+	[
+		'name'     => 'teacher-evidence.sh',
+		'type'     => 'application/x-sh',
+		'tmp_name' => $invalid_type_path,
+		'error'    => UPLOAD_ERR_OK,
+		'size'     => filesize( $invalid_type_path ),
+	],
+	[ 'learningPlanId' => (string) $created_id ]
+);
+ggsa_assert( $invalid_type->get_status() === 415, 'evidence upload rejects disallowed file types' );
+
+$oversized_path = tempnam( sys_get_temp_dir(), 'ggsa-evidence-' );
+file_put_contents( $oversized_path, "%PDF-1.4\n% GGSA oversized placeholder\n" );
+$oversized = ggsa_evidence_request(
+	[
+		'name'     => 'teacher-evidence.pdf',
+		'type'     => 'application/pdf',
+		'tmp_name' => $oversized_path,
+		'error'    => UPLOAD_ERR_OK,
+		'size'     => 10485761,
+	],
+	[
+		'learningPlanId' => (string) $created_id,
+		'category'       => 'Classroom artefact',
+	]
+);
+ggsa_assert( $oversized->get_status() === 413, 'evidence upload rejects oversized files' );
+
+$missing_category_path = tempnam( sys_get_temp_dir(), 'ggsa-evidence-' );
+file_put_contents( $missing_category_path, "%PDF-1.4\n% GGSA missing category\n" );
+$missing_category = ggsa_evidence_request(
+	[
+		'name'     => 'teacher-evidence.pdf',
+		'type'     => 'application/pdf',
+		'tmp_name' => $missing_category_path,
+		'error'    => UPLOAD_ERR_OK,
+		'size'     => filesize( $missing_category_path ),
+	],
+	[ 'learningPlanId' => (string) $created_id ]
+);
+ggsa_assert( $missing_category->get_status() === 422, 'evidence upload requires a category' );
 
 if ( count( $failures ) > 0 ) {
 	fwrite( STDERR, sprintf( "\n%d REST contract assertion(s) failed.\n", count( $failures ) ) );

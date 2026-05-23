@@ -103,6 +103,8 @@ Aggregates evidence from:
 - coach-reviewed mastery evidence;
 - notes prepared for partner-university RPL assessment.
 
+The current WordPress REST upload route now applies a prototype evidence policy: uploads must be attached to a learning plan ID or reference, file type is allowlisted to PDF, PNG, JPG/JPEG and DOCX, and file size defaults to 10 MB. Returned metadata includes owner and retention placeholders. Production still needs a decision on private storage, malware scanning, retention, and privacy treatment for classroom artefacts.
+
 ### `ReportingGateway`
 
 Optional future boundary for GraphQL or Hasura. This should only be built when GGSA confirms whether Hasura is an existing production dependency or an expected new reporting layer.

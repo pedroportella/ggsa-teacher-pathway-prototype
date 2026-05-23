@@ -29,6 +29,7 @@ require_once __DIR__ . '/includes/Integrations/MembershipUserGateway.php';
 require_once __DIR__ . '/includes/Integrations/WooCommerceEntitlementGateway.php';
 require_once __DIR__ . '/includes/Integrations/LearnDashGateway.php';
 require_once __DIR__ . '/includes/Domain/TeacherLearningPlanGenerator.php';
+require_once __DIR__ . '/includes/Domain/EvidenceUploadPolicy.php';
 require_once __DIR__ . '/includes/PostTypes/LearningPlanPostType.php';
 require_once __DIR__ . '/includes/Rest/TeacherPathwayController.php';
 require_once __DIR__ . '/includes/Plugin.php';

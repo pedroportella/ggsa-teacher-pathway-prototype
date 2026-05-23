@@ -49,11 +49,17 @@ test('captures a teacher pathway submission into the register', async ({ page })
   await page.goto('/learning-plan');
 
   await page.getByLabel('School or organisation').fill(organisationName);
-  await page.getByRole('button', { name: 'Add prototype evidence' }).click();
+  await page.getByLabel('Evidence category').selectOption('Classroom artefact');
+  await page.getByLabel('Evidence file').setInputFiles({
+    name: 'classroom-observation.pdf',
+    mimeType: 'application/pdf',
+    buffer: Buffer.from('%PDF-1.4\n% GGSA evidence smoke test\n'),
+  });
+  await expect(page.getByText('classroom-observation.pdf')).toBeVisible();
   await page.getByRole('button', { name: 'Sync to pathway register' }).click();
 
   await expect(
-    page.getByText(/Teacher learning plan captured locally|Teacher learning plan sent/),
+    page.getByText(/Teacher learning plan (?:and evidence )?(?:captured locally|sent)/),
   ).toBeVisible();
   await expect(page.getByRole('cell', { name: organisationName })).toBeVisible();
 });

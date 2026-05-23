@@ -27,11 +27,17 @@ test('loads refreshed seed data, creates a random record, and finds it after rel
   await page.getByLabel('Prototype integration source').fill(record.integrationType);
   await page.getByLabel('Pathway status').selectOption(record.workflowStatus);
   await page.getByLabel('Target commencement').fill(record.targetReleaseDate);
-  await page.getByRole('button', { name: 'Add prototype evidence' }).click();
+  await page.getByLabel('Evidence category').selectOption('RPL supporting document');
+  await page.getByLabel('Evidence file').setInputFiles({
+    name: 'rpl-supporting-document.pdf',
+    mimeType: 'application/pdf',
+    buffer: Buffer.from('%PDF-1.4\n% GGSA real backend evidence test\n'),
+  });
+  await expect(page.getByText('rpl-supporting-document.pdf')).toBeVisible();
   await page.getByRole('button', { name: 'Sync to pathway register' }).click();
 
   await expect(
-    page.getByText('Teacher learning plan sent to the WordPress pathway register.'),
+    page.getByText('Teacher learning plan and evidence sent to the WordPress pathway register.'),
   ).toBeVisible();
   await expect(page.getByRole('cell', { name: record.organisationName })).toBeVisible();
 
