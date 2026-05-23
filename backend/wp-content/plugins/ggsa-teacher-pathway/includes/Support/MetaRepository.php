@@ -10,6 +10,8 @@ class GGSA_Teacher_Pathway_Meta_Repository
 {
     public function learning_plan_to_register_item(WP_Post $post): array
     {
+        $submitted_at = get_post_datetime($post, 'date', 'gmt');
+
         return [
             'id' => (string) $post->ID,
             'referenceNumber' => (string) get_post_meta($post->ID, 'ggsa_reference_number', true),
@@ -17,7 +19,7 @@ class GGSA_Teacher_Pathway_Meta_Repository
             'productName' => (string) get_post_meta($post->ID, 'ggsa_pathway_name', true),
             'workflowStatus' => (string) get_post_meta($post->ID, 'ggsa_workflow_status', true),
             'riskLevel' => (string) get_post_meta($post->ID, 'ggsa_support_level', true),
-            'submittedAt' => get_post_datetime($post, 'date', 'gmt')?->format(DATE_ATOM),
+            'submittedAt' => $submitted_at instanceof DateTimeInterface ? $submitted_at->format(DATE_ATOM) : null,
         ];
     }
 

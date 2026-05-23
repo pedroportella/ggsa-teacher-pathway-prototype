@@ -1,0 +1,35 @@
+{
+  "name": "ggsa/teacher-pathway",
+  "description": "GGSA Teacher Pathway headless WordPress API plugin.",
+  "type": "wordpress-plugin",
+  "license": "proprietary",
+  "require": {
+    "php": ">=8.3"
+  },
+  "require-dev": {
+    "dealerdirect/phpcodesniffer-composer-installer": "^1.2",
+    "php-stubs/wordpress-stubs": "^6.8",
+    "phpcompatibility/php-compatibility": "^9.3",
+    "phpcompatibility/phpcompatibility-wp": "^2.1",
+    "phpstan/phpstan": "^2.1",
+    "szepeviktor/phpstan-wordpress": "^2.0",
+    "wp-coding-standards/wpcs": "^3.1"
+  },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    },
+    "sort-packages": true
+  },
+  "scripts": {
+    "lint": "find . -path ./vendor -prune -o -name '*.php' -print0 | xargs -0 -n1 php -l",
+    "phpcs": "phpcs",
+    "phpcbf": "phpcbf",
+    "phpstan": "php -d memory_limit=512M vendor/bin/phpstan analyse",
+    "quality": [
+      "@lint",
+      "@phpcs",
+      "@phpstan"
+    ]
+  }
+}

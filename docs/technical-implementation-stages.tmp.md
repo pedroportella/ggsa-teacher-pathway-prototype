@@ -87,7 +87,31 @@ docker compose run --rm --entrypoint php wordpress -l wp-content/plugins/ggsa-te
 pnpm test:e2e:real
 ```
 
-## Stage 2: Composer And PHP Quality Tooling
+## Stage 2: Composer And PHP Quality Tooling - Done
+
+Status: completed with local FE/BE checks.
+
+Completed:
+
+- Added plugin-local `composer.json`.
+- Added plugin-local `composer.lock`.
+- Added `phpcs.xml.dist` with focused WordPress security, database and PHP compatibility checks.
+- Added `phpstan.neon` with WordPress stubs and PHPStan extension.
+- Added root scripts:
+  - `pnpm php:install`;
+  - `pnpm php:lint`;
+  - `pnpm php:cs`;
+  - `pnpm php:stan`;
+  - `pnpm php:quality`.
+- Updated CI documentation with the Composer backend quality commands.
+
+Validated locally:
+
+- `composer --working-dir=backend/wp-content/plugins/ggsa-teacher-pathway install`.
+- `composer --working-dir=backend/wp-content/plugins/ggsa-teacher-pathway run quality`.
+- `pnpm lint`.
+- `pnpm typecheck`.
+- `pnpm test`.
 
 ### Goal
 

@@ -46,13 +46,14 @@ The job uploads `frontend/apps/portal/playwright-report` when available.
 
 ## Backend Validation
 
-Runs with PHP 8.3 and validates the custom WordPress plugin syntax.
+Runs with PHP 8.3 and validates the custom WordPress plugin syntax, WordPress security/coding checks and PHPStan static analysis.
 
 ```bash
-php -l backend/wp-content/plugins/ggsa-teacher-pathway/ggsa-teacher-pathway.php
+composer --working-dir=backend/wp-content/plugins/ggsa-teacher-pathway install
+composer --working-dir=backend/wp-content/plugins/ggsa-teacher-pathway run quality
 ```
 
-This confirms the current WordPress backend scaffold can be parsed without requiring a database-backed WordPress install in CI.
+This confirms the current WordPress backend scaffold can be parsed and checked without requiring a database-backed WordPress install in CI.
 
 ## Local Parity Checks
 
@@ -68,6 +69,8 @@ pnpm --dir frontend typecheck
 pnpm --dir frontend build
 pnpm --dir frontend exec playwright install chromium
 pnpm --dir frontend test:e2e
+composer --working-dir=backend/wp-content/plugins/ggsa-teacher-pathway install
+composer --working-dir=backend/wp-content/plugins/ggsa-teacher-pathway run quality
 docker compose run --rm --entrypoint php wordpress -l wp-content/plugins/ggsa-teacher-pathway/ggsa-teacher-pathway.php
 ```
 
@@ -93,7 +96,7 @@ If Docker Compose reports that it cannot connect to `unix:///Users/.../.docker/r
 
 ## Production Gates To Add
 
-- WordPress coding standards and PHP static analysis.
+- WordPress REST contract tests in a disposable WordPress runtime.
 - Plugin activation, route registration and permission checks in a disposable WordPress runtime.
 - API contract tests between the Next.js portal and WordPress REST routes.
 - Evidence upload policy, file storage and malware scanning validation.

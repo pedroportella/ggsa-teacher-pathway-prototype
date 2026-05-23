@@ -129,8 +129,12 @@ class GGSA_Teacher_Pathway_Learning_Plan_Post_Type
 
         $school = sanitize_text_field(wp_unslash($_POST['ggsa_school_name'] ?? ''));
         $pathway = sanitize_text_field(wp_unslash($_POST['ggsa_pathway_name'] ?? ''));
-        $status = $this->repository->sanitize_learning_plan_status((string) wp_unslash($_POST['ggsa_workflow_status'] ?? 'Learning plan draft'));
-        $support = $this->repository->sanitize_support_level((string) wp_unslash($_POST['ggsa_support_level'] ?? 'Medium'));
+        $status = $this->repository->sanitize_learning_plan_status(
+            sanitize_text_field(wp_unslash($_POST['ggsa_workflow_status'] ?? 'Learning plan draft'))
+        );
+        $support = $this->repository->sanitize_support_level(
+            sanitize_text_field(wp_unslash($_POST['ggsa_support_level'] ?? 'Medium'))
+        );
 
         update_post_meta($post_id, 'ggsa_school_name', $school);
         update_post_meta($post_id, 'ggsa_pathway_name', $pathway);
