@@ -46,14 +46,15 @@ The solution is implemented as a decoupled Next.js frontend and headless WordPre
 
 - Frontend: Next.js 15, React 18, TypeScript, Sass, Zustand.
 - Backend: WordPress, PHP, custom REST routes and custom post types.
-- Database: MariaDB.
-- Runtime: Docker and Docker Compose.
+- Database: MariaDB in Docker; SQLite for the lightweight local WordPress runtime.
+- Runtime: Docker Compose for full-stack parity, or local PHP for fast FE+BE checks.
 - Testing: Vitest and Playwright.
 - Package manager: pnpm 10.18.3 through Volta locally and Corepack in CI/Docker.
 
 ## Runtime Requirements
 
 - Docker Desktop, Docker and Docker Compose for the complete local stack.
+- PHP 8.3+ with `pdo_sqlite` for the lightweight local WordPress backend.
 - Volta for local Node.js and pnpm selection.
 - Node.js 20.19.x for local frontend commands and CI. Root Docker helper scripts also run on Node 22.
 - pnpm 10.18.3, managed through Volta locally and Corepack in CI/Docker.
@@ -195,6 +196,23 @@ pnpm --dir frontend build
 pnpm --dir frontend exec playwright install chromium
 pnpm --dir frontend test:e2e
 ```
+
+## Local FE And BE Without Docker
+
+Use this path for fast real-backend Playwright feedback without starting Docker. The setup creates an ignored WordPress runtime in `backend/.wordpress`, uses SQLite for local data, symlinks the custom GGSA plugin and seeds the learning plan register.
+
+```bash
+# Create or refresh the local WordPress runtime and seed data.
+pnpm backend:setup:local
+
+# Optional: keep WordPress running locally for manual frontend work.
+pnpm backend:start:local
+
+# Run Playwright with Next.js and the local WordPress backend.
+pnpm test:e2e:local:real
+```
+
+Local WordPress runs at `http://localhost:8080`. The admin login is `admin` / `admin`.
 
 ## Full Local Verification
 

@@ -14,6 +14,12 @@ Already completed:
 - Updated UI copy so learning plans are enrolment-generated rather than manually invented.
 - Renamed "Certification ready" to "RPL evidence ready".
 - Added `docs/integration-alignment.md`.
+- Added a no-Docker local WordPress runtime for fast FE+BE Playwright checks:
+  - local WordPress in `backend/.wordpress`;
+  - SQLite-backed local database;
+  - custom GGSA plugin symlinked into the local runtime;
+  - seeded pathway register;
+  - `pnpm test:e2e:local:real` for real-backend Playwright.
 - Refreshed Docker from scratch and verified:
   - lint;
   - typecheck;

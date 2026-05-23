@@ -32,6 +32,9 @@ pnpm-debug.log*
 *.local
 
 # WordPress local runtime and uploads
+backend/.cache/
+backend/.wordpress/
+backend/.wp-cli/
 backend/wp-config.php
 backend/wp-content/uploads/
 backend/wp-content/cache/
