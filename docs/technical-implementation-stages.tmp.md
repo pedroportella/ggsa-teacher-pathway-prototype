@@ -168,7 +168,30 @@ composer run phpstan
 
 Exact command shape may change depending on whether Composer runs on host or in Docker.
 
-## Stage 3: WordPress REST Contract Tests
+## Stage 3: WordPress REST Contract Tests - Done
+
+Status: completed with local WordPress contract checks and local FE+BE Playwright.
+
+Completed:
+
+- Added a PHP REST contract runner at `backend/wp-content/plugins/ggsa-teacher-pathway/tests/rest-contract.php`.
+- Added Composer `test` script for the plugin.
+- Added root `pnpm php:test` script.
+- Included REST contract tests in `pnpm php:quality`.
+- Covered:
+  - unauthenticated request rejection;
+  - portal-token request acceptance;
+  - admin-capability request acceptance;
+  - malformed create payload rejection;
+  - valid create payload post/meta persistence;
+  - readiness `controlChecks` persistence;
+  - register list response fields.
+
+Validated locally:
+
+- `pnpm php:test`.
+- `pnpm php:quality`.
+- `pnpm test:e2e:local:real`.
 
 ### Goal
 

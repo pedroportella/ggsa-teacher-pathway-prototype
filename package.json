@@ -21,6 +21,7 @@
     "php:lint": "composer --working-dir=backend/wp-content/plugins/ggsa-teacher-pathway run lint",
     "php:cs": "composer --working-dir=backend/wp-content/plugins/ggsa-teacher-pathway run phpcs",
     "php:stan": "composer --working-dir=backend/wp-content/plugins/ggsa-teacher-pathway run phpstan",
+    "php:test": "composer --working-dir=backend/wp-content/plugins/ggsa-teacher-pathway run test",
     "php:quality": "composer --working-dir=backend/wp-content/plugins/ggsa-teacher-pathway run quality",
     "backend:setup:local": "sh scripts/local-backend-setup.sh",
     "backend:start:local": "sh scripts/local-backend-start.sh",
