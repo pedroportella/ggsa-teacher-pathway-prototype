@@ -10,7 +10,10 @@ class GGSA_Teacher_Pathway_REST_Controller {
 
 	public function __construct(
 		private GGSA_Teacher_Pathway_Meta_Repository $repository,
-		private GGSA_Teacher_Pathway_Permissions $permissions
+		private GGSA_Teacher_Pathway_Permissions $permissions,
+		private GGSA_Teacher_Pathway_Membership_User_Gateway $membership_gateway,
+		private GGSA_Teacher_Pathway_WooCommerce_Entitlement_Gateway $woocommerce_gateway,
+		private GGSA_Teacher_Pathway_LearnDash_Gateway $learndash_gateway
 	) {
 	}
 
@@ -104,12 +107,14 @@ class GGSA_Teacher_Pathway_REST_Controller {
 		}
 
 		$reference = sprintf( 'GGSA-TP-%s-%03d', gmdate( 'Y' ), (int) $post_id );
-		$record    = [
-			'id'              => (string) $post_id,
-			'referenceNumber' => $reference,
-			'submittedAt'     => gmdate( DATE_ATOM ),
-			...$payload,
-		];
+		$record    = $this->with_integration_context(
+			[
+				'id'              => (string) $post_id,
+				'referenceNumber' => $reference,
+				'submittedAt'     => gmdate( DATE_ATOM ),
+				...$payload,
+			]
+		);
 
 		$this->repository->update_learning_plan_meta(
 			(int) $post_id,
@@ -121,6 +126,29 @@ class GGSA_Teacher_Pathway_REST_Controller {
 		);
 
 		return rest_ensure_response( $record );
+	}
+
+	private function with_integration_context( array $record ): array {
+		$teacher_profile = $this->membership_gateway->resolve_teacher_profile( $record );
+
+		return [
+			...$record,
+			'integrationContext' => [
+				'membership'  => [
+					'available'      => $this->membership_gateway->has_membership_platform(),
+					'teacherProfile' => $teacher_profile,
+				],
+				'wooCommerce' => [
+					'available'   => $this->woocommerce_gateway->has_woocommerce(),
+					'entitlement' => $this->woocommerce_gateway->resolve_teacher_entitlement( $teacher_profile, $record ),
+				],
+				'learnDash'   => [
+					'available'    => $this->learndash_gateway->has_learndash(),
+					'modules'      => $this->learndash_gateway->list_assigned_modules( $teacher_profile, $record ),
+					'certificates' => $this->learndash_gateway->list_certificates( $teacher_profile ),
+				],
+			],
+		];
 	}
 
 	public function upload_learning_plan_evidence( WP_REST_Request $request ): WP_REST_Response {

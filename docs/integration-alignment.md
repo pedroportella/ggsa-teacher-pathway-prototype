@@ -50,6 +50,14 @@ Teacher / school user
 
 The custom WordPress plugin should not pretend to be LearnDash, WooCommerce or the Membership Platform. Its strongest role is to orchestrate Teacher Pathway-specific workflow data that those systems do not already own.
 
+The plugin now mirrors the frontend adapter boundaries in PHP:
+
+- `includes/Integrations/LearnDashGateway.php`
+- `includes/Integrations/MembershipUserGateway.php`
+- `includes/Integrations/WooCommerceEntitlementGateway.php`
+
+These gateways detect common production plugin APIs where possible and otherwise return deterministic local prototype data. Created learning plan records include an `integrationContext` payload that records the resolved membership profile, WooCommerce entitlement and LearnDash module/certificate state. This makes the prototype adapter-ready without claiming LearnDash or WooCommerce is currently installed.
+
 ## Proposed Integration Boundaries
 
 ### `TeacherPathwayRepository`
@@ -70,15 +78,21 @@ Reads LMS-owned data:
 
 The local implementation can use seed data, but the interface should use LearnDash language.
 
+Current PHP local fallback returns LearnDash-named course/module records and checks for LearnDash functions/classes such as enrolled-course and course-progress APIs before falling back.
+
 ### `MembershipUserGateway`
 
 Resolves the current user, school, role and Teacher Pathway enrolment trigger.
 
 This is the boundary that should support the live page claim that selecting the Teacher role generates a personalised Teacher Learning Plan.
 
+Current PHP local fallback resolves a teacher profile from the logged-in WordPress user when one exists, or from the submitted local prototype payload otherwise.
+
 ### `WooCommerceEntitlementGateway`
 
 Resolves paid or granted access, subscription state, school entitlements or product membership mappings if WooCommerce is part of the production access model.
+
+Current PHP local fallback resolves an active local entitlement and checks for WooCommerce APIs before marking the source as WooCommerce adapter-ready.
 
 ### `EvidencePortfolioService`
 

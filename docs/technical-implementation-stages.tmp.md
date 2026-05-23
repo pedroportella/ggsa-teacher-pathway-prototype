@@ -235,7 +235,25 @@ composer run test
 pnpm test:e2e:real
 ```
 
-## Stage 4: PHP-Side Integration Adapters
+## Stage 4: PHP-Side Integration Adapters - Done
+
+Status: completed with local WordPress contract checks and local FE+BE Playwright.
+
+Completed:
+
+- Added `includes/Integrations/LearnDashGateway.php`.
+- Added `includes/Integrations/WooCommerceEntitlementGateway.php`.
+- Added `includes/Integrations/MembershipUserGateway.php`.
+- Wired the gateways into the plugin bootstrap and REST controller.
+- Added `integrationContext` enrichment to created learning plan payloads.
+- Added local deterministic fallback data for LearnDash modules, WooCommerce entitlements and membership teacher profiles.
+- Added production extension checks for common LearnDash, WooCommerce and membership-platform APIs.
+- Added REST contract coverage for adapter integration context.
+- Updated architecture and integration alignment docs.
+
+Validated locally:
+
+- `pnpm php:quality`.
 
 ### Goal
 

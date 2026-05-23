@@ -117,6 +117,13 @@ $created_id        = is_array( $created ) ? absint( $created['id'] ?? 0 ) : 0;
 ggsa_assert( $valid_create->get_status() === 200, 'valid create payload is accepted' );
 ggsa_assert( $created_id > 0 && get_post_type( $created_id ) === GGSA_TEACHER_PATHWAY_POST_TYPE, 'valid create payload creates a learning plan post' );
 ggsa_assert( (string) get_post_meta( $created_id, 'ggsa_school_name', true ) === $organisation_name, 'valid create payload persists learning plan meta' );
+ggsa_assert(
+	is_array( $created )
+	&& isset( $created['integrationContext']['membership']['teacherProfile'] )
+	&& isset( $created['integrationContext']['wooCommerce']['entitlement'] )
+	&& isset( $created['integrationContext']['learnDash']['modules'][0]['courseId'] ),
+	'valid create payload includes adapter integration context'
+);
 
 $readiness_update = ggsa_rest_request(
 	'POST',

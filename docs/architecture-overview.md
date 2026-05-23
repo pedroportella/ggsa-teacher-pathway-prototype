@@ -70,6 +70,16 @@ The app should not know how to reach WordPress. Do not put `WORDPRESS_API_BASE_U
 
 If the frontend needs new data, add or update a named function in `packages/services` first. The app should import that function instead of building URLs or calling the upstream API directly.
 
+### WordPress Integration Adapters
+
+The custom WordPress plugin mirrors the same boundary style for upstream platform concepts:
+
+- `GGSA_Teacher_Pathway_Membership_User_Gateway` resolves the current teacher profile and membership role.
+- `GGSA_Teacher_Pathway_WooCommerce_Entitlement_Gateway` resolves product access, subscription or school entitlement state.
+- `GGSA_Teacher_Pathway_LearnDash_Gateway` resolves assigned courses/modules, progress and certificates.
+
+These classes live under `backend/wp-content/plugins/ggsa-teacher-pathway/includes/Integrations`. They should be the only plugin code that knows about LearnDash, WooCommerce or membership-platform APIs. REST controllers may consume their normalized arrays, but should not call production plugin APIs directly.
+
 ### Route Handlers
 
 Next.js route handlers are allowed as the same-origin browser contract:

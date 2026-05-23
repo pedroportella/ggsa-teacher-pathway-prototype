@@ -25,6 +25,9 @@ const GGSA_TEACHER_PATHWAY_CONTROL_STATUSES = [ 'Complete', 'Needs evidence', 'N
 
 require_once __DIR__ . '/includes/Support/MetaRepository.php';
 require_once __DIR__ . '/includes/Security/Permissions.php';
+require_once __DIR__ . '/includes/Integrations/MembershipUserGateway.php';
+require_once __DIR__ . '/includes/Integrations/WooCommerceEntitlementGateway.php';
+require_once __DIR__ . '/includes/Integrations/LearnDashGateway.php';
 require_once __DIR__ . '/includes/PostTypes/LearningPlanPostType.php';
 require_once __DIR__ . '/includes/Rest/TeacherPathwayController.php';
 require_once __DIR__ . '/includes/Plugin.php';

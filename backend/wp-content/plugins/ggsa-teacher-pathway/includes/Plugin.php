@@ -11,13 +11,25 @@ class GGSA_Teacher_Pathway_Plugin {
 	private GGSA_Teacher_Pathway_Meta_Repository $repository;
 	private GGSA_Teacher_Pathway_Learning_Plan_Post_Type $post_type;
 	private GGSA_Teacher_Pathway_REST_Controller $rest_controller;
+	private GGSA_Teacher_Pathway_Membership_User_Gateway $membership_gateway;
+	private GGSA_Teacher_Pathway_WooCommerce_Entitlement_Gateway $woocommerce_gateway;
+	private GGSA_Teacher_Pathway_LearnDash_Gateway $learndash_gateway;
 
 	public function __construct() {
-		$this->repository = new GGSA_Teacher_Pathway_Meta_Repository();
-		$permissions      = new GGSA_Teacher_Pathway_Permissions();
+		$this->repository          = new GGSA_Teacher_Pathway_Meta_Repository();
+		$permissions               = new GGSA_Teacher_Pathway_Permissions();
+		$this->membership_gateway  = new GGSA_Teacher_Pathway_Membership_User_Gateway();
+		$this->woocommerce_gateway = new GGSA_Teacher_Pathway_WooCommerce_Entitlement_Gateway();
+		$this->learndash_gateway   = new GGSA_Teacher_Pathway_LearnDash_Gateway();
 
 		$this->post_type       = new GGSA_Teacher_Pathway_Learning_Plan_Post_Type( $this->repository );
-		$this->rest_controller = new GGSA_Teacher_Pathway_REST_Controller( $this->repository, $permissions );
+		$this->rest_controller = new GGSA_Teacher_Pathway_REST_Controller(
+			$this->repository,
+			$permissions,
+			$this->membership_gateway,
+			$this->woocommerce_gateway,
+			$this->learndash_gateway
+		);
 	}
 
 	public function register_hooks(): void {
@@ -43,46 +55,49 @@ class GGSA_Teacher_Pathway_Plugin {
 
 		$seed_records = [
 			[
-				'referenceNumber'   => 'GGSA-TP-2026-001',
-				'organisationName'  => 'Cairns West State School',
-				'contactName'       => 'Mia Thompson',
-				'contactEmail'      => 'mia.thompson@example.org.au',
-				'productName'       => 'Mastery Teaching Foundations',
-				'productVersion'    => '2026 cohort',
-				'pathwayProfile'    => 'Mastery Teaching Foundations',
-				'integrationType'   => 'WordPress seed data refresh',
-				'workflowStatus'    => 'In progress',
-				'riskLevel'         => 'Medium',
-				'targetReleaseDate' => '2026-07-01',
-				'submittedAt'       => '2026-05-17T23:45:00+10:00',
+				'referenceNumber'    => 'GGSA-TP-2026-001',
+				'organisationName'   => 'Cairns West State School',
+				'contactName'        => 'Mia Thompson',
+				'contactEmail'       => 'mia.thompson@example.org.au',
+				'productName'        => 'Mastery Teaching Foundations',
+				'productVersion'     => '2026 cohort',
+				'pathwayProfile'     => 'Mastery Teaching Foundations',
+				'integrationType'    => 'WordPress seed data refresh',
+				'integrationContext' => $this->integration_context( [] ),
+				'workflowStatus'     => 'In progress',
+				'riskLevel'          => 'Medium',
+				'targetReleaseDate'  => '2026-07-01',
+				'submittedAt'        => '2026-05-17T23:45:00+10:00',
 			],
 			[
-				'referenceNumber'   => 'GGSA-TP-2026-002',
-				'organisationName'  => 'Cape York Academy',
-				'contactName'       => 'Noah Williams',
-				'contactEmail'      => 'noah.williams@example.org.au',
-				'productName'       => 'Mastery Teaching Towards Excellence',
-				'productVersion'    => '2026 cohort',
-				'pathwayProfile'    => 'Mastery Teaching Towards Excellence',
-				'integrationType'   => 'WordPress seed data refresh',
-				'workflowStatus'    => 'Coach action required',
-				'riskLevel'         => 'High',
-				'targetReleaseDate' => '2026-07-15',
-				'submittedAt'       => '2026-05-16T13:10:00+10:00',
+				'referenceNumber'    => 'GGSA-TP-2026-002',
+				'organisationName'   => 'Cape York Academy',
+				'contactName'        => 'Noah Williams',
+				'contactEmail'       => 'noah.williams@example.org.au',
+				'productName'        => 'Mastery Teaching Towards Excellence',
+				'productVersion'     => '2026 cohort',
+				'pathwayProfile'     => 'Mastery Teaching Towards Excellence',
+				'integrationType'    => 'WordPress seed data refresh',
+				'integrationContext' => $this->integration_context( [] ),
+				'workflowStatus'     => 'Coach action required',
+				'riskLevel'          => 'High',
+				'targetReleaseDate'  => '2026-07-15',
+				'submittedAt'        => '2026-05-16T13:10:00+10:00',
 			],
 			[
-				'referenceNumber'   => 'GGSA-TP-2026-003',
-				'organisationName'  => 'St Marys Catholic School',
-				'contactName'       => 'Olivia Nguyen',
-				'contactEmail'      => 'olivia.nguyen@example.org.au',
-				'productName'       => 'Mastery Teaching Fellow',
-				'productVersion'    => '2026 cohort',
-				'pathwayProfile'    => 'Mastery Teaching Fellow',
-				'integrationType'   => 'WordPress seed data refresh',
-				'workflowStatus'    => 'RPL evidence ready',
-				'riskLevel'         => 'Low',
-				'targetReleaseDate' => '2026-08-01',
-				'submittedAt'       => '2026-05-15T09:20:00+10:00',
+				'referenceNumber'    => 'GGSA-TP-2026-003',
+				'organisationName'   => 'St Marys Catholic School',
+				'contactName'        => 'Olivia Nguyen',
+				'contactEmail'       => 'olivia.nguyen@example.org.au',
+				'productName'        => 'Mastery Teaching Fellow',
+				'productVersion'     => '2026 cohort',
+				'pathwayProfile'     => 'Mastery Teaching Fellow',
+				'integrationType'    => 'WordPress seed data refresh',
+				'integrationContext' => $this->integration_context( [] ),
+				'workflowStatus'     => 'RPL evidence ready',
+				'riskLevel'          => 'Low',
+				'targetReleaseDate'  => '2026-08-01',
+				'submittedAt'        => '2026-05-15T09:20:00+10:00',
 			],
 		];
 
@@ -117,5 +132,25 @@ class GGSA_Teacher_Pathway_Plugin {
 		}
 
 		return $created_ids;
+	}
+
+	public function integration_context( array $payload ): array {
+		$teacher_profile = $this->membership_gateway->resolve_teacher_profile( $payload );
+
+		return [
+			'membership'  => [
+				'available'      => $this->membership_gateway->has_membership_platform(),
+				'teacherProfile' => $teacher_profile,
+			],
+			'wooCommerce' => [
+				'available'   => $this->woocommerce_gateway->has_woocommerce(),
+				'entitlement' => $this->woocommerce_gateway->resolve_teacher_entitlement( $teacher_profile, $payload ),
+			],
+			'learnDash'   => [
+				'available'    => $this->learndash_gateway->has_learndash(),
+				'modules'      => $this->learndash_gateway->list_assigned_modules( $teacher_profile, $payload ),
+				'certificates' => $this->learndash_gateway->list_certificates( $teacher_profile ),
+			],
+		];
 	}
 }
