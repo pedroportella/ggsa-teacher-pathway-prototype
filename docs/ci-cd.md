@@ -49,8 +49,8 @@ pnpm docker:build
 Current review links:
 
 - Frontend: https://ggsa-teacher-pathway-frontend-zj7zd.ondigitalocean.app
-- Backend REST base: https://134.199.175.187/wp-json/ggsa/v1
-- WordPress admin: https://134.199.175.187/wp-admin/
+- Backend REST base: shared privately with reviewers
+- WordPress admin: shared privately with authorized reviewers only
 
 Deployment shape:
 
@@ -65,7 +65,7 @@ Useful deployment checks:
 doctl apps get <app-id>
 doctl apps create-deployment <app-id> --force-rebuild
 curl -s https://ggsa-teacher-pathway-frontend-zj7zd.ondigitalocean.app/status
-curl -i https://134.199.175.187/wp-json/ggsa/v1/teacher-pathway-submissions
+curl -i https://<backend-host>/wp-json/ggsa/v1/teacher-pathway-submissions
 ```
 
 Expected behavior:

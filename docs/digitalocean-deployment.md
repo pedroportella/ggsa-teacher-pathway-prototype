@@ -5,8 +5,8 @@ This repository has a DigitalOcean review deployment for the GGSA Teacher Pathwa
 ## Live Links
 
 - Frontend portal: https://ggsa-teacher-pathway-frontend-zj7zd.ondigitalocean.app
-- Backend WordPress REST base: https://134.199.175.187/wp-json/ggsa/v1
-- Backend WordPress admin: https://134.199.175.187/wp-admin/
+- Backend WordPress REST base: shared privately with reviewers
+- Backend WordPress admin: shared privately with authorized reviewers only
 
 Use the trailing slash on `/wp-admin/`.
 
@@ -28,16 +28,16 @@ The backend runs on a DigitalOcean one-click WordPress Droplet:
 
 - Region: `syd1`
 - Image: `wordpress-20-04`
-- Droplet: `ggsa-teacher-pathway-backend`
-- Public IP: `134.199.175.187`
+- Droplet: stored in private deployment notes
+- Backend address: stored in private deployment notes
 
 Useful checks:
 
 ```bash
-doctl compute droplet get ggsa-teacher-pathway-backend \
+doctl compute droplet get <backend-droplet-name> \
   --format ID,Name,PublicIPv4,Status
 
-ssh -i ~/.ssh/ggsa_do_prototype root@134.199.175.187
+ssh -i ~/.ssh/<review-ssh-key> root@<backend-host>
 
 cd /var/www/html
 wp plugin list --allow-root
@@ -57,7 +57,7 @@ The frontend runs on DigitalOcean App Platform:
 
 - Region: `syd`
 - App: `ggsa-teacher-pathway-frontend`
-- App ID: `5c2b1236-23ca-41b1-838a-e5318fe38e35`
+- App ID: stored in private deployment notes
 - Source: GitHub `main`
 - Build: `frontend/Dockerfile`
 
@@ -84,14 +84,14 @@ If DigitalOcean says `GitHub user not authenticated`, connect App Platform to Gi
 Force a fresh rebuild:
 
 ```bash
-doctl apps create-deployment 5c2b1236-23ca-41b1-838a-e5318fe38e35 --force-rebuild
+doctl apps create-deployment <app-id> --force-rebuild
 ```
 
 ## Smoke Checks
 
 ```bash
 curl -s https://ggsa-teacher-pathway-frontend-zj7zd.ondigitalocean.app/status
-curl -i https://134.199.175.187/wp-json/ggsa/v1/teacher-pathway-submissions
+curl -i https://<backend-host>/wp-json/ggsa/v1/teacher-pathway-submissions
 ```
 
 Expected:

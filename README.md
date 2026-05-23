@@ -9,8 +9,8 @@ The prototype shows a decoupled Next.js frontend, a custom headless WordPress pl
 Current DigitalOcean review environment:
 
 - Frontend portal: https://ggsa-teacher-pathway-frontend-zj7zd.ondigitalocean.app
-- Backend WordPress REST base: https://134.199.175.187/wp-json/ggsa/v1
-- Backend WordPress admin: https://134.199.175.187/wp-admin/
+- Backend WordPress REST base: shared privately with reviewers
+- Backend WordPress admin: shared privately with authorized reviewers only
 
 The DigitalOcean deployment is a prototype review environment, not GGSA production infrastructure. The frontend runs on DigitalOcean App Platform from `frontend/Dockerfile`; the backend runs on a DigitalOcean WordPress Droplet with the `ggsa-teacher-pathway` plugin installed and activated.
 
@@ -32,7 +32,7 @@ The DigitalOcean deployment is a prototype review environment, not GGSA producti
   - `ggsa_learning_plan` custom post type;
   - secured REST routes;
   - learning plan creation/listing/readiness/evidence endpoints;
-  - admin visibility for submitted plans;
+  - redacted admin visibility for submitted plans;
   - Divi-friendly portal launch shortcode.
 - Local PHP/SQLite WordPress runtime for fast real-backend E2E.
 - Docker Compose runtime for full-stack parity.
