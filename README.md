@@ -4,6 +4,26 @@ Working prototype of a Teacher Pathway portal for Good to Great Schools Australi
 
 The prototype shows a decoupled Next.js frontend, a custom headless WordPress plugin, adapter-ready boundaries for LearnDash/WooCommerce/membership concepts, evidence upload, readiness review, WordPress admin visibility and local/CI validation.
 
+## Live Demo
+
+Current DigitalOcean review environment:
+
+- Frontend portal: https://ggsa-teacher-pathway-frontend-zj7zd.ondigitalocean.app
+- Backend WordPress REST base: https://134.199.175.187/wp-json/ggsa/v1
+- Backend WordPress admin: https://134.199.175.187/wp-admin/
+
+The DigitalOcean deployment is a prototype review environment, not GGSA production infrastructure. The frontend runs on DigitalOcean App Platform from `frontend/Dockerfile`; the backend runs on a DigitalOcean WordPress Droplet with the `ggsa-teacher-pathway` plugin installed and activated.
+
+## Screenshots
+
+| Frontend home, top | Frontend home, footer |
+| --- | --- |
+| ![Frontend home page top section](docs/screenshots/ggsa-frontend-home-top.png) | ![Frontend home page footer section](docs/screenshots/ggsa-frontend-home-footer.png) |
+
+| Backend learning plan list | Backend learning plan item |
+| --- | --- |
+| ![WordPress admin list of teacher learning plans](docs/screenshots/ggsa-backend-learning-plan-list.png) | ![WordPress admin teacher learning plan detail](docs/screenshots/ggsa-backend-learning-plan-detail.png) |
+
 ## What Is Real
 
 - Next.js App Router portal with register, readiness, learning-plan and about views.
@@ -90,7 +110,37 @@ pnpm ci:docker
 - [Integration alignment](docs/integration-alignment.md)
 - [Divi deployment strategy](docs/divi-deployment-strategy.md)
 - [CI/CD](docs/ci-cd.md)
+- [DigitalOcean deployment](docs/digitalocean-deployment.md)
 - [Implementation summary](docs/technical-implementation-stages.tmp.md)
+
+## DigitalOcean Deployment Summary
+
+The current review deployment uses:
+
+- `syd1` Droplet region for the WordPress backend, closest to GGSA's Cairns/Australia context.
+- DigitalOcean App Platform region `syd` for the frontend.
+- GitHub-connected App Platform deploys from the `main` branch.
+- Runtime environment variables generated from `.do/app.template.yml`; `.do/app.generated.yml` and `.env.local` stay untracked because they contain environment-specific values.
+
+Typical frontend deployment flow:
+
+```bash
+set -a
+source .env.local
+set +a
+
+perl \
+  -e 'local $/; $_=<>; s/__WORDPRESS_API_BASE_URL__/$ENV{WORDPRESS_API_BASE_URL}/g; s/__GGSA_TEACHER_PATHWAY_API_TOKEN__/$ENV{GGSA_TEACHER_PATHWAY_API_TOKEN}/g; s/__NEXT_TELEMETRY_DISABLED__/$ENV{NEXT_TELEMETRY_DISABLED}/g; print' \
+  .do/app.template.yml > .do/app.generated.yml
+
+doctl apps create --spec .do/app.generated.yml
+```
+
+After the app exists, use this to force a fresh production rebuild:
+
+```bash
+doctl apps create-deployment <app-id> --force-rebuild
+```
 
 ## Production Next Steps
 

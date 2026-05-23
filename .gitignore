@@ -53,13 +53,18 @@ docker-data/
 mysql-data/
 mariadb-data/
 
-# Generated screenshots and reports
-docs/screenshots/
+# Generated screenshots and curated image assets
 *.png
 *.jpg
 *.jpeg
 *.webp
 *.gif
+!docs/screenshots/
+!docs/screenshots/ggsa-*.png
+!docs/screenshots/ggsa-*.jpg
+!docs/screenshots/ggsa-*.jpeg
+!docs/screenshots/ggsa-*.webp
+!docs/screenshots/ggsa-*.gif
 !frontend/**/src/**/*.png
 !frontend/**/src/**/*.jpg
 !frontend/**/src/**/*.jpeg
