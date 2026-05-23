@@ -25,8 +25,8 @@ export function ReadinessContainer({ notice, submission, updateCheck }: Readines
         <div className="row">
           <div className="col-xs-12 col-md-4">
             <p className="eyebrow">Pathway readiness</p>
-            <h2 id="readiness-heading">Module, evidence and certification readiness</h2>
-            <p>Review the learning plan before it moves into coaching, certification preparation or RPL evidence assessment.</p>
+            <h2 id="readiness-heading">Module, evidence and RPL readiness</h2>
+            <p>Review the learning plan before it moves into coaching, RPL evidence preparation or partner assessment.</p>
             <p className="portal-status-note">{notice}</p>
           </div>
           <div className="col-xs-12 col-md-8">
@@ -77,11 +77,11 @@ export function ReadinessContainer({ notice, submission, updateCheck }: Readines
                 <li>Certificates, classroom artefacts and mastery evidence can support RPL review.</li>
               </ul>
             </Panel>
-            <Panel id="readiness-decisioning" title="Certification readiness" eyebrow="Pathway readiness page" className="ggsa-panel">
+            <Panel id="readiness-decisioning" title="RPL evidence readiness" eyebrow="Pathway readiness page" className="ggsa-panel">
               <ul className="portal-checklist">
                 <li>Support level helps coaches prioritise schools and cohorts.</li>
                 <li>Outstanding evidence categories can be turned into clear coach actions.</li>
-                <li>Certification-ready plans can be reviewed for accreditation and postgraduate RPL pathways.</li>
+                <li>RPL-ready plans can be prepared for accreditation and postgraduate partner assessment pathways.</li>
               </ul>
             </Panel>
           </div>

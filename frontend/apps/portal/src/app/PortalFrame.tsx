@@ -31,11 +31,11 @@ export function PortalFrame({ children }: { children: ReactNode }) {
         ],
       }}
       subHeader={{
-        introduction: 'A working GGSA Teacher Pathway portal for personalised learning plans, prerequisite and core modules, evidence portfolios, certification readiness and RPL support.',
+        introduction: 'A working GGSA Teacher Pathway portal for enrolment-generated learning plans, prerequisite and core modules, evidence portfolios and RPL support.',
         title: 'Teacher Learning Pathways powered by headless WordPress.',
         children: (
           <div className="portal-sub-header__actions">
-            <Button route="/learning-plan" onNavigate={() => navigate('learning-plan')}>Create learning plan</Button>
+            <Button route="/learning-plan" onNavigate={() => navigate('learning-plan')}>Review generated plan</Button>
             <Button className="au-btn--dark" variant="secondary" type="button" disabled={isRegisterLoading} onClick={refreshRegister}>
               {isRegisterLoading ? 'Loading register' : 'Refresh register'}
             </Button>

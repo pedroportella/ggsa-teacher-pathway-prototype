@@ -16,14 +16,14 @@ test('loads refreshed seed data, creates a random record, and finds it after rel
   await page.getByLabel('School or organisation').fill(record.organisationName);
   await page.getByLabel('Teacher or coordinator name').fill(record.contactName);
   await page.getByLabel('Contact email').fill(record.contactEmail);
-  await page.getByLabel('Learning plan').fill(record.productName);
+  await page.getByRole('textbox', { name: 'Learning plan' }).fill(record.productName);
   await page.getByLabel('Cohort or intake').fill(record.productVersion);
   await page.getByLabel('Teacher course by career stage').selectOption(record.pathwayProfile);
-  await page.getByLabel('Platform integration').fill(record.integrationType);
+  await page.getByLabel('Prototype integration source').fill(record.integrationType);
   await page.getByLabel('Pathway status').selectOption(record.workflowStatus);
   await page.getByLabel('Target commencement').fill(record.targetReleaseDate);
-  await page.getByRole('button', { name: 'Attach sample evidence' }).click();
-  await page.getByRole('button', { name: 'Submit to pathway register' }).click();
+  await page.getByRole('button', { name: 'Add prototype evidence' }).click();
+  await page.getByRole('button', { name: 'Sync to pathway register' }).click();
 
   await expect(page.getByText('Teacher learning plan sent to the WordPress pathway register.')).toBeVisible();
   await expect(page.getByRole('cell', { name: record.organisationName })).toBeVisible();

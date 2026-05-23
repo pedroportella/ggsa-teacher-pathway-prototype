@@ -31,7 +31,7 @@ export function PortalProvider({ children }: { children: ReactNode }) {
   const summary = useMemo(() => {
     const highRisk = register.filter((item) => item.riskLevel === 'High').length;
     const actionRequired = register.filter((item) => item.workflowStatus === 'Coach action required').length;
-    const ready = register.filter((item) => item.workflowStatus === 'Certification ready').length;
+    const ready = register.filter((item) => item.workflowStatus === 'RPL evidence ready').length;
 
     return { highRisk, actionRequired, ready };
   }, [register]);

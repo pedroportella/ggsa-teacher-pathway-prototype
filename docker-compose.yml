@@ -15,6 +15,7 @@ services:
         define('WP_ENVIRONMENT_TYPE', 'local');
         define('WP_DEBUG', true);
         define('WP_DEBUG_DISPLAY', false);
+        define('GGSA_TEACHER_PATHWAY_API_TOKEN', 'local-teacher-pathway-portal-token');
     volumes:
       - wordpress-data:/var/www/html
       - ./backend/wp-content/plugins/ggsa-teacher-pathway:/usr/src/ggsa-plugins/ggsa-teacher-pathway:ro
@@ -71,6 +72,7 @@ services:
       - "5173:5173"
     environment:
       WORDPRESS_API_BASE_URL: http://wordpress/wp-json/ggsa/v1
+      GGSA_TEACHER_PATHWAY_API_TOKEN: local-teacher-pathway-portal-token
     depends_on:
       - wordpress
       - wordpress-setup

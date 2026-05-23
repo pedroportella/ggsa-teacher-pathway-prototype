@@ -78,7 +78,7 @@ pnpm docker:build
 pnpm docker:up -- --refresh-register
 curl -i http://localhost:5173/status
 curl -i http://localhost:5173/api/teacher-pathway-submissions
-curl -i http://localhost:8080/wp-json/ggsa/v1/teacher-pathway-submissions
+curl -i -H 'X-GGSA-Portal-Token: local-teacher-pathway-portal-token' http://localhost:8080/wp-json/ggsa/v1/teacher-pathway-submissions
 ```
 
 The `pnpm docker:up` shortcut starts MariaDB, WordPress, WordPress setup and the frontend. Add `-- --refresh-register` or use `pnpm docker:up:seed` when a test run needs the WordPress register replaced with known seed learning plans.

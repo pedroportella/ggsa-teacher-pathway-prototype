@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: GGSA Teacher Pathway Headless API
- * Description: Headless WordPress API for Teacher Learning Pathways, LearnDash-style modules and evidence portfolio records.
+ * Description: Adapter-ready headless WordPress API for Teacher Learning Pathways and evidence portfolio workflow records.
  * Version: 0.1.0
  * Author: Pedro Portella
  */
@@ -18,7 +18,7 @@ const GGSA_TEACHER_PATHWAY_STATUSES = [
     'Enrolled',
     'In progress',
     'Coach action required',
-    'Certification ready',
+    'RPL evidence ready',
 ];
 const GGSA_TEACHER_PATHWAY_SUPPORT_LEVELS = ['Low', 'Medium', 'High'];
 const GGSA_TEACHER_PATHWAY_CONTROL_STATUSES = ['Complete', 'Needs evidence', 'Not started'];
@@ -59,12 +59,12 @@ function ggsa_register_teacher_pathway_routes(): void
             [
                 'methods' => WP_REST_Server::READABLE,
                 'callback' => 'ggsa_list_learning_plans',
-                'permission_callback' => '__return_true',
+                'permission_callback' => 'ggsa_can_access_teacher_pathway_api',
             ],
             [
                 'methods' => WP_REST_Server::CREATABLE,
                 'callback' => 'ggsa_create_learning_plan',
-                'permission_callback' => '__return_true',
+                'permission_callback' => 'ggsa_can_access_teacher_pathway_api',
             ],
         ]
     );
@@ -75,7 +75,7 @@ function ggsa_register_teacher_pathway_routes(): void
         [
             'methods' => WP_REST_Server::CREATABLE,
             'callback' => 'ggsa_upload_learning_plan_evidence',
-            'permission_callback' => '__return_true',
+            'permission_callback' => 'ggsa_can_access_teacher_pathway_api',
         ]
     );
 
@@ -85,9 +85,30 @@ function ggsa_register_teacher_pathway_routes(): void
         [
             'methods' => WP_REST_Server::CREATABLE,
             'callback' => 'ggsa_update_learning_plan_readiness',
-            'permission_callback' => '__return_true',
+            'permission_callback' => 'ggsa_can_access_teacher_pathway_api',
         ]
     );
+}
+
+function ggsa_can_access_teacher_pathway_api(WP_REST_Request $request): bool
+{
+    if (current_user_can('edit_posts')) {
+        return true;
+    }
+
+    $expected_token = ggsa_teacher_pathway_api_token();
+    $request_token = (string) $request->get_header('x-ggsa-portal-token');
+
+    return $expected_token !== '' && hash_equals($expected_token, $request_token);
+}
+
+function ggsa_teacher_pathway_api_token(): string
+{
+    if (defined('GGSA_TEACHER_PATHWAY_API_TOKEN')) {
+        return (string) constant('GGSA_TEACHER_PATHWAY_API_TOKEN');
+    }
+
+    return (string) getenv('GGSA_TEACHER_PATHWAY_API_TOKEN');
 }
 
 function ggsa_list_learning_plans(): WP_REST_Response
@@ -209,7 +230,7 @@ function ggsa_seed_learning_plan_register(bool $refresh = false): array
             'productVersion' => '2026 cohort',
             'pathwayProfile' => 'Mastery Teaching Fellow',
             'integrationType' => 'WordPress seed data refresh',
-            'workflowStatus' => 'Certification ready',
+            'workflowStatus' => 'RPL evidence ready',
             'riskLevel' => 'Low',
             'targetReleaseDate' => '2026-08-01',
             'submittedAt' => '2026-05-15T09:20:00+10:00',

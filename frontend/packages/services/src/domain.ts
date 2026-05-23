@@ -3,7 +3,7 @@ export type WorkflowStatus =
   | 'Enrolled'
   | 'In progress'
   | 'Coach action required'
-  | 'Certification ready';
+  | 'RPL evidence ready';
 
 export type RiskLevel = 'Low' | 'Medium' | 'High';
 
@@ -73,7 +73,7 @@ export const initialControlChecks: ControlCheck[] = [
   },
   {
     id: 'certification',
-    label: 'RPL and accreditation readiness can be reviewed by GGSA coaches',
+    label: 'RPL evidence can be prepared for partner assessment',
     category: 'Certification',
     status: 'Not started',
   },
@@ -103,7 +103,7 @@ export const seedSubmissions: RegisterItem[] = [
     referenceNumber: 'GGSA-TP-2026-003',
     organisationName: 'St Marys Catholic School',
     productName: 'Mastery Teaching Fellow',
-    workflowStatus: 'Certification ready',
+    workflowStatus: 'RPL evidence ready',
     riskLevel: 'Low',
     submittedAt: '2026-05-15T09:20:00+10:00',
   },
@@ -116,7 +116,7 @@ export const blankSubmission: TeacherPathwaySubmission = {
   productName: 'Teacher Learning Plan',
   productVersion: '2026 cohort',
   pathwayProfile: 'Mastery Teaching Foundations',
-  integrationType: 'Headless WordPress, LearnDash and Next.js membership journey',
+  integrationType: 'Local prototype adapters for Membership, WooCommerce and LearnDash',
   workflowStatus: 'Learning plan draft',
   riskLevel: 'Medium',
   targetReleaseDate: '2026-07-01',

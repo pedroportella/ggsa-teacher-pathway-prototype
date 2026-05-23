@@ -8,7 +8,7 @@ const assetSrc = (asset: ImageAsset) => (typeof asset === 'string' ? asset : ass
 const processStages = [
   {
     title: 'Enrol',
-    body: 'A school or teacher selects the Teacher role and receives a personalised learning plan aligned to career stage and goals.',
+    body: 'A school or teacher selects the Teacher role through the Membership Platform and receives a personalised learning plan aligned to career stage and goals.',
   },
   {
     title: 'Complete prerequisites',
@@ -20,7 +20,7 @@ const processStages = [
   },
   {
     title: 'Build evidence',
-    body: 'Certificates, classroom artefacts and mastery evidence are stored for coach review, certification and RPL pathways.',
+    body: 'Certificates, classroom artefacts and mastery evidence are stored for coach review and partner RPL assessment pathways.',
   },
 ];
 
@@ -33,7 +33,7 @@ export function AboutProcessContainer() {
             <p className="eyebrow">About this Portal</p>
             <h2 id="about-heading">What this portal helps people do</h2>
             <p>
-              This portal helps GGSA staff, schools and teachers keep a clear record of teacher learning plans, evidence and readiness for the Mastery Teaching Pathway. It brings registration, pathway progress and coach review into one place so non-technical users can see what needs attention next.
+              This portal helps GGSA staff, schools and teachers review enrolment-generated learning plans, evidence and readiness for the Mastery Teaching Pathway. It brings pathway progress and coach review into one place so non-technical users can see what needs attention next.
             </p>
           </div>
           <div className="col-xs-12 col-lg-4">
@@ -69,7 +69,7 @@ export function AboutProcessContainer() {
             <Panel id="content-model" title="What the portal records" eyebrow="Learning plan register">
               <ul className="portal-checklist">
                 <li>Learning plan: reference, school, teacher, career stage, pathway status and support level.</li>
-                <li>Module catalogue: prerequisites, classroom core modules and elective modules.</li>
+                <li>Module catalogue: prerequisites, classroom core modules and elective modules sourced through adapter-ready LMS boundaries.</li>
                 <li>Evidence portfolio: certificates, classroom artefacts, mastery evidence and RPL notes.</li>
               </ul>
             </Panel>

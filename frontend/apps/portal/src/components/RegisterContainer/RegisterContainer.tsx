@@ -26,7 +26,7 @@ export function RegisterContainer({ isRegisterLoading, notice, register, summary
                 <MetricCard label="Coach action" value={summary.actionRequired} />
               </div>
               <div className="col-xs-12 col-sm-6 col-lg-3">
-                <MetricCard label="Certification ready" value={summary.ready} />
+                <MetricCard label="RPL evidence ready" value={summary.ready} />
               </div>
             </div>
           </div>
@@ -62,7 +62,7 @@ export function RegisterContainer({ isRegisterLoading, notice, register, summary
               <p className="eyebrow">Priority work</p>
               <h2>Focus pathway support</h2>
               <ul className="au-link-list portal-priority__list">
-                <li><a href="/learning-plan">Capture learning plan details</a></li>
+                <li><a href="/learning-plan">Review enrolment-generated plan</a></li>
                 <li><a href="/pathway-readiness">Check module and evidence readiness</a></li>
                 <li><a href="#register">Review high-support cohorts first</a></li>
               </ul>
@@ -70,7 +70,7 @@ export function RegisterContainer({ isRegisterLoading, notice, register, summary
             <section className="portal-priority portal-priority--teal">
               <p className="eyebrow">Operating principle</p>
               <h2>One plan, many milestones</h2>
-              <p>Learning plan data, module completion, evidence quality and certification readiness are treated as connected views of the same teacher pathway.</p>
+              <p>Learning plan data, module completion, evidence quality and RPL readiness are treated as connected views of the same teacher pathway.</p>
             </section>
           </aside>
         </div>

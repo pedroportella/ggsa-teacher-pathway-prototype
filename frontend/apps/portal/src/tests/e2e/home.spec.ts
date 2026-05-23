@@ -44,11 +44,14 @@ test('loads the GGSA teacher pathway portal dashboard', async ({ page }) => {
 });
 
 test('captures a teacher pathway submission into the register', async ({ page }) => {
+  const organisationName = `Good to Great Schools Australia ${Date.now()}`;
+
   await page.goto('/learning-plan');
 
-  await page.getByRole('button', { name: 'Attach sample evidence' }).click();
-  await page.getByRole('button', { name: 'Submit to pathway register' }).click();
+  await page.getByLabel('School or organisation').fill(organisationName);
+  await page.getByRole('button', { name: 'Add prototype evidence' }).click();
+  await page.getByRole('button', { name: 'Sync to pathway register' }).click();
 
   await expect(page.getByText(/Teacher learning plan captured locally|Teacher learning plan sent/)).toBeVisible();
-  await expect(page.getByRole('cell', { name: 'Good to Great Schools Australia' })).toBeVisible();
+  await expect(page.getByRole('cell', { name: organisationName })).toBeVisible();
 });

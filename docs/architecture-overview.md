@@ -5,7 +5,7 @@ The GGSA Teacher Pathway portal uses a decoupled production-oriented architectur
 - Next.js App Router frontend with the existing design-system packages.
 - Next.js route handlers acting as a small backend-for-frontend over WordPress, while delegating upstream API details to `packages/services`.
 - Headless WordPress backend exposed through custom REST routes.
-- LearnDash-style content modelling for prerequisites, modules, progress and evidence.
+- Adapter-ready content boundaries for LearnDash prerequisites, modules, progress and evidence.
 - MariaDB persistence through WordPress.
 - Docker for local parity.
 - `backend/Dockerfile` builds the WordPress runtime with the custom pathway plugin installed.
@@ -65,7 +65,7 @@ The app should not know how to reach WordPress. Do not put `WORDPRESS_API_BASE_U
 
 - public browser-facing service functions, such as `listSubmissions`, `createSubmission` and `uploadEvidence`;
 - server-side gateway functions, such as `requestTeacherPathwaySubmissions`, `submitTeacherPathwayRecord` and `submitTeacherPathwayEvidence`;
-- environment resolution for upstream systems, currently `WORDPRESS_API_BASE_URL`;
+- environment resolution for upstream systems, currently `WORDPRESS_API_BASE_URL` and the server-side portal API token;
 - domain types, seed data and workflow/readiness business logic.
 
 If the frontend needs new data, add or update a named function in `packages/services` first. The app should import that function instead of building URLs or calling the upstream API directly.
@@ -94,12 +94,12 @@ Keep reusable display and form UI in component packages or feature containers. A
 
 ### Domain And Workflow
 
-Teacher Pathway records model a LearnDash-style journey:
+Teacher Pathway records model an adapter-ready learning journey:
 
 - prerequisites;
 - core modules;
 - evidence portfolio;
-- certification readiness;
+- RPL evidence readiness;
 - workflow status;
 - risk level.
 
@@ -154,7 +154,15 @@ Docker overrides this for container networking:
 http://wordpress/wp-json/ggsa/v1
 ```
 
-Both values are resolved inside `packages/services`, not inside the app.
+Both URL values are resolved inside `packages/services`, not inside the app.
+
+The local WordPress plugin also requires a portal API token for REST access outside an authenticated WordPress admin session:
+
+```text
+GGSA_TEACHER_PATHWAY_API_TOKEN=local-teacher-pathway-portal-token
+```
+
+Docker wires the same local token into the frontend and WordPress containers. Production environments should replace this value with an environment-specific secret and layer in user-level authentication and role-based authorization.
 
 ### Verification
 

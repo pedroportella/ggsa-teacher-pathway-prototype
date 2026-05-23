@@ -6,7 +6,7 @@ This repository contains a full-stack Teacher Pathway portal for Good to Great S
 
 The application supports learning plan intake, pathway readiness review, evidence capture, WordPress administration visibility, local Docker runtime parity and automated frontend validation.
 
-The solution is implemented as a decoupled Next.js frontend and headless WordPress backend. The frontend keeps the existing design-system workspace intact, while WordPress owns submitted learning plans, LearnDash-style pathway data and editorial administration.
+The solution is implemented as a decoupled Next.js frontend and headless WordPress backend. The frontend keeps the existing design-system workspace intact, while WordPress owns submitted learning plan workflow records, adapter-ready pathway integration points and editorial administration.
 
 ## Screenshot
 
@@ -217,8 +217,8 @@ curl -i http://localhost:5173/status
 # Check the same-origin API route.
 curl -i http://localhost:5173/api/teacher-pathway-submissions
 
-# Check the WordPress API directly.
-curl -i http://localhost:8080/wp-json/ggsa/v1/teacher-pathway-submissions
+# Check the WordPress API directly through the local portal token.
+curl -i -H 'X-GGSA-Portal-Token: local-teacher-pathway-portal-token' http://localhost:8080/wp-json/ggsa/v1/teacher-pathway-submissions
 
 # Install frontend dependencies for local quality checks.
 pnpm --dir frontend install
@@ -270,11 +270,12 @@ docker compose run --rm --entrypoint php wordpress -l wp-content/plugins/ggsa-te
 
 ## Configuration
 
-The Next.js server reads one upstream environment variable:
+The Next.js server reads upstream WordPress configuration from environment variables:
 
 | Variable | Local default | Docker value | Description |
 | --- | --- | --- | --- |
 | `WORDPRESS_API_BASE_URL` | `http://localhost:8080/wp-json/ggsa/v1` | `http://wordpress/wp-json/ggsa/v1` | WordPress REST base URL used by `@ggsa/services`. |
+| `GGSA_TEACHER_PATHWAY_API_TOKEN` | `local-teacher-pathway-portal-token` | `local-teacher-pathway-portal-token` | Shared server-side token accepted by the local WordPress plugin for portal API calls. Use an environment-specific secret outside local development. |
 
 Docker database settings are configured in `docker-compose.yml`:
 
@@ -292,7 +293,7 @@ Docker database settings are configured in `docker-compose.yml`:
 - Keep application-specific teacher pathway composition in `frontend/apps/portal` or `frontend/packages/services`.
 - Treat WordPress as the submitted learning-plan system of record once the backend is running.
 - Use seeded frontend data for local resilience only, not as production persistence.
-- Add authentication, role-based permissions, file storage policy and environment-specific secrets management before public deployment.
+- Replace the local shared API token with environment-specific secrets, then add user authentication, role-based permissions, file storage policy and operational secret management before public deployment.
 
 ## Documentation
 

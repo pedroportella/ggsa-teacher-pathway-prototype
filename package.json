@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "GGSA Teacher Pathway portal using Next.js, headless WordPress, LearnDash-style data and Docker.",
+  "description": "GGSA Teacher Pathway portal using Next.js, headless WordPress, adapter-ready pathway data and Docker.",
   "packageManager": "pnpm@10.18.3",
   "volta": {
     "node": "20.19.5",
