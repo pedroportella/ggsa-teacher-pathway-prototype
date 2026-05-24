@@ -16,12 +16,12 @@ The DigitalOcean deployment is a prototype review environment, not GGSA producti
 
 ## Screenshots
 
-| Frontend home, top | Frontend home, footer |
-| --- | --- |
+| Frontend home, top                                                             | Frontend home, footer                                                                |
+| ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------ |
 | ![Frontend home page top section](docs/screenshots/ggsa-frontend-home-top.png) | ![Frontend home page footer section](docs/screenshots/ggsa-frontend-home-footer.png) |
 
-| Backend learning plan list | Backend learning plan item |
-| --- | --- |
+| Backend learning plan list                                                                              | Backend learning plan item                                                                              |
+| ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
 | ![WordPress admin list of teacher learning plans](docs/screenshots/ggsa-backend-learning-plan-list.png) | ![WordPress admin teacher learning plan detail](docs/screenshots/ggsa-backend-learning-plan-detail.png) |
 
 ## What Is Real
@@ -107,11 +107,10 @@ pnpm ci:docker
 ## Key Docs
 
 - [Architecture overview](docs/architecture-overview.md)
-- [Integration alignment](docs/integration-alignment.md)
 - [Divi deployment strategy](docs/divi-deployment-strategy.md)
 - [CI/CD](docs/ci-cd.md)
 - [DigitalOcean deployment](docs/digitalocean-deployment.md)
-- [Implementation summary](docs/technical-implementation-stages.tmp.md)
+- [Implementation summary](docs/technical-implementation-stages.md)
 
 ## DigitalOcean Deployment Summary
 

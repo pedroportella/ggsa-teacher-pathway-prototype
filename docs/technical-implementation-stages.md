@@ -17,12 +17,9 @@ This file is intentionally brief. Detailed process notes were moved outside the 
 
 ## Important Sub-Stages
 
-- Refactored language from "LearnDash-style owns data" to adapter-ready prototype.
 - Secured WordPress REST routes with admin capability or server-side portal token.
-- Changed UI copy so learning plans are generated from enrolment context.
 - Added local PHP/SQLite WordPress runtime for fast real-backend E2E without Docker.
 - Hardened frontend and backend code style.
-- Compared RBDM file upload approach and extracted a simpler reusable upload component.
 - Fixed dark-context secondary button contrast, including footer resting and hover states.
 
 ## Final Local Validation Set
