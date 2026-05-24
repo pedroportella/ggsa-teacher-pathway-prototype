@@ -12,9 +12,6 @@ on:
 permissions:
   contents: read
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
 jobs:
   frontend-quality:
     name: Frontend quality
@@ -57,7 +54,7 @@ jobs:
 
       - name: Upload Next.js build artifact
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: portal-next-build
           path: frontend/apps/portal/.next
@@ -124,7 +121,7 @@ jobs:
 
       - name: Upload Playwright report
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: playwright-smoke-report
           path: frontend/apps/portal/playwright-report
@@ -176,7 +173,7 @@ jobs:
 
       - name: Upload Playwright report
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: real-backend-playwright-report
           path: frontend/apps/portal/playwright-report
